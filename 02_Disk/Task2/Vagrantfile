@@ -7,22 +7,22 @@ MACHINES = {
         :ip_addr => '192.168.11.101',
 	      :disks => {
 		        :sata1 => {
-			          :dfile => 'c:/Education/Linux/disk/sata1.vdi',
+			          :dfile => 'f:/diskVirtualBox/linux/sata1.vdi',
 			          :size => 20000,
 			          :port => 1
 		        },
 		        :sata2 => {
-                :dfile => 'c:/Education/Linux/disk/sata2.vdi',
+                :dfile => 'f:/diskVirtualBox/linux/sata2.vdi',
                 :size => 20000, 
 			          :port => 2
 		        },
             :sata3 => {
-                :dfile => 'c:/Education/Linux/disk/sata3.vdi',
+                :dfile => 'f:/diskVirtualBox/linux/sata3.vdi',
                 :size => 20000,
                 :port => 3
             },
             :sata4 => {
-                :dfile => 'c:/Education/Linux/disk/sata4.vdi',
+                :dfile => 'f:/diskVirtualBox/linux/sata4.vdi',
                 :size => 20000, 
                 :port => 4
             }
@@ -37,7 +37,6 @@ Vagrant.configure("2") do |config|
             box.vm.host_name = boxname.to_s
             box.vm.network "private_network", ip: boxconfig[:ip_addr]
             box.vm.box_check_update = false
-            #box.vm.synced_folder "C:/Education/Linux/git/02_Disk/srv", "/srv1c"
             box.vm.provider :virtualbox do |vb|
                 vb.customize ["modifyvm", :id, "--memory", "1024"]
                 vb.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
@@ -63,6 +62,7 @@ Vagrant.configure("2") do |config|
                 sudo mkdir -p /home/vagrant/bin
                 sudo cp /vagrant/init_raid.sh /home/vagrant/bin/init_raid.sh
                 sudo chmod guo+x /home/vagrant/bin/init_raid.sh
+                sudo cat /home/vagrant/bin/init_raid.sh
                 sudo /home/vagrant/bin/init_raid.sh
             SHELL
     end

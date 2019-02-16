@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 if test -e /dev/md0 
 then
     echo "Raid array was been create"
@@ -13,17 +15,16 @@ else
     mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /etc/mdadm/mdadm.conf
     cat /proc/mdstat
     mdadm -D /dev/md0
-    #End test
-
+    
     if [[ "test -e /dev/md0" && -z "$(grep -o '_' /proc/mdstat)" ]]
     then
         #format and mount and create parted raid array
-        sudo parted -s /dev/md0 mklabel gpt
+        sudo parted -s /dev/md0 mklabel msdos
         sudo parted /dev/md0 mkpart primary ext4 0% 100%
         sudo mkfs.ext4 /dev/md0p1
                 
         stringForFSTAB=$(sudo blkid /dev/md0p1 | grep -o "UUID=.*TYPE"| sed s/TYPE//| sed -r s/\"//g | tr -d '\n')
-        stringForFSTAB="$stringForFSTAB    /raid10   ext4    defaults    0 0"
+        stringForFSTAB="$stringForFSTAB /raid10 ext4    defaults    0 0"
         if [[ -z "$(grep $stringForFSTAB /etc/fstab)" ]] 
         then
             sudo sh -c "echo $stringForFSTAB >> /etc/fstab"
