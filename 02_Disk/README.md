@@ -15,6 +15,6 @@
 1. Используя созданный скрипт ранее делаю 10 райд. 4 диска по 20G так как системный 40G
 2. выполняю команду lsblk
 
-	![lsblk](02_Disk/lsblk_ferst.jpg)
+	![lsblk](02_Disk/lsblk_ferst.JPG)
 
 3. trgrtg
