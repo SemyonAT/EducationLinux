@@ -18,10 +18,12 @@
 
 	![lsblk](/02_Disk/lsblk_ferst_uefi.JPG)
 
-3. На дополнительных двух дисках NVMe собираю raid, перед разбиваю на 3 раздела (boot, uefi, root fs) диски. После выделяю на массиве md3 раздел под swap. все соответствующим образом форматирую:
+3. На дополнительных двух дисках NVMe собираю raid, перед разбиваю на 4 раздела (boot, uefi, root fs, swap) диски. Все соответствующим образом форматирую:
+	`mdadm --create --verbose /dev/md0 -l 1 -n /dev/nvme0n1p1` 
 	* md0 (EFI system Partition) vfat (fat 16) 210Mb
 	* md1 (boot раздел) ext2 1000Mb
-	* md3 (root fs and swap) ext4 linux-swap (1000Mb)
+	* md3 linux-swap (1000Mb)
+	* md4 root fs ext4 
 	* все разделы помечаю как gpt, uefi умеет работать с ними
 	* Создаю конфигурационный файл райда
 		* echo "DEVICE partitions" > /etc/mdadm.conf
@@ -29,8 +31,8 @@
 4. Создаю каталог будущего root fs
 	
 	`sudo mkdir /raid`
-5. Монтирую в каталог диск md2p2
-	`sudo mount /dev/md2p2 /raid` 
+5. Монтирую в каталог диск md3
+	`sudo mount /dev/md3 /raid` 
 	
 6. в него копирую корень
 	
@@ -64,7 +66,8 @@
 
 13. Устанавливаю GRUB2 на оба диска NVME
 	
-	`sudo yum install grub2-efi-modules`   
+	`sudo yum install grub2-efi-modules`  
+	`sudo yum install efibootmgr`   
 	`grub2-install /dev/nvme0n1p2 --boot-directory /boot --efi-directory=/boot/efi`    
 	`grub2-install /dev/nvme0n2p2 --efi-directory=/boot/efi`
 
@@ -78,3 +81,16 @@
 16. efibootmgr -c -d /dev/nvme0n2 -p 1 -L "Centos Linux R2" -l \\EFI\\centos\\grubx64.efi
 
 
+
+
+
+# Не для проверки
+
+ 
+ grub-install /dev/sda
+
+Установка Grub efi на MBR все выглядит точно так же, только тут есть несколько ограничений. Раздел ESP нужно создавать только в начале диска. В режиме EFI тоже можно установить GRUB на флешку, и это не очень сложно. Для этого используется команда:
+
+ grub-install --boot-directory=/mnt/sdb2/boot --efi-directory=/mnt/sdb1 --target=x86_64-efi --removable
+
+Рассмотрим опции: --boot-directory - задает папку с файлами загрузчика на флешке, --efi-directory - папка куда смонтирован раздел efi, --target - архитектура целевой системы и --removable говорит, что это установка на съемный носитель. С UEFI все. После перезагрузки и выбора в меню EFI пункта связанного с Grub, вы получите доступ к привычному меню grub и сможете выбрать нужный параметр.
