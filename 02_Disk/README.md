@@ -80,7 +80,9 @@
 
 16. efibootmgr -c -d /dev/nvme0n2 -p 1 -L "Centos Linux R2" -l \\EFI\\centos\\grubx64.efi
 
+17. В virtual box убираю основной диск и система грузится только с райда. Скриншот комманды lsblk ниже
 
+	![lsblk finish](/02_Disk/finish.JPG)
 
 
 
