@@ -60,28 +60,35 @@
 ## Проверить нет ли ошибок при разбиении
 Ошибок при разбиении нет, то есть нет наложения между сетями
 
-![Net lab fs](/03_lvm/FolderHome.JPG)
-
 # Практическая часть задания
 
-
+В vagrantfile добавил маршруты, так как при перезапуске они удаляются, что бы не удалялись нужно вносить в фалы скриптов
+Маршрут между офисом 1 и 2 проходит через центральный роутер, но для динамической маршрутизации я его сделаю, что бы смотреть ассиметричный трафик
 
 # Для Себя
-nmtui - графический редактор сети. нужно установить network-manager
 
-ip rout add blackhole 10/8
+    yum install net-tools 
+    lspci - просмотр портов pci
+    ss - вместо netstat
+    tc - управление трафиком
+    nstat - сетевые счетчики
+    nmcli - net work manager
+    nmtui - графический редактор сети. нужно установить network-manager
+    /etc/sysconfig/network-scripts/ - директория со скриптами
+
+Сниферить сети
+
+    tcpdump -i eth2 port 80 
+    ngrep - читает что в пакете передается через сеть
 
 Quagga 
-OSPF работает на третем уровне
-
-yum instal Quagga
-cat /etc/quagga/daemons 
-vtysh - утилита настройки quagga
-
-router ospf 
-network ospf 10.0.0.0/24 ar 0
-show ip ospf neighbor - получаем соседа и посмотреть в каком он статусе бдр или др
-
-show ip ospf database 
-
-адреса на интерфейсах смотрятся show ip interface brief
+    
+    OSPF работает на третем уровне
+    yum instal Quagga
+    cat /etc/quagga/daemons 
+    vtysh - утилита настройки quagga
+    router ospf 
+    network ospf 10.0.0.0/24 ar 0
+    show ip ospf neighbor - получаем соседа и посмотреть в каком он статусе бдр или др
+    show ip ospf database 
+    show ip interface brief - адреса на интерфейсах смотрятm
