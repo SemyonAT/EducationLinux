@@ -1,0 +1,55 @@
+# tasks file for fail2ban
+---
+- name: Install epel-release
+  yum:
+    name: epel-release
+    state: latest
+  tags:
+    - package
+    - epel
+
+- name: Install fail2ban
+  yum:
+    name: fail2ban
+    state: latest
+  tags:
+    - package
+    - fail2ban
+
+- name: Update configuration file - /etc/fail2ban/fail2ban.local
+  template:
+    src: etc/fail2ban/fail2ban.local.j2
+    dest: /etc/fail2ban/fail2ban.local
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart fail2ban
+  tags:
+    - fail2banlocal
+    - configuration
+    - fail2ban-configuration
+
+- name: Update configuration file - /etc/fail2ban/jail.local
+  template:
+    src: etc/fail2ban/jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart fail2ban
+  tags:
+    - configuration
+    - fail2ban-configuration
+
+- name: Copy jails
+  copy:
+    src: "{{ fail2ban_jaild_path }}"
+    dest: /etc/fail2ban/jail.d/
+    owner: root
+    group: root
+    mode: 0644
+  when: fail2ban_jaild_path is defined
+  notify: restart fail2ban
+  tags:
+    - configuration
+    - fail2ban-jails
