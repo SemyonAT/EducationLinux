@@ -1,5 +1,0 @@
-common_packages:
-  - vim
-  - telnet
-  - yum-utils
-  - bind-utils

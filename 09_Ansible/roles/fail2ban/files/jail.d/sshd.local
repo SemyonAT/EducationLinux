@@ -1,6 +1,0 @@
-[sshd]
-enabled = true
-port = ssh
-maxretry = 5
-bantime = 604800 # 7days
-findtime = 86400
