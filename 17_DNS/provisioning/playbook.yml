@@ -8,9 +8,22 @@
       - bind
       - bind-utils
       - ntp
-
   - name: copy transferkey to all servers and the client
     copy: src=named.zonetransfer.key dest=/etc/named.zonetransfer.key owner=root group=named mode=0644
+  - name: Disable selinux
+    selinux: state=disabled
+    notify:
+      - disable firewalld
+      - restart linux
+
+  handlers: 
+  - name: disable firewalld
+    systemd: 
+      name: firewalld
+      enabled: no
+  - name: restart linux
+    reboot: 
+      reboot_timeout: 300
 
 - hosts: ns01
   sudo: yes
@@ -53,3 +66,14 @@
     copy: src=rndc.conf dest=/home/vagrant/rndc.conf owner=vagrant group=vagrant mode=0644
   - name: copy motd to the client
     copy: src=client-motd dest=/etc/motd owner=root group=root mode=0644
+
+- hosts: client2
+  sudo: yes
+  tasks:
+  - name: copy resolv.conf to the client
+    copy: src=client-resolv.conf dest=/etc/resolv.conf owner=root group=root mode=0644
+  - name: copy rndc conf file
+    copy: src=rndc.conf dest=/home/vagrant/rndc.conf owner=vagrant group=vagrant mode=0644
+  - name: copy motd to the client
+    copy: src=client-motd dest=/etc/motd owner=root group=root mode=0644
+
