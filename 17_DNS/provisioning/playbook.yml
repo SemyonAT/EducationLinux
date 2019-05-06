@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  sudo: yes
+  become: yes
   tasks:
   - name: install packages
     yum: name={{ item }} state=latest 
@@ -10,23 +10,24 @@
       - ntp
   - name: copy transferkey to all servers and the client
     copy: src=named.zonetransfer.key dest=/etc/named.zonetransfer.key owner=root group=named mode=0644
-  - name: Disable selinux
-    selinux: state=disabled
-    notify:
-      - disable firewalld
-      - restart linux
-
-  handlers: 
   - name: disable firewalld
     systemd: 
       name: firewalld
       enabled: no
-  - name: restart linux
-    reboot: 
-      reboot_timeout: 300
+      #notify:
+      #- stop firewalld
+  - name: Disable selinux
+    selinux: state=disabled
+    
+
+  #handlers:
+  - name: stop firewalld
+    systemd: 
+      name: firewalld
+      state: stopped
 
 - hosts: ns01
-  sudo: yes
+  become: yes
   tasks:
   - name: copy named.conf
     copy: src=master-named.conf dest=/etc/named.conf owner=root group=named mode=0640
@@ -44,7 +45,7 @@
     service: name=named state=restarted enabled=yes
 
 - hosts: ns02
-  sudo: yes
+  become: yes
   tasks:
   - name: copy named.conf
     copy: src=slave-named.conf dest=/etc/named.conf owner=root group=named mode=0640
@@ -58,7 +59,7 @@
     service: name=named state=restarted enabled=yes
     
 - hosts: client
-  sudo: yes
+  become: yes
   tasks:
   - name: copy resolv.conf to the client
     copy: src=client-resolv.conf dest=/etc/resolv.conf owner=root group=root mode=0644
@@ -68,7 +69,7 @@
     copy: src=client-motd dest=/etc/motd owner=root group=root mode=0644
 
 - hosts: client2
-  sudo: yes
+  become: yes
   tasks:
   - name: copy resolv.conf to the client
     copy: src=client-resolv.conf dest=/etc/resolv.conf owner=root group=root mode=0644
