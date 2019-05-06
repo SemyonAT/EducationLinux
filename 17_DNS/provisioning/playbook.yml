@@ -14,17 +14,16 @@
     systemd: 
       name: firewalld
       enabled: no
-      #notify:
-      #- stop firewalld
   - name: Disable selinux
     selinux: state=disabled
+    notify:
+      - restart system
     
 
-  #handlers:
-  - name: stop firewalld
-    systemd: 
-      name: firewalld
-      state: stopped
+  handlers:
+    - name: restart system
+      reboot: 
+        reboot_timeout: 300
 
 - hosts: ns01
   become: yes

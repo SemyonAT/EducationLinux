@@ -52,3 +52,5 @@ systemctl reload named
 rndc reconfig / reload - утилита управления dns
 howis - кто ты
 dig -x google.com - получение обратной запис гугла
+
+named-checkconf /etc/named.conf - проверка конфига dns server
