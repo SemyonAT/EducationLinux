@@ -8,4 +8,3 @@
     sysctl_set: yes
     state: present
     reload: yes
-

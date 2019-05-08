@@ -1,5 +1,6 @@
 ---
 
+
 #Dynamic routing run router server (OSPF Quagga) 
 - hosts: servers
   become: true
@@ -18,20 +19,28 @@
         name: network
         state: restarted
 
-inetRouter_ip = '192.168.255.1'
-#netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
-- hosts: inetRouter
-  # nmcli_team:
-  conn_name: inetRouter
-    ip4: '{{ inetRouter_ip }}'
-    gw4: '{{ inetRouter_gw }}'
-  conn_name: external
-    ip4: '{{ external_ip }}'
-    gw4: '{{ external_gw }}'
-  conn_name: storage
-    ip4: '{{ storage_ip }}'
-    gw4: '{{ storage_gw }}'
 
+- hosts: inetRouter
+  become: true
+  #vars: 
+  #  inetRouter_ip: '192.168.255.5/30'
+  #  inetRouter_gw: '192.168.0.1'
+  
+  tasks:
+  - name: install 
+    yum: 
+      name:
+      - python-gobject
+      - NetworkManager-glib
+  - name: set eth
+    nmcli:
+      conn_name: my-eth1 
+      ifname: eth1
+      type: ethernet
+      ip4: 192.168.255.5/30
+      gw4: 192.168.0.1
+      state: present
+    
 
 - hosts: routers
   become: true
