@@ -1,2 +1,12 @@
 ---
 # tasks file for Quagga
+
+- name: Kernel is allowed to routing
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+

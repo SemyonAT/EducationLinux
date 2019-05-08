@@ -13,7 +13,7 @@ central_office
 office1
 office2
 
-[serverrouter]
+[routers]
 inetRouter    ansible_host=127.0.0.1 ansible_port=2222 ansible_private_key_file=.vagrant/machines/inetRouter/virtualbox/private_key
 centralRouter ansible_host=127.0.0.1 ansible_port=2200 ansible_private_key_file=.vagrant/machines/centralRouter/virtualbox/private_key
 office1Router ansible_host=127.0.0.1 ansible_port=2202 ansible_private_key_file=.vagrant/machines/office1Router/virtualbox/private_key

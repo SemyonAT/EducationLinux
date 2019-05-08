@@ -1,16 +1,15 @@
 ---
 
 #Dynamic routing run router server (OSPF Quagga) 
-- hosts: serverrouter
-  roles:
-    - quagga
-
 - hosts: servers
   become: true
   tasks:
     - name: Set gateway
-      #command: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
       command: echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+      notify:
+        - restart network
+    - name: Set DEFROUTE = no
+      command: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
       notify:
         - restart network
   handlers:
@@ -19,4 +18,7 @@
         name: network
         state: restarted
 
-
+- hosts: routers
+  become: true
+  roles:
+    - quagga
