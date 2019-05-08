@@ -18,6 +18,21 @@
         name: network
         state: restarted
 
+inetRouter_ip = '192.168.255.1'
+#netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+- hosts: inetRouter
+  # nmcli_team:
+  conn_name: inetRouter
+    ip4: '{{ inetRouter_ip }}'
+    gw4: '{{ inetRouter_gw }}'
+  conn_name: external
+    ip4: '{{ external_ip }}'
+    gw4: '{{ external_gw }}'
+  conn_name: storage
+    ip4: '{{ storage_ip }}'
+    gw4: '{{ storage_gw }}'
+
+
 - hosts: routers
   become: true
   roles:
