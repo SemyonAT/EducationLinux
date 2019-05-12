@@ -14,3 +14,18 @@ Vagrantfile + ansible
 
 
 # Для себя
+Quagga сетевой пакет для работы протокола OSPF BGP на линуксе
+## shell zebra
+vtysh - оболочка для управления quagga
+## standart mode
+show run - комада показать все интерфейсы и конфигурацию
+
+show ip ospf database - показывает роутинговую базу ospf 
+show ip ospf neighbor - посмотреть соседей
+
+## Конфигурирование терминала
+configure terminal - вход в режим конфигурирования
+## 
+router ospf - зайти в режим настройки ospf
+network 10.0.0.0/24 ar 0 - настроить зону прослушивания
+do применить результат

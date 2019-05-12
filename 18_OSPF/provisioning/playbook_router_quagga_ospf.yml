@@ -19,8 +19,8 @@
         name: network
         state: restarted
 
-
-- hosts: inetRouter
+#inetRoute
+- hosts: all 
   become: true
   #vars: 
   #  inetRouter_ip: '192.168.255.5/30'
@@ -32,14 +32,14 @@
       name:
       - python-gobject
       - NetworkManager-glib
-  - name: set eth
-    nmcli:
-      conn_name: my-eth1 
-      ifname: eth1
-      type: ethernet
-      ip4: 192.168.255.5/30
-      gw4: 192.168.0.1
-      state: present
+  #- name: set eth
+  #  nmcli:
+  #    conn_name: eth1 
+  #    ifname: eth1
+  #    type: ethernet
+  #    ip4: 192.168.255.15/24
+  #    gw4: 192.168.255.1
+  #    state: present
     
 
 - hosts: routers
