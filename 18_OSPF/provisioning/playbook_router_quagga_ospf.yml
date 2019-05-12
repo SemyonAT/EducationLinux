@@ -32,15 +32,17 @@
       name:
       - python-gobject
       - NetworkManager-glib
+      - epel-release
+
   #- name: set eth
   #  nmcli:
   #    conn_name: eth1 
   #    ifname: eth1
   #    type: ethernet
   #    ip4: 192.168.255.15/24
-  #    gw4: 192.168.255.1
+  #    gw4: "192.168.255.1"
   #    state: present
-    
+   
 
 - hosts: routers
   become: true

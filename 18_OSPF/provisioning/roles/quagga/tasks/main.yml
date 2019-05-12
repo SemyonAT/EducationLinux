@@ -4,7 +4,7 @@
 - name: Kernel is allowed to routing
   sysctl:
     name: net.ipv4.ip_forward
-    value: 1
+    value: "1"
     sysctl_set: yes
     state: present
     reload: yes
@@ -13,6 +13,22 @@
   yum:
     name: quagga
     state: latest
+
+- name: copy info daemons
+  copy: 
+    src: daemons
+    dest: /etc/quagga/daemons group=quagga owner=quagga
+  notify:
+    - Restart zebra service
+    - Restart ospfd service
 #- name: Copy zebra config
 #  template: src=quagga.conf.j2 dest=/etc/quagga/zebra.conf
-#  notify: Restart zebra service
+#  notify: Reload zebra service
+
+- name: Copy quagga config
+  template: 
+    src: ospfd.conf.j2
+    dest: /etc/quagga/ospfd.conf group=quagga owner=quagga
+  notify: 
+    - Restart zebra service
+    - Restart ospfd service
