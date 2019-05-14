@@ -20,3 +20,7 @@
   systemd:
     name: ospfd
     state: reloaded
+
+- name: restart system
+  reboot: 
+      reboot_timeout: 300

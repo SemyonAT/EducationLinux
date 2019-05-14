@@ -1,13 +1,19 @@
 ---
 # tasks file for Quagga
 
-- name: Kernel is allowed to routing
+- name: Kernel is allowed to routing # net.ipv4.conf.all.forwarding
   sysctl:
     name: net.ipv4.ip_forward
     value: "1"
     sysctl_set: yes
     state: present
     reload: yes
+
+- name: Disable selinux
+  selinux: 
+    state: disabled
+  notify:
+    - restart system
 
 - name: install Quagga
   yum:
@@ -17,18 +23,31 @@
 - name: copy info daemons
   copy: 
     src: daemons
-    dest: /etc/quagga/daemons group=quagga owner=quagga
+    dest: /etc/quagga/daemons
+    group: quagga
+    owner: quagga
   notify:
     - Restart zebra service
     - Restart ospfd service
-#- name: Copy zebra config
-#  template: src=quagga.conf.j2 dest=/etc/quagga/zebra.conf
-#  notify: Reload zebra service
 
-- name: Copy quagga config
-  template: 
-    src: ospfd.conf.j2
-    dest: /etc/quagga/ospfd.conf group=quagga owner=quagga
+#- name: Print status
+# debug:
+#    var: setup
+    
+- name: Copy zebra config centralRouter
+  copy:
+    src: zebra.conf.centralRouter
+    dest: /etc/quagga/zebra.conf
+  notify: Reload zebra service
+
+- name: Copy quagga config centralRouter
+  copy: 
+    src: ospfd.conf.centralRouter
+    dest: /etc/quagga/ospfd.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "inetRouter"
   notify: 
     - Restart zebra service
     - Restart ospfd service

@@ -1,31 +1,66 @@
 ---
 
-
 #Dynamic routing run router server (OSPF Quagga) 
-- hosts: servers
+- hosts: inetRouter
   become: true
   tasks:
-    - name: Set gateway
-      command: echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-      notify:
-        - restart network
+    - name: set iptables
+      shell: iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
+  
+- hosts: centralRouter
+  become: true
+  tasks:
+    - name: Set gateway centralRouter
+      shell: echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
     - name: Set DEFROUTE = no
-      command: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-      notify:
-        - restart network
-  handlers:
-    - name:  restart network
-      systemd:
-        name: network
-        state: restarted
+      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
-#inetRoute
+- hosts: office1Router
+  become: true
+  tasks:
+    - name: Set gateway office1Router
+      shell: echo "GATEWAY=192.168.255.5" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+  #  - name: Set DEFROUTE = no
+  #    shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+
+- hosts: office2Router
+  become: true
+  tasks:
+    - name: Set gateway office2Router
+      shell: echo "GATEWAY=192.168.255.9" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+  #  - name: Set DEFROUTE = no
+  #    shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+
+- hosts: centralServer
+  become: true
+  tasks:
+    - name: Set gateway centralServer
+      shell: echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+  #  - name: Set DEFROUTE = no
+  #    shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+
+- hosts: office1Server
+  become: true
+  tasks:
+    - name: Set gateway office1Server
+      shell: echo "GATEWAY=192.168.2.65" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+  #  - name: Set DEFROUTE = no
+  #    shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+- hosts: office2Server
+  become: true
+  tasks:
+    - name: Set gateway office2Server
+      shell: echo "GATEWAY=192.168.1.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+  #  - name: Set DEFROUTE = no
+  #    shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+
+#Set all host
 - hosts: all 
   become: true
   #vars: 
   #  inetRouter_ip: '192.168.255.5/30'
   #  inetRouter_gw: '192.168.0.1'
-  
+
   tasks:
   - name: install 
     yum: 
@@ -33,7 +68,10 @@
       - python-gobject
       - NetworkManager-glib
       - epel-release
-
+  - name:  restart network
+    systemd:
+      name: network
+      state: restarted
   #- name: set eth
   #  nmcli:
   #    conn_name: eth1 
@@ -42,7 +80,7 @@
   #    ip4: 192.168.255.15/24
   #    gw4: "192.168.255.1"
   #    state: present
-   
+
 
 - hosts: routers
   become: true
