@@ -1,6 +1,6 @@
 !
 ! Zebra configuration saved from vty
-!   2019/05/16 10:08:48
+!   2019/05/16 10:05:44
 !
 !
 !
@@ -12,14 +12,12 @@ interface eth1
 interface eth2
 !
 interface eth3
-!
-interface eth4
-!
+ ip ospf cost 100
 interface lo
 !
 router ospf
- ospf router-id 0.0.0.10
- network 192.168.0.0/24 area 0.0.0.5
+ ospf router-id 0.0.0.2
+ network 192.168.1.0/24 area 0.0.0.2
  network 192.168.255.0/24 area 0.0.0.0
 !
 line vty

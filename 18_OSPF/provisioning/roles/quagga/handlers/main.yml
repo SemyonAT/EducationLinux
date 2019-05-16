@@ -10,17 +10,6 @@
     name: ospfd
     state: restarted
     enabled: yes
-
-- name: Reload zebra service
-  systemd:
-    name: zebra
-    state: reloaded
-
-- name: Reload ospfd service
-  systemd:
-    name: ospfd
-    state: reloaded
-
 - name: restart system
   reboot: 
       reboot_timeout: 300
