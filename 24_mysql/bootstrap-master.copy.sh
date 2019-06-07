@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Variables
 DBNAME=sample
 DBUSER=root
