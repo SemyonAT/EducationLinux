@@ -1,0 +1,11 @@
+[nfs_server]
+nassrv10    ansible_host=127.0.0.1 ansible_port=33553 ansible_private_key_file=.vagrant/machines/nassrv10/virtualbox/private_key
+
+[PostgreSQL]
+pgsrv10    ansible_host=127.0.0.1 ansible_port=33552 ansible_private_key_file=.vagrant/machines/pgsrv10/virtualbox/private_key
+pgsrv01    ansible_host=127.0.0.1 ansible_port=33550 ansible_private_key_file=.vagrant/machines/pgsrv01/virtualbox/private_key
+pgsrv02    ansible_host=127.0.0.1 ansible_port=33551 ansible_private_key_file=.vagrant/machines/pgsrv02/virtualbox/private_key
+
+[nfs_client:children]
+PostgreSQL
+
