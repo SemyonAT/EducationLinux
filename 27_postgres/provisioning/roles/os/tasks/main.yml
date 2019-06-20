@@ -1,0 +1,21 @@
+---
+# tasks file for os
+- name: enable firewalld
+  systemd: 
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: install packages epel-release
+  yum: 
+    name:
+    - epel-release
+
+- name: install packages 
+  yum: 
+    name:
+    - net-tools
+    - sysstat
+    - htop
+    - vim
+    - atop

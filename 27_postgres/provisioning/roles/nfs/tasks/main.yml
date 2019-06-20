@@ -1,6 +1,45 @@
 ---
 # tasks file for nfs
+##############################################
+### set firewalld
+# firewall-cmd --permanent --zone=public --add-service=nfs
+# firewall-cmd --permanent --zone=public --add-service=mountd
+# firewall-cmd --permanent --zone=public --add-service=rpc-bind
+# firewall-cmd --reload
+# 10.6.9.23 /24
+- name: Enable port for nfs in firewalld 
+  firewalld:
+    zone: public
+    service: nfs
+    permanent: yes
+    immediate: yes
+    state: enabled
 
+- name: Enable port for nfs3 in firewalld 
+  firewalld:
+    zone: public
+    service: nfs3
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for mountd in firewalld 
+  firewalld:
+    zone: public
+    service: mountd
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for rpc-bind in firewalld 
+  firewalld:
+    zone: public
+    service: rpc-bind
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+##############################################
 - name: install nfs servers
   yum:
     name: nfs-utils
@@ -10,6 +49,20 @@
     - restart nfs-server.service
 
 # rpcinfo -p localhost #Проверяем для каких версий NFS способен принимать подключения наш NFS-сервер
+
+##############################################
+### try statate enable
+- name: try statate enable rpcbind.service
+  systemd: 
+    name: rpcbind.service
+    enabled: yes
+    state: started
+
+- name: try statate enable nfs-server.service
+  systemd: 
+    name: nfs-server.service
+    enabled: yes
+    state: started
 
 ##############################################
 ### nassrv10
@@ -22,7 +75,7 @@
   when: ansible_facts['hostname'] == "nassrv10"
 
 - name: create directory for pgsrv10
-  file: path=/pg_backup/pgsrv10/{{ item }}/data state=directory mode=0777
+  file: path=/pg_backup/pgsrv01/{{ item }}/data state=directory mode=0777
   loop:
     - dev
     - outs
@@ -30,7 +83,7 @@
   when: ansible_facts['hostname'] == "nassrv10"
 
 - name: create directory for pgsrv10
-  file: path=/pg_backup/pgsrv10/{{ item }}/xlog state=directory mode=0777
+  file: path=/pg_backup/pgsrv02/{{ item }}/xlog state=directory mode=0777
   loop:
     - dev
     - outs
@@ -53,8 +106,3 @@
 - name: reload config nfs
   shell: exportfs -r
 
-# firewall-cmd --permanent --zone=public --add-service=nfs
-# firewall-cmd --permanent --zone=public --add-service=mountd
-# firewall-cmd --permanent --zone=public --add-service=rpc-bind
-# firewall-cmd --reload
-# 10.6.9.23 /24
