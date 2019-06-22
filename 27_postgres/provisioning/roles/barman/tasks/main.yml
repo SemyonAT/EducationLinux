@@ -1,0 +1,27 @@
+---
+# tasks file for barman
+
+##############################################################
+### set firewalld
+#- name: Enable port for barman in firewalld 
+#  firewalld:
+#    zone: public
+#    service: lukilserver
+#    permanent: yes
+#    immediate: yes
+#    state: enabled
+
+#####################################################
+###  general settings  ###
+
+- name: install repo postgresql
+  yum: 
+    name:
+      - https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7.6-x86_64/pgdg-redhat10-10-2.noarch.rpm
+- name: install packages barman
+  yum:
+    name:
+      - barman
+#- name: run command another server
+#  shell: mkdir /111
+#  delegate_to: nassrv10

@@ -4,8 +4,8 @@
 ### set firewalld
 - name: Enable port for postgres in firewalld 
   firewalld:
-    zone: postgresql
-    service: nfs
+    zone: public
+    service: postgresql
     permanent: yes
     immediate: yes
     state: enabled
@@ -57,9 +57,9 @@
     dest: "/usr/lib/systemd/system/{{ item }}" 
     mode: 0644
   loop:
+    - postgresql-10-slave.service
     - postgresql-10-audit.service
     - postgresql-10-dev.service
-  when: ansible_facts['hostname'] == "pgsrv10"
 ##############################################################
 ### audit cluster ###
 
@@ -75,6 +75,7 @@
   file:
     path: /var/lib/pgsql/10/audit_cluster/lost+found
     state: absent
+  when: ansible_facts['hostname'] == "pgsrv10"
 
 - name: init claster postgres1c audit
   shell: /usr/pgsql-10/bin/initdb --locale=ru_RU.UTF-8 -D /var/lib/pgsql/10/audit_cluster
@@ -98,7 +99,6 @@
 
 - name: ansible create directory outs
   file: path=/var/lib/pgsql/10/data state=directory owner=postgres group=postgres
-  when: ansible_facts['hostname'] == "pgsrv10"
 
 #- name: Mount up device outs server
 #  mount: path=/var/lib/pgsql/10/data src=/dev/pg_cluster2/outs fstype=ext4 state=mounted
@@ -115,18 +115,35 @@
   shell: /usr/pgsql-10/bin/initdb --locale=ru_RU.UTF-8 -D /var/lib/pgsql/10/data
   become_user: postgres
   ignore_errors: yes
-  when: ansible_facts['hostname'] == "pgsrv10"
 
-- name: copy config files postgres1c outs pgsrv10
-  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
-  notify: 
-    - Restart postgres1c outs
-  when: ansible_facts['hostname'] == "pgsrv10"
+#- name: copy config files postgres1c outs pgsrv10
+#  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
+#  notify: 
+#    - Restart postgres1c outs
+#when: ansible_facts['hostname'] == "pgsrv10"
 
 - name: State postgres1c outs
   systemd:
     name: postgresql-10.service
     state: started
+
+##############################################################
+### outs slave cluster ###
+
+- name: ansible create directory outs
+  file: path=/var/lib/pgsql/10/slave state=directory owner=postgres group=postgres
+
+#- name: copy config files postgres1c outs pgsrv10
+#  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
+#  notify: 
+#    - Restart postgres1c outs
+
+
+#- name: State postgres1c outs
+#  systemd:
+#    name: postgresql-10-slave.service
+#    state: started
+
 #############################################
 ### other activiti ###
 

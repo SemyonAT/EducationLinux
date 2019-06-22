@@ -32,8 +32,28 @@ MACHINES = {
         :net => [
                {ip: '192.168.30.2', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
             ]
-  },            
-  
+  }, 
+:barman => {
+        :box_name => "centos/7",
+        :ssh_port => 33554,
+        :net => [
+               {ip: '192.168.30.100', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
+            ]
+},            
+:zabbix1c => {
+    :box_name => "centos/7",
+    :ssh_port => 33555,
+    :net => [
+           {ip: '192.168.30.101', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
+        ]
+},  
+:zabbix1cSlave => {
+    :box_name => "centos/7",
+    :ssh_port => 33557,
+    :net => [
+           {ip: '192.168.30.102', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
+        ]
+},   
 }
 
 Vagrant.configure("2") do |config|
@@ -82,9 +102,12 @@ Vagrant.configure("2") do |config|
             systemctl restart sshd
             yum install -y gdisk
             sudo echo "192.168.30.144 nassrv10" >> /etc/hosts
+            sudo echo "192.168.30.101 zabbix1c" >> /etc/hosts
+            sudo echo "192.168.30.102 zabbix1cSlave" >> /etc/hosts
+            sudo echo "192.168.30.100 barman" >> /etc/hosts
             sudo echo "192.168.30.1 pgsrv01" >> /etc/hosts
             sudo echo "192.168.30.2 pgsrv02" >> /etc/hosts
-            
+        
           SHELL
 
         case boxname.to_s
