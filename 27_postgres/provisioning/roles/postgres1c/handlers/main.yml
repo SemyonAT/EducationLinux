@@ -29,6 +29,4 @@
     name: multipathd.service
     enabled: yes
     state: restarted
-    
-
 

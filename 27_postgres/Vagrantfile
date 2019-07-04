@@ -40,20 +40,20 @@ MACHINES = {
                {ip: '192.168.30.100', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
             ]
 },            
-:zabbix1c => {
-    :box_name => "centos/7",
-    :ssh_port => 33555,
-    :net => [
-           {ip: '192.168.30.101', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
-        ]
-},  
-:zabbix1cSlave => {
-    :box_name => "centos/7",
-    :ssh_port => 33557,
-    :net => [
-           {ip: '192.168.30.102', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
-        ]
-},   
+#:zabbix1c => {
+#    :box_name => "centos/7",
+#    :ssh_port => 33555,
+#    :net => [
+#           {ip: '192.168.30.101', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
+#        ]
+#},  
+#:zabbix1cSlave => {
+#    :box_name => "centos/7",
+#    :ssh_port => 33557,
+#    :net => [
+#           {ip: '192.168.30.102', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "moscow-net"},
+#        ]
+#},   
 }
 
 Vagrant.configure("2") do |config|

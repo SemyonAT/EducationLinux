@@ -74,21 +74,28 @@
   mount: path=/pg_backup src=/dev/pg_backup/data fstype=ext4 state=mounted
   when: ansible_facts['hostname'] == "nassrv10"
 
-- name: create directory for pgsrv10
-  file: path=/pg_backup/pgsrv01/{{ item }}/data state=directory mode=0777
-  loop:
-    - dev
-    - outs
-    - audit
-  when: ansible_facts['hostname'] == "nassrv10"
+- name: Change file ownership, group and permissions
+  file:
+    path: /pg_backup
+    #owner: root
+    #group: root
+    mode: '0777'
 
-- name: create directory for pgsrv10
-  file: path=/pg_backup/pgsrv02/{{ item }}/xlog state=directory mode=0777
-  loop:
-    - dev
-    - outs
-    - audit
-  when: ansible_facts['hostname'] == "nassrv10"
+#- name: create directory for pgsrv10
+#  file: path=/pg_backup/pgsrv01/{{ item }}/data state=directory mode=0777
+#  loop:
+#    - dev
+#    - outs
+#    - audit
+#  when: ansible_facts['hostname'] == "nassrv10"
+
+#- name: create directory for pgsrv10
+#  file: path=/pg_backup/pgsrv02/{{ item }}/xlog state=directory mode=0777
+#  loop:
+#    - dev
+#    - outs
+#    - audit
+#  when: ansible_facts['hostname'] == "nassrv10"
 
 - name: create directory for pg_cluster_audit
   file: path=/pg_cluster_audit state=directory

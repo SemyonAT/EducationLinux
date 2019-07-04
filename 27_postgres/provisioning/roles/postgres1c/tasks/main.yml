@@ -30,6 +30,7 @@
     - postgresql10-1c-contrib-10.5-24.el7.x86_64.rpm
     - postgresql10-1c-libs-10.5-24.el7.x86_64.rpm
     - postgresql10-1c-server-10.5-24.el7.x86_64.rpm
+
 - name: install packages
   yum: 
     name: 
@@ -116,6 +117,52 @@
   become_user: postgres
   ignore_errors: yes
 
+- name: "Set locale massege en_US.UTF8"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^lc_messages = 'ru_RU.UTF-8'"
+    line: "lc_messages = 'en_US.UTF-8'"
+  notify:
+    - Restart postgres1c outs
+
+- name: "Set wal_level = replica"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^#wal_level = replica"
+    line: "wal_level = 'replica' "
+  notify:
+    - Restart postgres1c outs
+
+- name: "Set max_wal_senders = 10 "
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^#max_wal_senders = 10 "
+    line: "max_wal_senders = 10 "
+  notify:
+    - Restart postgres1c outs
+    
+- name: "Set max_replication_slots = 10"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^#max_replication_slots = 10"
+    line: "max_replication_slots = 10"
+  notify:
+    - Restart postgres1c outs
+
+- name: "Set replication acses"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/pg_hba.conf
+    state: present
+    regexp: "^host    replication     all             ::1/128                 trust"
+    line: "host    replication     all             0.0.0.0/0                 trust"
+  notify:
+    - Restart postgres1c outs
+
+
 #- name: copy config files postgres1c outs pgsrv10
 #  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
 #  notify: 
@@ -131,7 +178,7 @@
 ### outs slave cluster ###
 
 - name: ansible create directory outs
-  file: path=/var/lib/pgsql/10/slave state=directory owner=postgres group=postgres
+  file: path=/var/lib/pgsql/10/slave state=directory owner=postgres group=postgres mode=0700
 
 #- name: copy config files postgres1c outs pgsrv10
 #  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
@@ -146,8 +193,10 @@
 
 #############################################
 ### other activiti ###
-
-
+- name: install psycopg2
+  yum: 
+    name:
+      - python-psycopg2
 
 
 
