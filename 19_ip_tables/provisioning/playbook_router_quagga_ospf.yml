@@ -15,6 +15,14 @@
     - name: Set DEFROUTE = no
       shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
+- hosts: centralRouter2
+  become: true
+  tasks:
+    - name: Set gateway centralRouter2
+      shell: echo "GATEWAY=192.168.255.100" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    - name: Set DEFROUTE = no
+      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+
 - hosts: office1Router
   become: true
   tasks:
@@ -57,9 +65,6 @@
 #Set all host
 - hosts: all 
   become: true
-  #vars: 
-  #  inetRouter_ip: '192.168.255.5/30'
-  #  inetRouter_gw: '192.168.0.1'
 
   tasks:
   - name: install 
@@ -78,7 +83,6 @@
   #    gw4: "192.168.255.1"
   #    state: present
 
-
 - hosts: routers
   become: true
   roles:
@@ -88,10 +92,6 @@
 #Set all host
 - hosts: all 
   become: true
-  #vars: 
-  #  inetRouter_ip: '192.168.255.5/30'
-  #  inetRouter_gw: '192.168.0.1'
-
   tasks:
   - name:  restart network
     systemd:

@@ -10,6 +10,13 @@ MACHINES = {
         :net => [
                    {ip: '192.168.255.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
                 ]
+},
+:inetRouter2 => {
+        :box_name => "centos/7",
+        #:public => {:ip => '10.10.10.1', :adapter => 1},
+        :net => [
+                   {ip: '192.168.255.100', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net2"},
+                ]
   },
   :centralRouter => {
         :box_name => "centos/7",
@@ -18,6 +25,7 @@ MACHINES = {
                    {ip: '192.168.255.5', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "office1-net"},
                    {ip: '192.168.255.9', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office2-net"},
                    {ip: '192.168.0.1', adapter: 5, netmask: "255.255.255.0", virtualbox__intnet: "dir-net"},
+                   {ip: '192.168.255.101', adapter: 6, netmask: "255.255.255.252", virtualbox__intnet: "router-net2"},
                 ]
   },
   
@@ -28,35 +36,34 @@ MACHINES = {
                 ]
   },
   
-  :office1Router => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.255.6', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office1-net"},
-                   {ip: '192.168.2.65', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {ip: '192.168.255.13', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office_betwen-net"},
-                ]
-  },
-  :office1Server => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.2.66', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
-                ]
-  },
-  :office2Router => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.255.10', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office2-net"},
-                   {ip: '192.168.1.129', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {ip: '192.168.255.14', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office_betwen-net"},
-                ]
-  },
-  :office2Server => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.1.130', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
-                ]
-  },
-  
+ # :office1Router => {
+ #       :box_name => "centos/7",
+ #       :net => [
+ #                  {ip: '192.168.255.6', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office1-net"},
+ #                  {ip: '192.168.2.65', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
+ #                  {ip: '192.168.255.13', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office_betwen-net"},
+ #               ]
+ # },
+ # :office1Server => {
+ #       :box_name => "centos/7",
+ #       :net => [
+ #                  {ip: '192.168.2.66', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
+ #               ]
+ # },
+ # :office2Router => {
+ #       :box_name => "centos/7",
+ #       :net => [
+ #                  {ip: '192.168.255.10', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office2-net"},
+ #                  {ip: '192.168.1.129', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
+ #                  {ip: '192.168.255.14', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office_betwen-net"},
+ #               ]
+ # },
+ # :office2Server => {
+ #       :box_name => "centos/7",
+ #       :net => [
+ #                  {ip: '192.168.1.130', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
+ #               ]
+ # },
 }
 
 Vagrant.configure("2") do |config|
@@ -83,7 +90,7 @@ Vagrant.configure("2") do |config|
           SHELL
 
         box.vm.provision "ansible" do |ansible|
-          ansible.verbose = "vv"
+          ansible.verbose = "v"
           ansible.playbook = "provisioning/playbook_router_quagga_ospf.yml"
           ansible.become = "true"
           ansible.inventory_path = "provisioning/staging/hosts" 
