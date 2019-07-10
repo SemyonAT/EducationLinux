@@ -17,6 +17,16 @@
     state: present
     reload: yes
 
+- name: Enable port for quaga ospf in firewalld 
+  shell: firewall-cmd --permanent --zone=public --add-protocol=ospf
+#- name: Enable port for quaga ospf in firewalld 
+#  firewalld:
+#    zone: public
+#    protocol: 'ospf'
+#    permanent: yes
+#    immediate: yes
+#    state: enabled
+
 - name: Disable selinux
   selinux: 
     state: disabled
@@ -54,6 +64,28 @@
     owner: quagga
     mode: 0660
   when: ansible_facts['hostname'] == "inetRouter"
+  notify: 
+    - Restart ospfd service
+
+# inetRouter2    
+- name: Copy zebra config inetRouter2
+  copy:
+    src: zebra.conf.inetRouter2
+    dest: /etc/quagga/zebra.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  notify: Restart zebra service
+  when: ansible_facts['hostname'] == "inetRouter2"
+
+- name: Copy quagga config inetRouter2
+  copy: 
+    src: ospfd.conf.inetRouter2
+    dest: /etc/quagga/ospfd.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "inetRouter2"
   notify: 
     - Restart ospfd service
 
@@ -122,3 +154,4 @@
   when: ansible_facts['hostname'] == "office2Router"
   notify: 
     - Restart ospfd service
+    

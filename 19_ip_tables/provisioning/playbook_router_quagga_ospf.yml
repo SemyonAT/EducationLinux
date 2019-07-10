@@ -15,13 +15,13 @@
     - name: Set DEFROUTE = no
       shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
-- hosts: centralRouter2
-  become: true
-  tasks:
-    - name: Set gateway centralRouter2
-      shell: echo "GATEWAY=192.168.255.100" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-    - name: Set DEFROUTE = no
-      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+#- hosts: inetRouter2
+#  become: true
+#  tasks:
+#    - name: Set gateway inetRouter2
+#      shell: echo "GATEWAY=192.168.255.100" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+#    - name: Set DEFROUTE = no
+#      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
 - hosts: office1Router
   become: true
@@ -65,8 +65,12 @@
 #Set all host
 - hosts: all 
   become: true
-
   tasks:
+  - name:  restart network
+    systemd:
+      name: network
+      state: restarted
+
   - name: install 
     yum: 
       name:
@@ -82,12 +86,22 @@
   #    ip4: 192.168.255.15/24
   #    gw4: "192.168.255.1"
   #    state: present
+- hosts: all
+  become: true
+  roles:
+    - os
+    - iptables
 
 - hosts: routers
   become: true
   roles:
     - quagga
 
+
+- hosts: centralServer
+  become: true
+  roles:
+    - nginx
 
 #Set all host
 - hosts: all 
