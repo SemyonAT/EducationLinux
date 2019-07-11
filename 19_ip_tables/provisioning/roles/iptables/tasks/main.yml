@@ -13,20 +13,82 @@
   become: yes
   when: ansible_facts['hostname'] == "centralRouter"
 
+# inetRouter
+- name: iptables -I FORWARD -j ACCEPT
+  iptables:
+    table: filter
+    chain: FORWARD
+    jump: ACCEPT
+    action: insert
+    rule_num: 1
+    comment: accept trafic route iptables -I FORWARD -j ACCEPT
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter"
+
 # inetRouter2    
-- name: Forward port 8080 to 80
+#Открыть порты 80 и 8080
+- name: Insert a rule open 80 port
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 80
+    jump: ACCEPT
+    action: insert
+    rule_num: 3
+  when: ansible_facts['hostname'] == "inetRouter2"
+
+- name: Insert a rule open 8080 port
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 8080
+    jump: ACCEPT
+    action: insert
+    rule_num: 2
+  when: ansible_facts['hostname'] == "inetRouter2"
+  
+- name: Forward port 8080 to 80 and route trafic onethe ip 192.168.0.2
   iptables:
     table: nat
     chain: PREROUTING
-    #in_interface: eth0
+    protocol: tcp
+    match: tcp
+    destination_port: '8080'
+    destination: '10.0.2.15'
+    jump: DNAT
+    to_destination: '192.168.0.2:80'
+    action: insert
+    comment: Redirect web traffic to port 8080 in centralServer
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+
+- name: Forward port 8080 to 80
+  iptables:
+    table: nat
+    chain: OUTPUT
+    protocol: tcp
+    match: tcp
+    destination_port: '80'
+    destination: '10.0.2.15'
+    jump: DNAT
+    to_destination: '192.168.0.2'
+    action: insert
+    comment: Redirect web traffic to port 8080 in centralServer
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+
+
+- name: Forward port 8080 to 80
+  iptables:
+    table: nat
+    chain: POSTROUTING
     protocol: tcp
     match: tcp
     destination_port: '80'
     destination: '192.168.0.2'
-    #centralServer
-    jump: DNAT
-    to_destination: '192.168.0.2:8080'
-    #to_ports: '8080'
+    jump: SNAT
+    to_source: '192.168.255.17'
+    action: insert
     comment: Redirect web traffic to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
