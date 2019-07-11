@@ -26,17 +26,7 @@
   when: ansible_facts['hostname'] == "inetRouter"
 
 # inetRouter2    
-#Открыть порты 80 и 8080
-- name: Insert a rule open 80 port
-  iptables:
-    chain: INPUT
-    protocol: tcp
-    destination_port: 80
-    jump: ACCEPT
-    action: insert
-    rule_num: 3
-  when: ansible_facts['hostname'] == "inetRouter2"
-
+#Открыть порт 8080
 - name: Insert a rule open 8080 port
   iptables:
     chain: INPUT
@@ -46,7 +36,18 @@
     action: insert
     rule_num: 2
   when: ansible_facts['hostname'] == "inetRouter2"
-  
+#Разрешаем форвардинг всех пакетов чез локальный хост. Плюс параметры ядра устанавливаются в роли Quaga
+- name: iptables -I FORWARD -j ACCEPT
+  iptables:
+    table: filter
+    chain: FORWARD
+    jump: ACCEPT
+    action: insert
+    rule_num: 1
+    comment: accept trafic route iptables -I FORWARD -j ACCEPT
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+#Перенаправление трафика с порта на другую машину на конкретный порт с внешенго трафика
 - name: Forward port 8080 to 80 and route trafic onethe ip 192.168.0.2
   iptables:
     table: nat
@@ -54,30 +55,28 @@
     protocol: tcp
     match: tcp
     destination_port: '8080'
-    destination: '10.0.2.15'
     jump: DNAT
     to_destination: '192.168.0.2:80'
     action: insert
     comment: Redirect web traffic to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
-
-- name: Forward port 8080 to 80
+#Перенаправление трафика с порта на другую машину на конкретный порт с внутреннего трафика localhost
+- name: Forward port 8080 to 80 and route trafic onethe ip 192.168.0.2
   iptables:
     table: nat
     chain: OUTPUT
     protocol: tcp
     match: tcp
-    destination_port: '80'
-    destination: '10.0.2.15'
+    destination_port: '8080'
     jump: DNAT
-    to_destination: '192.168.0.2'
+    to_destination: '192.168.0.2:80'
     action: insert
     comment: Redirect web traffic to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
-
-
+#это правило маскирует исходящий трафик при перенаправлении с конкретного порта
+#iptables -I POSTROUTING -j MASQUERADE - 'это маскарадинг для всвего исходящего трафика, но можно ограничить -d -s'
 - name: Forward port 8080 to 80
   iptables:
     table: nat
@@ -92,3 +91,5 @@
     comment: Redirect web traffic to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
+
+#Сохраниение ip tabels 
