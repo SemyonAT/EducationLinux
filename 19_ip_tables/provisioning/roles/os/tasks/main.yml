@@ -5,6 +5,7 @@
     name: firewalld
     state: started
     enabled: yes
+  when: ansible_facts['hostname'] != "centralRouter"
 
 
 - name: install packages epel-release
@@ -12,17 +13,17 @@
     name:
     - epel-release
 
-- name: install packages other
-  yum: 
-    name:
-    - net-tools
-    - sysstat
-    - htop
-    - vim
-    - atop
-    - telnet
-    - chrony
-    - tcpdump
+#- name: install packages other
+ # yum: 
+ #   name:
+ #   - net-tools
+ #   - sysstat
+ #   - htop
+ #   - vim
+ #   - atop
+ #   - telnet
+ #   - chrony
+ #   - tcpdump
 
 - name: Set timezone to Asia/Tokyo
   timezone:

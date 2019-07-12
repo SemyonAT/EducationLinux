@@ -19,6 +19,7 @@
 
 - name: Enable port for quaga ospf in firewalld 
   shell: firewall-cmd --permanent --zone=public --add-protocol=ospf
+  when: ansible_facts['hostname'] != "inetRouter"
 #- name: Enable port for quaga ospf in firewalld 
 #  firewalld:
 #    zone: public
