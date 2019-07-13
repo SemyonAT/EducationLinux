@@ -31,158 +31,75 @@
 #iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT  
 #iptables -A INPUT -p icmp -j ACCEPT      
 #iptables -A INPUT -i lo -j ACCEPT      
-#iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT   # ssh is OK
+#iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT  
 #iptables -A INPUT -j REJECT 
-
-- name: drop INPUT 
-  shell: iptables --flush INPUT
-  when: ansible_facts['hostname'] == "inetRouter"
-- name: drop TRAFFIC 
-  shell: iptables --flush TRAFFIC
-  when: ansible_facts['hostname'] == "inetRouter"
-  ignore_errors: yes
-- name: drop SSH-INPUT 
-  shell: iptables --flush SSH-INPUT
-  when: ansible_facts['hostname'] == "inetRouter"
-  ignore_errors: yes
-- name: drop SSH-INPUTTWO 
-  shell: iptables --flush SSH-INPUTTWO
-  when: ansible_facts['hostname'] == "inetRouter"
-  ignore_errors: yes
-- name: drop TRAFFIC 
-  shell: iptables -X TRAFFIC
-  ignore_errors: yes
-  when: ansible_facts['hostname'] == "inetRouter"
-- name: drop SSH-INPUT 
-  shell: iptables -X SSH-INPUT
-  ignore_errors: yes
-  when: ansible_facts['hostname'] == "inetRouter"
-- name: drop SSH-INPUTTWO 
-  shell: iptables -X SSH-INPUTTWO
-  ignore_errors: yes
-  when: ansible_facts['hostname'] == "inetRouter"
-
-
-- name: drop TRAFFIC 
-  shell: iptables -N TRAFFIC
-  when: ansible_facts['hostname'] == "inetRouter"
-  ignore_errors: yes
-
-- name: iptables -N SSH-INPUT 
-  shell: iptables -N SSH-INPUT 
-  when: ansible_facts['hostname'] == "inetRouter"
-  ignore_errors: yes
-
-- name: iptables -N SSH-INPUTTWO
-  shell: iptables -N SSH-INPUTTWO
-  when: ansible_facts['hostname'] == "inetRouter"
-  ignore_errors: yes
-
-
-##################################
-
-
-
-- name: -A INPUT -j TRAFFIC
-  shell: iptables -A INPUT -j TRAFFIC
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: ESTABLISHED TRAFFIC ACCEPT
-  shell: iptables -A TRAFFIC -m state --state ESTABLISHED,RELATED -j ACCEPT
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -p icmp -j ACCEPT  
-  shell: iptables -A TRAFFIC -p icmp -j ACCEPT  
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -i lo -j ACCEPT  
-  shell: iptables -A TRAFFIC -i lo -j ACCEPT  
-  when: ansible_facts['hostname'] == "inetRouter"
-
-#- name: Accept 22 port 
-#  shell: iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
-#  when: ansible_facts['hostname'] == "inetRouter"
-
-
+- name: iptables_raw blok trafik ipv6
+  iptables_raw:
+    ipversion: 6
+    weight: 50
+    name: blok trafik ipv6
+    rules: '-A INPUT -j DROP'
+#- name: iptables_raw standart rull
+#  iptables_raw:
+#    name: default_rules
+#    weight: 10
+#    keep_unmanaged: no
+#    rules: |
+#      -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#      -A INPUT -p icmp -j ACCEPT 
+#      -A INPUT -i lo -j ACCEPT
+#      -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+#      -A INPUT -j REJECT
+#      -P FORWARD ACCEPT
+#      -P OUTPUT ACCEPT
+- name: iptables_raw new rull
+  iptables_raw:
+    name: default_rules
+    weight: 10
+    keep_unmanaged: no
+    rules: |
+      -A INPUT -i lo -j ACCEPT
+      -N BTRAFFIC
+      -N SSH-INPUT
+      -N SSH-INPUTTWO
+      -A INPUT -j BTRAFFIC
+      -A BTRAFFIC -p icmp --icmp-type any -j ACCEPT
+      -A BTRAFFIC -m state --state ESTABLISHED,RELATED -j ACCEPT
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 9991 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 7777 -m recent --rcheck --name SSH0 -j SSH-INPUT
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 8881 -m recent --name SSH0 --set -j DROP
+      -A SSH-INPUT -m recent --name SSH1 --set -j DROP
+      -A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP 
+      -A BTRAFFIC -j DROP
+      #-P INPUT DROP
+      #-P FORWARD ACCEPT
+      -P OUTPUT ACCEPT
 #knok
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 5556 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 6667 -m recent --rcheck --name SSH0 -j SSH-INPUT
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
-#-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 7778 -m recent --name SSH0 --set -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 5556 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 6667 -m recent --rcheck --name SSH0 -j SSH-INPUT
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 7778 -m recent --name SSH0 --set -j DROP
 #-A SSH-INPUT -m recent --name SSH1 --set -j DROP
 #-A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP 
-#-A TRAFFIC -j DROP
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 5556 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 5556 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 6667 -m recent --rcheck --name SSH0 -j SSH-INPUT
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 6667 -m recent --rcheck --name SSH0 -j SSH-INPUT
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 7778 -m recent --name SSH0 --set -j DROP
-  shell: iptables -A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 7778 -m recent --name SSH0 --set -j DROP 
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A SSH-INPUT -m recent --name SSH1 --set -j DROP 
-  shell: iptables -A SSH-INPUT -m recent --name SSH1 --set -j DROP
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP 
-  shell: iptables -A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP 
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: iptables -A TRAFFIC -j DROP 
-  shell: iptables -A TRAFFIC -j DROP 
-  when: ansible_facts['hostname'] == "inetRouter"
-
-#DROP
-#- name: any other traffic is not welcome 
-#  shell: iptables -A INPUT -j REJECT
-#  when: ansible_facts['hostname'] == "inetRouter"
+#-A BTRAFFIC -j DROP
 
 ################################
 ### FORWARD
 #-A FORWARD -j REJECT --reject-with icmp-port-unreachable
-
-- name: drop FORWARD 
-  shell: iptables --flush FORWARD
-  when: ansible_facts['hostname'] == "inetRouter"
-
-- name: Accept forward 
-  shell: iptables -A FORWARD -j ACCEPT
-  when: ansible_facts['hostname'] == "inetRouter"
+#--flush FORWARD
+#-A FORWARD -j ACCEPT
 ################################
 ### OUTPUT
 
 ################################
 ### POSTROUTING
-
-###############################
-- name: service iptables save
-  shell: service iptables save
-  when: ansible_facts['hostname'] == "inetRouter"
-
 
 #####################################
 #####################################
@@ -237,7 +154,7 @@
     jump: DNAT
     to_destination: '192.168.0.2:80'
     action: insert
-    comment: Redirect web traffic to port 8080 in centralServer
+    comment: Redirect web BTRAFFIC to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
 #Перенаправление трафика с порта на другую машину на конкретный порт с внутреннего трафика localhost
@@ -251,7 +168,7 @@
     jump: DNAT
     to_destination: '192.168.0.2:80'
     action: insert
-    comment: Redirect web traffic to port 8080 in centralServer
+    comment: Redirect web BTRAFFIC to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
 #это правило маскирует исходящий трафик при перенаправлении с конкретного порта
@@ -267,7 +184,7 @@
     jump: SNAT
     to_source: '192.168.255.17'
     action: insert
-    comment: Redirect web traffic to port 8080 in centralServer
+    comment: Redirect web BTRAFFIC to port 8080 in centralServer
   become: yes
   when: ansible_facts['hostname'] == "inetRouter2"
 
