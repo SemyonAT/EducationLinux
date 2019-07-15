@@ -23,6 +23,7 @@
     - chrony
     - tcpdump
     - nmap
+    - unzip
 
 - name: Set timezone to Europe/Moscow
   timezone:

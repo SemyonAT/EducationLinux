@@ -12,16 +12,16 @@
   tasks:
     - name: Set gateway centralRouter
       shell: echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-    - name: Set DEFROUTE = no
-      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+    #- name: Set DEFROUTE = no
+    #  shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
 - hosts: office1Router
   become: true
   tasks:
     - name: Set gateway office1Router
       shell: echo "GATEWAY=192.168.255.5" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-    - name: Set DEFROUTE = no
-      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+    #- name: Set DEFROUTE = no
+    #  shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
 - hosts: office2Router
   become: true
@@ -36,8 +36,8 @@
   tasks:
     - name: Set gateway centralServer
       shell: echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-    - name: Set DEFROUTE = no
-      shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+    #- name: Set DEFROUTE = no
+    #  shell: echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
 
 - hosts: office1Server
   become: true
@@ -82,16 +82,13 @@
   become: true
   roles:
     - os
-  
+
 - hosts: routers
   become: true
   roles:
-    - quagga
+    - openSSH
+    - openVPN
 
-- hosts: centralServer
-  become: true
-  roles:
-    - nginx
 
 #Set all host
 - hosts: all 
