@@ -1,0 +1,115 @@
+---
+# tasks file for nfs
+##############################################
+### set firewalld
+# firewall-cmd --permanent --zone=public --add-service=nfs
+# firewall-cmd --permanent --zone=public --add-service=mountd
+# firewall-cmd --permanent --zone=public --add-service=rpc-bind
+# firewall-cmd --reload
+# 10.6.9.23 /24
+- name: Enable port for nfs in firewalld 
+  firewalld:
+    zone: public
+    service: nfs
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for nfs3 in firewalld 
+  firewalld:
+    zone: public
+    service: nfs3
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for mountd in firewalld 
+  firewalld:
+    zone: public
+    service: mountd
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for rpc-bind in firewalld 
+  firewalld:
+    zone: public
+    service: rpc-bind
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+##############################################
+- name: install nfs servers
+  yum:
+    name: nfs-utils
+    state: latest
+  notify:
+    - restart rpcbind.service
+    - restart nfs-server.service
+
+# rpcinfo -p localhost #Проверяем для каких версий NFS способен принимать подключения наш NFS-сервер
+
+##############################################
+### try statate enable
+- name: try statate enable rpcbind.service
+  systemd: 
+    name: rpcbind.service
+    enabled: yes
+    state: started
+
+- name: try statate enable nfs-server.service
+  systemd: 
+    name: nfs-server.service
+    enabled: yes
+    state: started
+
+##############################################
+### nassrv10
+- name: create directory for backup
+  file: path=/pg_backup state=directory mode=0777
+  when: ansible_facts['hostname'] == "nassrv10"
+
+- name: Mount up device for backup
+  mount: path=/pg_backup src=/dev/pg_backup/data fstype=ext4 state=mounted
+  when: ansible_facts['hostname'] == "nassrv10"
+
+- name: Change file ownership, group and permissions
+  file:
+    path: /pg_backup
+    #owner: root
+    #group: root
+    mode: '0777'
+
+#- name: create directory for pgsrv10
+#  file: path=/pg_backup/pgsrv01/{{ item }}/data state=directory mode=0777
+#  loop:
+#    - dev
+#    - outs
+#    - audit
+#  when: ansible_facts['hostname'] == "nassrv10"
+
+#- name: create directory for pgsrv10
+#  file: path=/pg_backup/pgsrv02/{{ item }}/xlog state=directory mode=0777
+#  loop:
+#    - dev
+#    - outs
+#    - audit
+#  when: ansible_facts['hostname'] == "nassrv10"
+
+- name: create directory for pg_cluster_audit
+  file: path=/pg_cluster_audit state=directory
+  when: ansible_facts['hostname'] == "nassrv10"
+
+- name: Mount up device for pg_cluster_audit
+  mount: path=/pg_cluster_audit src=/dev/pg_cluster/audit fstype=ext4 state=mounted
+  when: ansible_facts['hostname'] == "nassrv10"
+
+
+- name: copy config nfs shear
+  copy: src=nassrv10-exports dest=/etc/exports mode=0644
+  when: ansible_facts['hostname'] == "nassrv10"
+  
+- name: reload config nfs
+  shell: exportfs -r
+

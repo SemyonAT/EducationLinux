@@ -3,3 +3,5 @@
 .ssh/
 .vagrant/
 *.ppk
+/24_mysql/config/*
+/24_mysql/data/*
