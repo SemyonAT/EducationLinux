@@ -22,6 +22,7 @@
       state: present
   when: ansible_facts['hostname'] == "inetRouter"
 
+
 - name: Try nmcli add bond-slave
   nmcli:
       type: bond-slave
@@ -71,3 +72,18 @@
       master: 'bond0'
       state: present
   when: ansible_facts['hostname'] == "centralRouter"
+
+
+- name: "Set dhcp static"
+  lineinfile:
+    dest:  /etc/sysconfig/network-scripts/ifcfg-bond0
+    state: present
+    regexp: "^BOOTPROTO=dhcp"
+    line: "BOOTPROTO=static"
+
+- name: "Set dhcp static"
+  lineinfile:
+    dest:  /etc/sysconfig/network-scripts/ifcfg-bond0
+    state: present
+    regexp: "^DHCP_CLIENT_ID=static"
+    line: "BONDING_OPTS=\"mode=1 miimon=100 fail_over_mac=1\""
