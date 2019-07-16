@@ -1,0 +1,29 @@
+---
+# tasks file for vlan
+
+#- name: Try nmcli add vlan
+#  nmcli:
+#    type: vlan
+#    ifname: eth1
+#    vlanid: '100'
+#    vlandev: eth1
+#    conn_name: vlan100
+#    ip4: '10.10.10.254/24'
+#    autoconnect: yes
+#    state: present
+
+- name: testClient1 add vlan1
+  shell: nmcli con add type vlan con-name "vlan1" dev "eth1" id 1 ip4 10.10.10.254/24
+  when: ansible_facts['hostname'] == "testClient1"     
+
+- name: testClient1 add vlan2
+  shell: nmcli con add type vlan con-name "vlan2" dev "eth1" id 1 ip4 10.10.10.254/24
+  when: ansible_facts['hostname'] == "testClient2"
+
+- name: testServer1 add vlan1
+  shell: nmcli con add type vlan con-name "vlan1" dev "eth1" id 1 ip4 10.10.10.1/24
+  when: ansible_facts['hostname'] == "testServer1"  
+
+- name: testServer2 add vlan2
+  shell: nmcli con add type vlan con-name "vlan2" dev "eth1" id 1 ip4 10.10.10.1/24
+  when: ansible_facts['hostname'] == "testServer2"  

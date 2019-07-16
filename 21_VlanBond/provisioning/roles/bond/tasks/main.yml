@@ -1,0 +1,73 @@
+---
+# tasks file for bond
+#########################################33
+- name: Add the 802.1q module
+  modprobe:
+    name: bonding
+    state: present
+#- name: Set sysctl for bonding
+
+
+
+###### Working with all cloud nodes - Bonding
+- name: Try nmcli add bond - conn_name only & ip4 gw4 mode
+  nmcli:
+      type: bond
+      conn_name: 'bond0'
+      ip4: '192.168.1.100/24'
+      gw4: ''
+      mode: "active-backup"
+      dhcp_client_id: static
+      #miimon: 100
+      state: present
+  when: ansible_facts['hostname'] == "inetRouter"
+
+- name: Try nmcli add bond-slave
+  nmcli:
+      type: bond-slave
+      conn_name: 'bond0-eth1'
+      ifname: 'eth1'
+      master: 'bond0'
+      state: present
+  when: ansible_facts['hostname'] == "inetRouter"
+
+- name: Try nmcli add bond-slave
+  nmcli:
+      type: bond-slave
+      conn_name: 'bond0-eth2'
+      ifname: 'eth2'
+      master: 'bond0'
+      state: present
+  when: ansible_facts['hostname'] == "inetRouter"
+
+
+###############################333
+- name: Try nmcli add bond - conn_name only & ip4 gw4 mode
+  nmcli:
+      type: bond
+      conn_name: 'bond0'
+      ip4: '192.168.1.101/24'
+      gw4: ''
+      mode: "active-backup"
+      dhcp_client_id: static
+      #miimon: 100
+      state: present
+  when: ansible_facts['hostname'] == "centralRouter"
+
+- name: Try nmcli add bond-slave
+  nmcli:
+      type: bond-slave
+      conn_name: 'bond0-eth1'
+      ifname: 'eth1'
+      master: 'bond0'
+      state: present
+  when: ansible_facts['hostname'] == "centralRouter"
+
+- name: Try nmcli add bond-slave
+  nmcli:
+      type: bond-slave
+      conn_name: 'bond0-eth5'
+      ifname: 'eth5'
+      master: 'bond0'
+      state: present
+  when: ansible_facts['hostname'] == "centralRouter"

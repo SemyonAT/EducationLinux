@@ -5,68 +5,84 @@
 
 MACHINES = {
 :inetRouter => {
-        :box_name => "centos/6",
+        :box_name => "centos/7",
+        :ssh_port => 33355,
         #:public => {:ip => '10.10.10.1', :adapter => 1},
         :net => [
                    {ip: '192.168.255.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+                   {ip: '192.168.255.17', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "router-net2"},
                 ]
   },
   :centralRouter => {
         :box_name => "centos/7",
+        :ssh_port => 33356,
         :net => [
                    {ip: '192.168.255.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
                    {ip: '192.168.255.5', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "office1-net"},
                    {ip: '192.168.255.9', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office2-net"},
-                   {ip: '192.168.0.1', adapter: 5, netmask: "255.255.255.240", virtualbox__intnet: "dir-net"},
-                   {ip: '192.168.0.33', adapter: 6, netmask: "255.255.255.240", virtualbox__intnet: "hw-net"},
-                   {ip: '192.168.0.65', adapter: 7, netmask: "255.255.255.192", virtualbox__intnet: "mgt-net"},
+                   {ip: '192.168.0.1', adapter: 5, netmask: "255.255.255.0", virtualbox__intnet: "dir-net"},
+                   {ip: '192.168.255.18', adapter: 6, netmask: "255.255.255.252", virtualbox__intnet: "router-net2"},
                 ]
   },
   
-  :centralServer => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.0.2', adapter: 2, netmask: "255.255.255.240", virtualbox__intnet: "dir-net"},
-                   {adapter: 3, auto_config: false, virtualbox__intnet: true},
-                   {adapter: 4, auto_config: false, virtualbox__intnet: true},
-                ]
-  },
+#  :centralServer => {
+#        :box_name => "centos/7",
+#        :net => [
+#                   {ip: '192.168.0.2', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "dir-net"},
+#                ]
+#  },
   
   :office1Router => {
         :box_name => "centos/7",
+        :ssh_port => 33357,
         :net => [
                    {ip: '192.168.255.6', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office1-net"},
-                   {ip: '192.168.2.1', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "dev-net"},
-                   {ip: '192.168.2.65', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {ip: '192.168.2.129', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "mng-net"},
-                   {ip: '192.168.2.193', adapter: 6, netmask: "255.255.255.192", virtualbox__intnet: "hw-net"},
+                   {ip: '192.168.2.65', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
+                   {ip: '192.168.255.13', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office_betwen-net"},
                 ]
   },
-  :office1Server => {
+  :testClient1 => {
         :box_name => "centos/7",
+        :ssh_port => 33360,
         :net => [
-                   {ip: '192.168.2.66', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {adapter: 3, auto_config: false, virtualbox__intnet: true},
-                   {adapter: 4, auto_config: false, virtualbox__intnet: true},
+                   {ip: '192.168.2.70', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
                 ]
   },
-  :office2Router => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.255.10', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office2-net"},
-                   {ip: '192.168.1.1', adapter: 3, netmask: "255.255.255.128", virtualbox__intnet: "dev-net"},
-                   {ip: '192.168.1.129', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {ip: '192.168.1.193', adapter: 6, netmask: "255.255.255.192", virtualbox__intnet: "hw-net"},
-                ]
+  :testServer1 => {
+    :box_name => "centos/7",
+    :ssh_port => 33361,
+    :net => [
+               {ip: '192.168.2.71', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
+            ]
   },
-  :office2Server => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.1.130', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {adapter: 3, auto_config: false, virtualbox__intnet: true},
-                   {adapter: 4, auto_config: false, virtualbox__intnet: true},
-                ]
+  :testClient2 => {
+    :box_name => "centos/7",
+    :ssh_port => 33362,
+    :net => [
+               {ip: '192.168.2.72', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
+            ]
   },
+  :testServer2 => {
+    :box_name => "centos/7",
+    :ssh_port => 33363,
+    :net => [
+               {ip: '192.168.2.73', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
+            ]
+  },
+#  :office2Router => {
+#        :box_name => "centos/7",
+#        :net => [
+#                   {ip: '192.168.255.10', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office2-net"},
+#                   {ip: '192.168.1.129', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
+#                   {ip: '192.168.255.14', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "office_betwen-net"},
+#                ]
+#  },
+#  :office2Server => {
+#        :box_name => "centos/7",
+#        :net => [
+#                   {ip: '192.168.1.130', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net"}
+#                ]
+#  },
   
 }
 
@@ -87,84 +103,25 @@ Vagrant.configure("2") do |config|
           box.vm.network "public_network", boxconfig[:public]
         end
 
+        box.vm.network :forwarded_port, guest: 22, host: boxconfig[:ssh_port], id: "ssh", auto_correct: true
+        box.vm.network :forwarded_port, guest: 80, host: 8081, id: "http", auto_correct: true
+
         box.vm.provision "shell", inline: <<-SHELL
-          mkdir -p ~root/.ssh
-                cp ~vagrant/.ssh/auth* ~root/.ssh
-        SHELL
-        
-        case boxname.to_s
-        when "inetRouter"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf
-            sudo iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
-            sudo service network restart
-            sudo ip rout add 192.168.0.0/28 via 192.168.255.2
-            sudo ip rout add 192.168.1.128/26 via 192.168.255.2
-            sudo ip rout add 192.168.1.2/26 via 192.168.255.2
-            sudo ip rout add 192.168.255.4/30 via 192.168.255.2
-            sudo ip rout add 192.168.255.8/30 via 192.168.255.2
-            SHELL
-        when "centralRouter"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            #192.168.2.64/26 office1 net
-            sudo ip rout add 192.168.2.64/26 via 192.168.255.6
-            #192.168.1.128/26 office2 net
-            sudo ip rout add 192.168.1.128/26 via 192.168.255.10
-            SHELL
-        when "office1Router"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.255.5" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            #192.168.255.0/30 internet
-            sudo ip rout add 192.168.255.0/30 via 192.168.255.5
-            #192.168.0.0/28 central net
-            sudo ip rout add 192.168.0.0/28 via 192.168.255.5
-            #192.168.1.128/26 office2 net
-            sudo ip rout add 192.168.1.128/26 via 192.168.255.5
-            SHELL
-        when "office2Router"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.255.9" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            #192.168.255.0/30 internet
-            sudo ip rout add 192.168.255.0/30 via 192.168.255.9
-            #192.168.0.0/28 central net
-            sudo ip rout add 192.168.0.0/28 via 192.168.255.9
-            #192.168.2.64/26 office1 net
-            sudo ip rout add 192.168.2.64/26 via 192.168.255.9
-            SHELL
-        when "centralServer"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            SHELL
-        when "office1Server"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.2.65" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            SHELL
-        when "office2Server"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.1.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            SHELL
+            mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+            systemctl restart sshd
+          SHELL
+
+        box.vm.provision "ansible" do |ansible|
+          ansible.verbose = "v"
+          ansible.playbook = "provisioning/playbook_router_quagga_ospf.yml"
+          ansible.become = "true"
+          ansible.inventory_path = "provisioning/staging/hosts" 
         end
     
       end
 
   end
-  
   
 end
 

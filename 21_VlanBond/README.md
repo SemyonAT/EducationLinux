@@ -21,6 +21,11 @@ testClient2 <-> testServer2
 # Теоретическая часть
 
 # Для Себя
+less /proc/net/bonding/bond0 - какие интерфейсы входят в бондинг
+less /sys/class/net/bond0/bonding/active_slave - посмотреть в бондинге какой интерфейс активный
+
+
+
 
 net.ipv4.tcp_windows_scaling = 0 
 
