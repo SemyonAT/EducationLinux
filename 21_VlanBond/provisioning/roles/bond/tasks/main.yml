@@ -8,6 +8,21 @@
 #- name: Set sysctl for bonding
 
 
+#nmcli con add type bond ifname bond1 
+# mode active-active
+#BONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"
+#nmcli con add type bond ifname bond1 bond.options "mode=1,miimon=100, fail_over_mac=1"
+
+#nmcli con mod bond1 ipv4.addresses 192.168.5.5/24 
+#nmcli con mod bond1 ipv4.method manual
+##################nmcli con mod mybond0 ipv4.gateway 192.168.1.1
+#nmcli con add type bond-slave ifname eth1 master bond1
+#nmcli con add type bond-slave ifname eth2 master bond1
+#nmcli con up bond1
+
+#nmcli dev mod bond1 +bond.options "active_slave=eth2"
+#nmcli dev mod bond1 +bond.options "primary=eth1"
+
 
 ###### Working with all cloud nodes - Bonding
 - name: Try nmcli add bond - conn_name only & ip4 gw4 mode
