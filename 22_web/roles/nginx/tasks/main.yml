@@ -1,5 +1,13 @@
 ---
 
+- name: Enable port for http in firewalld 
+  firewalld:
+    zone: public
+    service: http
+    permanent: yes
+    immediate: yes
+    state: enabled
+
 - name: NGINX | Install EPEL Repo package from standard repo
   yum:
     name: epel-release

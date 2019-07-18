@@ -3,12 +3,22 @@
 
 MACHINES = {
   :nginx1 => {
-        :box_name => "centos/7",
-        :ip_addr => '192.168.11.150'
+    :box_name => "centos/7",
+    :ssh_port => 33100,
+    :web_port => 80,
+    :ip_addr => '192.168.10.100'
   },
   :nginx2 => {
-        :box_name => "ubuntu/xenial64",
-        :ip_addr => '192.168.11.151'
+    :box_name => "centos/7",
+    :ssh_port => 33101,
+    :web_port => 81,
+    :ip_addr => '192.168.11.101'
+  },
+  :nginx3 => {
+    :box_name => "centos/7",
+    :ssh_port => 33102,
+    :web_port => 82,
+    :ip_addr => '192.168.11.102'
   }
 }
 
@@ -22,6 +32,8 @@ Vagrant.configure("2") do |config|
           box.vm.host_name = boxname.to_s
 
           box.vm.network "private_network", ip: boxconfig[:ip_addr]
+          box.vm.network :forwarded_port, guest: 22, host: boxconfig[:ssh_port], id: "ssh", auto_correct: true
+          box.vm.network :forwarded_port, guest: 80, host: boxconfig[:web_port], id: "http", auto_correct: true
 
           box.vm.provider :virtualbox do |vb|
             vb.customize ["modifyvm", :id, "--memory", "200"]
@@ -32,12 +44,12 @@ Vagrant.configure("2") do |config|
             sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
             systemctl restart sshd
           SHELL
-          case boxname.to_s
-          when "nginx2"
-            box.vm.provision "shell", inline: <<-SHELL
-              sudo apt-get -y install python-minimal
-            SHELL
-          end 
+          #case boxname.to_s
+          #when "nginx2"
+          #  box.vm.provision "shell", inline: <<-SHELL
+          #    sudo apt-get -y install python-minimal
+          #  SHELL
+          #end 
 
           box.vm.provision "ansible" do |ansible|
             ansible.verbose = "v"
