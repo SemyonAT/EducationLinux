@@ -1,0 +1,29 @@
+
+[central_office]
+#centralServer ansible_host=127.0.0.1 ansible_port=2201 ansible_private_key_file=.vagrant/machines/centralServer/virtualbox/private_key
+
+[office1]
+office1Server ansible_host=127.0.0.1 ansible_port=2203 ansible_private_key_file=.vagrant/machines/office1Server/virtualbox/private_key
+
+[office2]
+office2Server ansible_host=127.0.0.1 ansible_port=2205 ansible_private_key_file=.vagrant/machines/office2Server/virtualbox/private_key
+
+[servers:children]
+central_office
+office1
+office2
+
+[vlan]
+testClient1    ansible_host=127.0.0.1 ansible_port=33360 ansible_private_key_file=.vagrant/machines/testClient1/virtualbox/private_key
+testServer1    ansible_host=127.0.0.1 ansible_port=33361 ansible_private_key_file=.vagrant/machines/testServer1/virtualbox/private_key
+testClient2    ansible_host=127.0.0.1 ansible_port=33362 ansible_private_key_file=.vagrant/machines/testClient2/virtualbox/private_key
+testServer2    ansible_host=127.0.0.1 ansible_port=33363 ansible_private_key_file=.vagrant/machines/testServer2/virtualbox/private_key
+
+
+[routers]
+inetRouter    ansible_host=127.0.0.1 ansible_port=33355 ansible_private_key_file=.vagrant/machines/inetRouter/virtualbox/private_key
+centralRouter ansible_host=127.0.0.1 ansible_port=33356 ansible_private_key_file=.vagrant/machines/centralRouter/virtualbox/private_key
+office1Router ansible_host=127.0.0.1 ansible_port=33357 ansible_private_key_file=.vagrant/machines/office1Router/virtualbox/private_key
+office2Router ansible_host=127.0.0.1 ansible_port=2204 ansible_private_key_file=.vagrant/machines/office2Router/virtualbox/private_key
+
+

@@ -1,0 +1,37 @@
+---
+# tasks file for os
+- name: enable firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: install packages epel-release
+  yum: 
+    name:
+    - epel-release
+
+- name: install packages other
+  yum: 
+    name:
+    - net-tools
+    - sysstat
+    - htop
+    - vim
+    - atop
+    - telnet
+    - chrony
+    - tcpdump
+    - nmap
+    - unzip
+    - traceroute
+
+- name: Set timezone to Europe/Moscow
+  timezone:
+    name: Europe/Moscow
+
+- name: enable chrony
+  systemd: 
+    name: chronyd
+    state: started
+    enabled: yes
