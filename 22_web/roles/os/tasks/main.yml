@@ -25,6 +25,7 @@
     - nmap
     - unzip
     - traceroute
+    - wget
 
 - name: Set timezone to Europe/Moscow
   timezone:
