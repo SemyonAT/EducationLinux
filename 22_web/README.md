@@ -13,6 +13,11 @@ https://nginx.org/ru/docs/http/ngx_http_headers_module.html
 
 
 
+#Вопросы
+Подскажите почему модуль ансибел get_url, скачивает архив и после распаковки модулем unarchive не содержит makfiles. Скачиваю http://nginx.org/download/nginx-1.12.2.tar.gz
+
+
+
 # Для себя
 
 curl -v --cookie "USER_TOKEN=Yes" http://127.0.0.1:5000/
