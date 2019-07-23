@@ -49,12 +49,33 @@
     - nginx-configuration
 
 
-#- name: install for developer lib
-#  yum:
-#    name:
-#      - rgregerg
-#      - ergregreg
-
+- name: install for developer lib
+  yum:
+    name:
+    - bison
+    - byacc
+    - cscope
+    - ctags
+    - cvs
+    - diffstat
+    - doxygen
+    - flex
+    - gcc
+    - gcc-c++
+    - gcc-gfortran
+    - gettext
+    - git
+    - indent
+    - intltool
+    - libtool
+    - patch
+    - patchutils
+    - rcs
+    - redhat-rpm-config
+    - rpm-build
+    - subversion
+    - swig
+    - systemtap
 
 - name: Download to specified path
   get_url:
@@ -76,5 +97,7 @@
 
 - name: Create new module
   shell: /usr/share/nginx/nginx-1.12.2/configure --with-pcre=ngx_http_rewrite_module
-#--with-pcre=ngx_http_headers_module  
+#--with-pcre=ngx_http_headers_module  --without-http_gzip_module
 
+make modules
+sudo make install
