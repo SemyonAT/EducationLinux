@@ -98,16 +98,22 @@
     group: root
     remote_src: yes
 
-- name: Create new module
-  shell: /usr/share/nginx/nginx-1.12.2/configure 
-  #shell: /usr/share/nginx/nginx-1.16.0/configure --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.cong -sbin-path=/usr/sbin/nginx --with-pcre --with-zlib --with-http_ssl_module --with-http_geoip_module
-#--with-http_rewrite_module --with-http_headers_module
-- name: Run 'modules' target as root
-  make:
-    chdir: /usr/share/nginx/nginx-1.12.2/
+#- name: Create new module
+#  #shell: /usr/share/nginx/nginx-1.16.0/configure --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.cong -sbin-path=/usr/sbin/nginx --with-pcre --with-zlib --with-http_ssl_module --with-http_geoip_module 
+#  shell: /usr/share/nginx/nginx-1.12.2/configure --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.cong --with-pcre --with-http_ssl_module --with-http_geoip_module --with-openssl
+#  #--with-zlib 
+#  #--ngx_http_headers_module --ngx_http_rewrite_module
+  
+
+#- name: Run 'modules' target as root
+#  make:
+#    chdir: /usr/share/nginx/nginx-1.12.2/
 #    target: modules
 
-- name: Run 'install' target as root
-  make:
-    chdir: /usr/share/nginx/nginx-1.12.2/
-    target: install
+#- name: Run 'install' target as root
+#  make:
+#    chdir: /usr/share/nginx/nginx-1.12.2/
+#    target: install
+
+#make modules
+#sudo make install
