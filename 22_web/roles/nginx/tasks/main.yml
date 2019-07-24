@@ -76,11 +76,13 @@
     - subversion
     - swig
     - systemtap
+    - zlib-devel
+    - pcre-devel
 
 - name: Download to specified path
   get_url:
     url: http://nginx.org/download/nginx-1.12.2.tar.gz
-         http://nginx.org/download/nginx-1.12.2.tar.gz
+    #url: https://nginx.org/download/nginx-1.16.0.tar.gz
     dest: /usr/share/nginx
     #nginx-1.12.2.tar.gz
 
@@ -90,14 +92,22 @@
 - name: Unarchive a file that
   unarchive:
     src: /usr/share/nginx/nginx-1.12.2.tar.gz
+    #src: /usr/share/nginx/nginx-1.16.0.tar.gz
     dest: /usr/share/nginx/
     owner: root
     group: root
     remote_src: yes
 
 - name: Create new module
-  shell: /usr/share/nginx/nginx-1.12.2/configure --with-pcre=ngx_http_rewrite_module
-#--with-pcre=ngx_http_headers_module  --without-http_gzip_module
+  shell: /usr/share/nginx/nginx-1.12.2/configure 
+  #shell: /usr/share/nginx/nginx-1.16.0/configure --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.cong -sbin-path=/usr/sbin/nginx --with-pcre --with-zlib --with-http_ssl_module --with-http_geoip_module
+#--with-http_rewrite_module --with-http_headers_module
+- name: Run 'modules' target as root
+  make:
+    chdir: /usr/share/nginx/nginx-1.12.2/
+#    target: modules
 
-make modules
-sudo make install
+- name: Run 'install' target as root
+  make:
+    chdir: /usr/share/nginx/nginx-1.12.2/
+    target: install

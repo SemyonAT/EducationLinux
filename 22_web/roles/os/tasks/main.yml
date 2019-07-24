@@ -26,6 +26,7 @@
     - unzip
     - traceroute
     - wget
+    - lsof
 
 - name: Set timezone to Europe/Moscow
   timezone:
