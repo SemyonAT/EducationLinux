@@ -1,0 +1,61 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :nginx1 => {
+    :box_name => "centos/7",
+    :ssh_port => 33100,
+    :web_port => 8080,
+    :ip_addr => '192.168.10.100'
+  },
+  :nginx2 => {
+    :box_name => "centos/7",
+    :ssh_port => 33101,
+    :web_port => 8081,
+    :ip_addr => '192.168.11.101'
+  },
+  :nginx3 => {
+    :box_name => "centos/7",
+    :ssh_port => 33102,
+    :web_port => 8082,
+    :ip_addr => '192.168.11.102'
+  }
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+      config.vm.define boxname do |box|
+
+          box.vm.box = boxconfig[:box_name]
+          box.vm.host_name = boxname.to_s
+
+          box.vm.network "private_network", ip: boxconfig[:ip_addr]
+          box.vm.network :forwarded_port, guest: 22, host: boxconfig[:ssh_port], id: "ssh", auto_correct: true
+          box.vm.network :forwarded_port, guest: 80, host: boxconfig[:web_port], id: "http", auto_correct: true
+
+          box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "200"]
+          end
+          
+          box.vm.provision "shell", inline: <<-SHELL
+            mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+            systemctl restart sshd
+          SHELL
+          #case boxname.to_s
+          #when "nginx2"
+          #  box.vm.provision "shell", inline: <<-SHELL
+          #    sudo apt-get -y install python-minimal
+          #  SHELL
+          #end 
+
+          box.vm.provision "ansible" do |ansible|
+            ansible.verbose = "v"
+            ansible.playbook = "pb_nginx.yml"
+            ansible.become = "true"
+          end
+      end
+  end
+end
