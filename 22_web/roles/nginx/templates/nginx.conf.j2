@@ -7,9 +7,27 @@ http {
     server {
         listen       {{ nginx_listen_port }} default_server;
         server_name  default_server;
-        root         /usr/share/nginx/html;
 
         location / {
+                if ($cookie_USER_TOKEN != "Yes") {
+                        return  302 /img;
+                }
+                root        /usr/share/nginx/html;
         }
-    }
+        location /img {
+                add_header Set-Cookie "USER_TOKEN=Yes";
+                return 302 /;
+                #alias        /usr/share/nginx/test/s800.jpg;
+        }
+
+        location /net {
+                 alias       /usr/share/nginx/test/net.jpg;
+        }
+        location /ret {
+                 return http://1c.ru/;
+        }
+
+        ###rewrite ^/image/\w+ retern 200 'oooooo';
+     }
 }
+

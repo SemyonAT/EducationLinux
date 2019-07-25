@@ -11,65 +11,41 @@ https://nginx.org/ru/docs/http/ngx_http_headers_module.html
 
 # Решение
 
+Решение данной задачи получилось в итоге простым и заключается в том, что, когда мы переходим по корневому пути и у нас не установлен cookie USER_TOKEN в значение YES, мы перенаправляем запрос на локейшен /img, на котором в свою очередь устанавливается Cookie и возвращается обратно в корневой локейшен.
+Подскажите как можно защититься от DDOS таким способом, мы ведь сами все перенаправляем и даем cooki, может что-то я не понимаю.
+
+        location / {
+                if ($cookie_USER_TOKEN != "Yes") {
+                        return  302 /img;
+                }
+                root        /usr/share/nginx/html;
+        }
+        location /img {
+                add_header Set-Cookie "USER_TOKEN=Yes";
+                return 302 /;
+                #alias        /usr/share/nginx/test/s800.jpg;
+        }
 
 
 # Для себя
 
+nginx -V - показывает модули с которыми собран NGINX
+curl -I http:\frfer.frfr - показывает заголовок запроса
+curl -b notrfgr -I -L  localhost - ходит по редиректам -L, -b c кукой
 curl -v --cookie "USER_TOKEN=Yes" http://127.0.0.1:5000/
 
-server {  server_name geekjob.pro;  ...  location / {    if ($cookie_access != "secretkey") {      return 302 https://geekjob.ru$request_uri;    }    ...  }  ...}
+server {  
+	server_name geekjob.pro; 
+	...
+	location / {
+		if ($cookie_access != "secretkey") {
+			return 302 https://geekjob.ru$request_uri;
+		}
+	...
+	}
+...}
 
 
 
 
 
-
-
-## Роли
-Создание структуры каталогов - ansible-galaxy init nginx
-roles:
-	- { role: nginx, when: ansible_system == ''Linux' }
-## Модули
-setup:  - получает все параметры системы, которые можем использовать как переменные
-debug: var= / msg="Hello" - выводит значение переменных
-shell: - выполняет команду шелл 
-register: peremennay - положить все в переменную
-delay: 2 - задержка в секундах
-retries: 10 - повторять 10 раз
-yum/apt: name=nginx state=latest -установщик
-copy: src=file dest=путь назначения mode=0555 привелегии - копирование файлов
-temlate: src=temlates/index.j2 dest=/etx/destination - копирует и заменяет внутри файла переменные
-
-## Переменные:
-ansible_os_family - RedHat/Debian Родительская операционная система
-
-## Условия 
-when: ansible_os_family == "RedHot"
-
-## Циклы
-### loop 
-	//выведет все названия файлов
-	debug: msg="Hello {{ item }} "
-	loop:
-		- "file1"
-		- "file2"
-	
-	//устанавливает список программ	
-	yum: name={{ item }} state=installed
-	loop:
-		- python
-		- htop
-		- nginx
-		- tree
-	//копирует все файлы в каталоге
-	copy: src={{ item }} dest={{ destination_folder }} mode=0555
-	with_fileglob: "{{ soursce_folder }}/*.*"
-
-### loop Until
-	shell: echo -n Z >> myfile.txt && cat myfile.txt //дозаписываем файл буквами Z и выводим на экран
-	regiser: output //сохраняем в переменную вывод из команды кат
-	delay: 2 //Ждем 2 секунды
-	retries: 10 повторять 10 раз
-	until: output.stdout.find("ZZZZ") == false выполняем повторение не 10 раз, а до тех пор пока в выводе переменной не найдем четыре Z
-## Оформление блоков
-- block: #===========Block for RedHot==========
