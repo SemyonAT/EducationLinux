@@ -7,40 +7,27 @@ http {
     server {
         listen       {{ nginx_listen_port }} default_server;
         server_name  default_server;
-        root         /usr/share/nginx/html;
 
         location / {
+                if ($cookie_USER_TOKEN != "Yes") {
+                        return  302 /img;
+                }
+                root        /usr/share/nginx/html;
         }
-    }
+        location /img {
+                add_header Set-Cookie "USER_TOKEN=Yes";
+                return 302 /;
+                #alias        /usr/share/nginx/test/s800.jpg;
+        }
+
+        location /net {
+                 alias       /usr/share/nginx/test/net.jpg;
+        }
+        location /ret {
+                 return http://1c.ru/;
+        }
+
+        ###rewrite ^/image/\w+ retern 200 'oooooo';
+     }
 }
 
-
-http {
-    include mime.types;
-
-    server {
-        listen       80 default_server;
-        server_name  default_server;
-
-        location / {
-                root /usr/share/www;
-        }
-
-        location /pic {
-                root /usr/share/www;
-                try_files $uri =404;
-                #return 300 'hellp';
-        }
-        location /olo {
-                alias /usr/share/www/pic;
-                #try_files $uri =404;
-        }
-        location /home {
-                #port_in_redirect off;
-                #server_name_in_redirect on;
-                return 301 /pic/im2.jpg;
-                #rewrite ^ /index.html;
-        }
-        rewrite ^/home1 /index.html;
-    }
-}
