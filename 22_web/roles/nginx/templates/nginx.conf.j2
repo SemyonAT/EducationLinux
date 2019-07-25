@@ -13,3 +13,34 @@ http {
         }
     }
 }
+
+
+http {
+    include mime.types;
+
+    server {
+        listen       80 default_server;
+        server_name  default_server;
+
+        location / {
+                root /usr/share/www;
+        }
+
+        location /pic {
+                root /usr/share/www;
+                try_files $uri =404;
+                #return 300 'hellp';
+        }
+        location /olo {
+                alias /usr/share/www/pic;
+                #try_files $uri =404;
+        }
+        location /home {
+                #port_in_redirect off;
+                #server_name_in_redirect on;
+                return 301 /pic/im2.jpg;
+                #rewrite ^ /index.html;
+        }
+        rewrite ^/home1 /index.html;
+    }
+}
