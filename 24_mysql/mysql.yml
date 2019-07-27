@@ -1,0 +1,19 @@
+
+---
+- name: for os
+  hosts: all
+  become: true
+  roles:
+    - os
+
+- name: Playbook
+  hosts: mysql
+  become: true
+  roles:
+    - mysql
+
+#- name: Playbook
+#  hosts: all
+#  become: true
+#  roles:
+#    - nginx
