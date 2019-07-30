@@ -1,5 +1,13 @@
 ---
 # tasks file for mysql
+### set firewalld
+- name: Enable port for mysql in firewalld 
+  firewalld:
+    zone: public
+    service: mysql
+    permanent: yes
+    immediate: yes
+    state: enabled
 
 - name: Install MySQL repository
   yum: name=https://repo.percona.com/yum/percona-release-latest.noarch.rpm state=present

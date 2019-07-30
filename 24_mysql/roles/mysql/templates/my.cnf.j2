@@ -11,8 +11,9 @@ init_connect='SET collation_connection = utf8_general_ci'
 init_connect='SET NAMES utf8'
 validate_password_policy=0
 validate_password_length=4
+log-slave-updates = on
 gtid-mode = on
-enforce-gtid-consistency=true
+enforce-gtid-consistency=on
 master-info-repository=TABLE
 relay-log={{ ansible_hostname }}-relay-bin
 
