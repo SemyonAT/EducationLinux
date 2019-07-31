@@ -37,16 +37,30 @@
       
    - name: Setup replication user
      shell: mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY 'dummysecret';"
+     ignore_errors: yes
      
 - hosts: slave
   become: yes
   tasks:
-   - name: Configure replication
+   - name: Configure replication on slave
      ignore_errors: yes
      shell: mysql -e "change master to master_host='master', master_user='replication', master_password='dummysecret', master_port=3306, MASTER_AUTO_POSITION=1;"    
-   - name: Start replication
+   - name: Start replication on slave
      ignore_errors: yes
      shell: mysql -e "start slave;"
+   ##Create user replication
+   - name: Setup replication user
+     shell: mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY 'dummysecret';"
+     ignore_errors: yes
+    
+   - name: Configure replication on master
+     ignore_errors: yes
+     shell: mysql -e "change master to master_host='slave', master_user='replication', master_password='dummysecret', master_port=3306, MASTER_AUTO_POSITION=1;"
+     delegate_to: 192.168.100.111
+   - name: Start replication on master
+     ignore_errors: yes
+     shell: mysql -e "start slave;"
+     delegate_to: 192.168.100.111
 
 #########################################
 ### proxySQL

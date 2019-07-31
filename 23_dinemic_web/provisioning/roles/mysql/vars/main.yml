@@ -1,2 +1,6 @@
 ---
 # vars file for mysql
+mysql_user_root:        'root' 
+mysql_password_root:    'YjdstRhjrjpz,hs288'
+mysql_webuser:          'webuser'
+mysql_password_webuser: 'YjdstRhjrjpz,hs2881'

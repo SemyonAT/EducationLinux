@@ -1,36 +1,37 @@
 ---
 # tasks file for proxysql
 
-- name: Adds repository key
-  apt_key:
-    url: http://repo.proxysql.com/ProxySQL/repo_pub_key
+### set firewalld
+- name: Enable port for mysql in firewalld 
+  firewalld:
+    zone: public
+    service: mysql
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for ProxySQL
+  firewalld:
+    zone: public
+    port: 6032-6033/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: install proxysql
+  yum:
+    name: http://repo.proxysql.com/ProxySQL/proxysql-2.0.x/centos/7/proxysql-2.0.5-1-centos7.x86_64.rpm
     state: present
 
-- name: Adds percona repositories
-  apt_repository:
-    repo: 'deb http://repo.proxysql.com/ProxySQL/proxysql-1.4.x/{{ ansible_distribution_release }} ./'
-    state: present
+- name: Set weight master
+  when: ansible_facts['hostname'] == "master"
+  shell: echo 100  
+  register: weight
 
-- name: Installs proxysql & python-mysqldb
-  apt:
-    pkg: "{{ item }}"
-    state: present
-  with_items:
-    - proxysql
-    - python-mysqldb
-
-- name: Holds proxysql version
-  dpkg_selections:
-    name: proxysql
-    selection: hold
-
-- name: Installs mysql-common & client
-  apt:
-    pkg: "{{ item }}"
-    state: present
-  with_items:
-    - mysql-common
-    - mysql-client
+- name: Set weight master
+  when: ansible_facts['hostname'] == "slave"
+  shell: echo 1  
+  register: weight
 
 - name: Configures proxysql
   template:
@@ -42,9 +43,10 @@
     - Load config from file to memory
 
 - name: Ensures proxysql is started
-  service:
+  systemd:
     name: proxysql
     state: started
+    enabled: yes
 
 - name: Creates log dir
   file:

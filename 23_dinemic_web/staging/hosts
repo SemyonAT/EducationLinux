@@ -10,11 +10,13 @@ nginx3 ansible_host=127.0.0.1 ansible_port=33203 ansible_private_key_file=.vagra
 192.168.100.112 ansible_user=vagrant ansible_private_key_file=.vagrant/machines/slave/virtualbox/private_key
 
 [proxysql]
-192.168.100.113 ansible_user=vagrant ansible_private_key_file=.vagrant/machines/proxy/virtualbox/private_key
+proxy ansible_host=192.168.100.113 ansible_user=vagrant ansible_private_key_file=.vagrant/machines/proxy/virtualbox/private_key
+#192.168.100.113
 
 [mysql:children]
 master
 slave
+proxysql
 
 #[all:children]
 #master

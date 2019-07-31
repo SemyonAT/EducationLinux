@@ -73,7 +73,8 @@ CHANGE MASTER TO MASTER_HOST = "192.168.11.150", MASTER_PORT = 3306,
 MASTER_USER = "repl", MASTER_PASSWORD = "!OtusLinux2018", MASTER_AUTO_POSITION = 1;
 START SLAVE;
 
-
+INSERT INTO bookmaker (id,bookmaker_name) VALUES(1,'1xbet');
+SELECT * FROM bookmaker;
 
 show variables like '%read_only%'; - показывает переменные
 
