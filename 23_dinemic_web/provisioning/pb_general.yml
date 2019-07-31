@@ -1,0 +1,65 @@
+
+---
+- name: for os
+  hosts: all
+  become: true
+  roles:
+    - os
+
+########################################
+### mysql   
+- name: for os
+  hosts: mysql
+  become: true
+  roles:
+    - mysql
+
+- hosts: master
+  become: yes
+  tasks:
+   - name: Check if bet.sql is present
+     shell: echo | mysql -s bet
+     register: bet_found
+     ignore_errors: yes
+     
+   - name: Create a new database with name 'bet'
+     when: bet_found is failed
+     mysql_db:
+      name: bet
+      state: present
+    
+   - name: Load bet.sql database
+     when: bet_found is failed   
+     mysql_db:
+      name: bet
+      state: import
+      target: /vagrant/provisioning/bet.sql
+      
+   - name: Setup replication user
+     shell: mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY 'dummysecret';"
+     
+- hosts: slave
+  become: yes
+  tasks:
+   - name: Configure replication
+     ignore_errors: yes
+     shell: mysql -e "change master to master_host='master', master_user='replication', master_password='dummysecret', master_port=3306, MASTER_AUTO_POSITION=1;"    
+   - name: Start replication
+     ignore_errors: yes
+     shell: mysql -e "start slave;"
+
+#########################################
+### proxySQL
+- name: proxySQL
+  hosts: proxysql
+  become: true
+  roles:
+    - proxysql
+
+#########################################
+### web nginx
+- name: Playbook
+  hosts: web
+  become: true
+  roles:
+    - nginx

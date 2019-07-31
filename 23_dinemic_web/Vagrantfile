@@ -4,21 +4,39 @@
 MACHINES = {
   :nginx1 => {
     :box_name => "centos/7",
-    :ssh_port => 33100,
-    :web_port => 8080,
-    :ip_addr => '192.168.10.100'
+    :ssh_port => 33201,
+    :web_port => 8081,
+    :ip_addr => '192.168.100.201'
   },
   :nginx2 => {
     :box_name => "centos/7",
-    :ssh_port => 33101,
-    :web_port => 8081,
-    :ip_addr => '192.168.11.101'
+    :ssh_port => 33202,
+    :web_port => 8082,
+    :ip_addr => '192.168.100.202'
   },
   :nginx3 => {
     :box_name => "centos/7",
-    :ssh_port => 33102,
-    :web_port => 8082,
-    :ip_addr => '192.168.11.102'
+    :ssh_port => 33203,
+    :web_port => 8083,
+    :ip_addr => '192.168.100.203'
+  },
+  :master => {
+    :box_name => "centos/7",
+    :ssh_port => 33111,
+    #:web_port => 8082,
+    :ip_addr => '192.168.100.111'
+  },
+  :slave => {
+    :box_name => "centos/7",
+    :ssh_port => 33112,
+    #:web_port => 8082,
+    :ip_addr => '192.168.100.112'
+  },
+  :proxy => {
+    :box_name => "centos/7",
+    :ssh_port => 33113,
+    #:web_port => 8082,
+    :ip_addr => '192.168.100.113'
   }
 }
 
@@ -33,10 +51,12 @@ Vagrant.configure("2") do |config|
 
           box.vm.network "private_network", ip: boxconfig[:ip_addr]
           box.vm.network :forwarded_port, guest: 22, host: boxconfig[:ssh_port], id: "ssh", auto_correct: true
-          box.vm.network :forwarded_port, guest: 80, host: boxconfig[:web_port], id: "http", auto_correct: true
-
+          if boxconfig.key?(:web_port)
+            box.vm.network :forwarded_port, guest: 80, host: boxconfig[:web_port], id: "http", auto_correct: true
+          end
+          
           box.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "200"]
+            vb.customize ["modifyvm", :id, "--memory", "256"]
           end
           
           box.vm.provision "shell", inline: <<-SHELL
@@ -53,8 +73,9 @@ Vagrant.configure("2") do |config|
 
           box.vm.provision "ansible" do |ansible|
             ansible.verbose = "v"
-            ansible.playbook = "pb_nginx.yml"
+            ansible.playbook = "provisioning/pb_general.yml"
             ansible.become = "true"
+            ansible.inventory_path = "staging/hosts"
           end
       end
   end
