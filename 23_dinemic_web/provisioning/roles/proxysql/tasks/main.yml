@@ -21,19 +21,9 @@
 
 - name: install proxysql
   yum:
-    #name: http://repo.proxysql.com/ProxySQL/proxysql-2.0.x/centos/7/proxysql-2.0.5-1-centos7.x86_64.rpm
-    name: http://repo.proxysql.com/ProxySQL/proxysql-1.4.x/centos/7/proxysql-1.4.15-1-centos7.x86_64.rpm
+    name: http://repo.proxysql.com/ProxySQL/proxysql-2.0.x/centos/7/proxysql-2.0.5-1-centos7.x86_64.rpm
+    #name: http://repo.proxysql.com/ProxySQL/proxysql-1.4.x/centos/7/proxysql-1.4.15-1-centos7.x86_64.rpm
     state: present
-
-- name: Set weight master
-  when: ansible_facts['hostname'] == "master"
-  shell: echo 100  
-  register: var_weight
-
-- name: Set weight master
-  when: ansible_facts['hostname'] == "slave"
-  shell: echo 1  
-  register: var_weight
 
 - name: Configures proxysql
   template:

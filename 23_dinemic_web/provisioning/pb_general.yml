@@ -76,4 +76,7 @@
   hosts: web
   become: true
   roles:
+    - wordpress
     - nginx
+    - keepalived
+

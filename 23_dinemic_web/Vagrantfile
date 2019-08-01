@@ -2,24 +2,6 @@
 # vim: set ft=ruby :
 
 MACHINES = {
-  :nginx1 => {
-    :box_name => "centos/7",
-    :ssh_port => 33201,
-    :web_port => 8081,
-    :ip_addr => '192.168.100.201'
-  },
-  :nginx2 => {
-    :box_name => "centos/7",
-    :ssh_port => 33202,
-    :web_port => 8082,
-    :ip_addr => '192.168.100.202'
-  },
-  :nginx3 => {
-    :box_name => "centos/7",
-    :ssh_port => 33203,
-    :web_port => 8083,
-    :ip_addr => '192.168.100.203'
-  },
   :master => {
     :box_name => "centos/7",
     :ssh_port => 33111,
@@ -37,6 +19,24 @@ MACHINES = {
     :ssh_port => 33113,
     #:web_port => 8082,
     :ip_addr => '192.168.100.113'
+  },
+  :nginx1 => {
+    :box_name => "centos/7",
+    :ssh_port => 33201,
+    :web_port => 8081,
+    :ip_addr => '192.168.100.201'
+  },
+  :nginx2 => {
+    :box_name => "centos/7",
+    :ssh_port => 33202,
+    :web_port => 8082,
+    :ip_addr => '192.168.100.202'
+  },
+  :nginx3 => {
+    :box_name => "centos/7",
+    :ssh_port => 33203,
+    :web_port => 8083,
+    :ip_addr => '192.168.100.203'
   }
 }
 
