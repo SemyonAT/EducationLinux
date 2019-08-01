@@ -78,5 +78,43 @@
   roles:
     - wordpress
     - nginx
-    - keepalived
+    - haproxy
 
+
+#####################################################
+###  - keepalived
+- hosts: nginx1
+  become: yes
+  roles:
+   - keepalived
+  vars:
+   interface: eth1
+   virtual_router_id: 1
+   virtual_ipaddress: 192.168.100.200
+   #virtual_ipaddress: 192.168.0.254
+   priority: 101
+   secret_passwd: 'YjdstRhjrjpz,hs2881'
+
+- hosts: nginx2
+  become: yes
+  roles:
+   - keepalived
+  vars:
+   interface: eth1
+   virtual_router_id: 1
+   virtual_ipaddress: 192.168.100.200
+   #virtual_ipaddress: 192.168.0.254
+   priority: 99
+   secret_passwd: 'YjdstRhjrjpz,hs2881'
+
+- hosts: nginx2
+  become: yes
+  roles:
+   - keepalived
+  vars:
+   interface: eth1
+   virtual_router_id: 1
+   virtual_ipaddress: 192.168.100.200
+   #virtual_ipaddress: 192.168.0.254
+   priority: 98
+   secret_passwd: 'YjdstRhjrjpz,hs2881'

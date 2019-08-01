@@ -41,7 +41,8 @@
     - lsof
 
 - name: Ensure SELINUX is permissive
-  selinux: state=permissive policy=targeted
+  selinux: state=disabled
+  # policy=targeted
 
 - name: Setup hosts
   template:

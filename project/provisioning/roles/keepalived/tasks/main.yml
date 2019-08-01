@@ -1,5 +1,41 @@
 ---
 
-- include: install_rh.yml
-#- include: firewall.yml
-- include: configure_rh.yml
+- name: Install packages
+  yum: name=keepalived state=present
+
+#- name: Make override dir for service keepalived
+#  file:
+#   path: /etc/systemd/system/keepalived.service.d
+#   state: directory
+
+#- name: Enable autorestart of services
+#  copy:
+#   src: override.conf
+#   dest: /etc/systemd/system/keepalived.service.d/override.conf
+
+- name: Copying keepalived.conf
+  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  notify: restart keepalived
+
+- name: Updating net.ipv4.ip_nonlocal_bind parameter
+  sysctl:
+   name: net.ipv4.ip_nonlocal_bind
+   value: 1
+   state: present
+
+- name: Updating net.ipv4.ip_forward parameter
+  sysctl:
+   name: net.ipv4.ip_forward
+   value: 1
+   state: present
+
+- name: Enable keepalived to be started at boot
+  service: name=keepalived enabled=yes state=started
+  
+
+- name: enable firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no
+
