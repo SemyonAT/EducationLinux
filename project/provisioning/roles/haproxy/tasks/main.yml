@@ -22,7 +22,6 @@
   template: src=haproxy.cfg.j2 dest=/etc/opt/rh/rh-haproxy18/haproxy/haproxy.cfg
   notify: restart haproxy
 
-- include: firewall.yml
-
 - name: Enable haproxy to be started at boot
   service: name=rh-haproxy18-haproxy enabled=yes state=restarted
+  ignore_errors: yes

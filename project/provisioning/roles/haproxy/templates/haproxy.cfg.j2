@@ -66,7 +66,7 @@ listen haproxy-stat                 #Haproxy Monitoring run on port 8080
     stats refresh 5s
     stats uri /stats                             #URL for HAProxy monitoring
     stats realm Haproxy\ Statistics
-    stats auth {{ username }}:{{ password }}            #User and Password for login to the monitoring dashboard
+    stats auth webuser:'YjdstRhjrjpz,hs2881'            #User and Password for login to the monitoring dashboard
     stats admin if TRUE
     default_backend app-main                    #This is optionally for monitoring backend
 
@@ -84,8 +84,8 @@ frontend main
 #---------------------------------------------------------------------
 
 backend app-main
-    balance leastconn                                   #Balance algorithm
- #   cookie PHPSESSID prefix nocache 					#Sticky sessions
-{% for host in groups['webservers'] %}
-    server {{ host }} {{ hostvars[host]['ansible_ssh_host'] }}:{{ port }} check
-{% endfor %}
+    balance leastconn       
+    server nginx1 192.168.201:80 check
+    server nginx1 192.168.202:80 check
+    server nginx1 192.168.203:80 check
+
