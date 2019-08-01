@@ -19,7 +19,7 @@ datadir="/var/lib/proxysql"
 admin_variables=
 {
   admin_credentials="{{ proxysql_admin_user }}:{{ proxysql_admin_password }}"
-  mysql_ifaces="{{ proxysql_admin_interface }}:{{ proxysql_admin_port }};/tmp/proxysql_admin.sock"
+  #mysql_ifaces="{{ proxysql_admin_interface }}:{{ proxysql_admin_port }};/tmp/proxysql_admin.sock"
 # refresh_interval=2000
 # debug=true
 {% if proxysql_cluster_name %}
@@ -52,18 +52,18 @@ mysql_variables=
   default_query_timeout=36000000
   have_compress=true
   poll_timeout=2000
-  interfaces="{{ proxysql_mysql_interface }}:{{ proxysql_mysql_port }};/tmp/proxysql.sock"
+  #interfaces="{{ proxysql_mysql_interface }}:{{ proxysql_mysql_port }};/tmp/proxysql.sock"
   default_schema="information_schema"
   stacksize=1048576
-  server_version="{{ proxysql_mysql_server_version }}"
-  connect_timeout_server=3000
+  #server_version="{{ proxysql_mysql_server_version }}"
+  connect_timeout_server=300
   monitor_history=600000
   monitor_connect_interval=60000
   monitor_ping_interval=10000
   monitor_read_only_interval=1500
   monitor_read_only_timeout=500
-# ping_interval_server=120000
-  ping_timeout_server=500
+  ping_interval_server=50000
+  ping_timeout_server=100
   commands_stats=true
   sessions_sort=true
   connect_retries_on_failure=10
@@ -78,6 +78,7 @@ mysql_servers =
   {
     address="{{ srv.address }}",
     port={{ srv.port }},
+    weight={{ srv.weight }},
     hostgroup={{ srv.hostgroup }}
   }{% if not loop.last %},{% endif %}
 {% endfor %}
@@ -101,7 +102,7 @@ mysql_users:
   {
     username="{{ usr.username }}",
     password="{{ usr.password }}",
-    default_hostgroup="{{ usr.default_hostgroup | default(0) }}"
+    default_hostgroup={{ usr.default_hostgroup | default(0) }}
   }{% if not loop.last %},{% endif %}
 {% endfor %}
 )

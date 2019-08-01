@@ -3,13 +3,13 @@
 proxysql_admin_user: admin
 proxysql_admin_password: admin
 
-proxysql_admin_interface: 127.0.0.1
+proxysql_admin_interface: 0.0.0.0
 proxysql_admin_port: 6032
 
 # Force database wipe
 proxysql_initial: false
 
-proxysql_mysql_interface: 127.0.0.1
+proxysql_mysql_interface: 0.0.0.0
 proxysql_mysql_port: 6033
 
 # Query rules
@@ -34,10 +34,12 @@ proxysql_mysql_query_rules: []
 proxysql_mysql_servers: 
   - address: 192.168.100.111
     port: 3306
-    hostgroup: 0
+    hostgroup: 1
+    weight: 100
   - address: 192.168.100.112
     port: 3306
     hostgroup: 1
+    weight: 1
 
 
 # Users
@@ -49,6 +51,7 @@ proxysql_mysql_servers:
 proxysql_mysql_users: 
    - username: webuser
      password: 'YjdstRhjrjpz,hs2881'
+     default_hostgroup: 1
 
 
 proxysql_cluster_name: false
