@@ -1,0 +1,24 @@
+---
+# handlers file for zabbix
+- name: reload base zabbix
+  postgresql_db:
+    name: zabbix1c
+    state: restore
+    login_password: impatience 
+    login_user: zabbix1c
+    target: /pg_backup/zabbix1c.sql.gz
+  delegate_to: pgsrv01
+
+- name: reload Apach
+  systemd:
+    name: httpd
+    state: restarted
+    enabled: yes
+
+- name: Restart zabbix server
+  systemd:
+    name: zabbix-server
+    state: restarted
+    enabled: yes
+
+    

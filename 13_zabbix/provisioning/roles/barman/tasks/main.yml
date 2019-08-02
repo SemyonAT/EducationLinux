@@ -1,0 +1,267 @@
+---
+# tasks file for barman
+
+##############################################################
+### set firewalld
+#- name: Enable port for barman in firewalld 
+#  firewalld:
+#    zone: public
+#    service: lukilserver
+#    permanent: yes
+#    immediate: yes
+#    state: enabled
+
+#####################################################
+###  general settings  ###
+- name: install locale ru_RU.UTF-8
+  shell: localedef  -i ru_RU -f UTF-8 ru_RU.UTF-8
+
+- name: install repo postgresql
+  yum: 
+    name:
+      - https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7.6-x86_64/pgdg-redhat10-10-2.noarch.rpm
+
+- name: install packages barman and postgresql10
+  yum:
+    name:
+      - barman
+      - postgresql10
+      - postgresql10-server
+      - python-psycopg2
+      - python-dateutil
+    
+
+#################################################################
+### Set backup pgsrv01 and pgsrv02
+- name: Create rails user, set MD5-hashed password, grant privs
+  postgresql_user:
+    name: barman
+    password: barman123
+    role_attr_flags: SUPERUSER,REPLICATION
+  delegate_to: "{{ item }}"
+  loop:
+    - pgsrv01
+    - pgsrv02
+
+- name: Create rails user, set MD5-hashed password, grant privs
+  postgresql_user:
+    name: streaming_barman
+    password: barman123
+    role_attr_flags: SUPERUSER,REPLICATION
+  delegate_to: "{{ item }}"
+  loop:
+    - pgsrv01
+    - pgsrv02
+
+
+- name: init slot replication for barman
+  become_user: postgres
+  postgresql_slot:
+    slot_name: barman
+    #state: absent
+    immediately_reserve: yes
+  delegate_to: "{{ item }}"
+  loop:
+    - pgsrv01
+    - pgsrv02
+
+- name: init slot replication for barman_receive_wal
+  become_user: postgres
+  postgresql_slot:
+    slot_name: barman_receive_wal
+    #state: absent
+    immediately_reserve: yes
+  delegate_to: "{{ item }}"
+  loop:
+    - pgsrv01
+    - pgsrv02
+
+- name: copy config barman
+  copy: src=barman.conf dest=/etc/barman.conf
+
+- name: copy config postgres server for barman
+  copy: src={{ item }} dest=/etc/barman.d/{{ item }}
+  loop:
+    - pgsrv01.conf
+    - pgsrv02.conf
+
+
+- name: init xlog replication pgsrv01
+  shell: "barman switch-xlog --force --archive pgsrv01"
+  #become_user: barman
+  ignore_errors: yes
+  
+- name: init xlog replication pgsrv02
+  shell: "barman switch-xlog --force --archive pgsrv02"
+  #become_user: barman
+  ignore_errors: yes
+
+- name: Edit a cron file under /etc/cron.d/barman
+  cron:
+    name: backup rgsrv01 every time
+    #weekday: 1
+    minute: "*/5"
+    #hour: 12
+    user: barman
+    job: "barman backup pgsrv01"
+    cron_file: barman
+
+- name: Edit a cron file under /etc/cron.d/barman
+  cron:
+    name: backup rgsrv02 every time
+    #weekday: 1
+    minute: "*/5"
+    #hour: 12
+    user: barman
+    job: "barman backup pgsrv02"
+    cron_file: barman
+
+###########################################
+### Set replication for server
+- name: init slot replication for slave
+  become_user: postgres
+  postgresql_slot:
+    slot_name: slave
+    #state: absent
+    immediately_reserve: yes
+  delegate_to: "{{ item }}"
+  loop:
+    - pgsrv01
+    - pgsrv02
+
+
+###########################################
+### Set sitings for replication for pgsrv01 on pgsrv02 
+- name: set vars p for check files  
+  stat:
+    path: /var/lib/pgsql/10/slave/postgresql.conf
+  register: p
+  delegate_to: pgsrv02
+
+- name: delit all file in folder /var/lib/pgsql/10/slave
+  command: "rm -rf /var/lib/pgsql/10/slave/*"
+  delegate_to: pgsrv02
+  when: p.stat.isreg is not defined 
+
+- name: create backup for slave for pgsrv01 but if not defined /var/lib/pgsql/10/slave
+  command: "/usr/bin/pg_basebackup -h pgsrv01 -p 5432 -U postgres -D /var/lib/pgsql/10/slave -Fp -Xf"
+  become_user: postgres
+  delegate_to: pgsrv02
+  when: p.stat.isreg is not defined 
+
+#Поменять порт на слейве
+- name: "Set port = 5433"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/slave/postgresql.conf
+    state: present
+    regexp: "^#port = 5432"
+    line: "port = 5433"
+  delegate_to: pgsrv02
+  notify:
+    - Restart postgres1c slave pgsrv02
+
+- name: "Set hot_standby = on"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/slave/postgresql.conf
+    state: present
+    regexp: "^#hot_standby = on"
+    line: "hot_standby = on"
+  delegate_to: pgsrv02
+  notify:
+    - Restart postgres1c slave pgsrv02
+    
+- name: "Set hot_standby = on"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/slave/postgresql.conf
+    state: present
+    regexp: "^#hot_standby_feedback = off"
+    line: "hot_standby_feedback = on"
+  delegate_to: pgsrv02
+  notify:
+    - Restart postgres1c slave pgsrv02
+
+- name: postgresql | Create postgresql slave config file from template
+  copy:
+    src: recovery_slave_pgsrv02.conf
+    dest: /var/lib/pgsql/10/slave/recovery.conf
+    mode: 0600
+  become_user: postgres
+  delegate_to: pgsrv02
+  notify:
+    - Restart postgres1c slave pgsrv02
+
+- name: check slave pgsrv01 on pgsrv02
+  systemd:
+    name: postgresql-10-slave.service
+    state: started
+    enabled: yes
+  delegate_to: pgsrv02
+
+
+###########################################
+### Set sitings for replication for pgsrv02 on pgsrv01 
+#server_for_slave=pgsrv02
+- name: set vars p for check files  
+  stat:
+    path: /var/lib/pgsql/10/slave/postgresql.conf
+  register: p
+  delegate_to: pgsrv01
+
+- name: delit all file in folder /var/lib/pgsql/10/slave
+  command: "rm -rf /var/lib/pgsql/10/slave/*"
+  delegate_to: pgsrv01
+  when: p.stat.isreg is not defined 
+
+- name: create backup for slave for pgsrv01 but if not defined /var/lib/pgsql/10/slave
+  command: "/usr/bin/pg_basebackup -h pgsrv02 -p 5432 -U postgres -D /var/lib/pgsql/10/slave -Fp -Xf"
+  become_user: postgres
+  delegate_to: pgsrv01
+  when: p.stat.isreg is not defined 
+
+#Поменять порт на слейве
+- name: "Set port = 5433"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/slave/postgresql.conf
+    state: present
+    regexp: "^#port = 5432"
+    line: "port = 5433"
+  delegate_to: pgsrv01
+  notify:
+    - Restart postgres1c slave pgsrv01
+
+- name: "Set hot_standby = on"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/slave/postgresql.conf
+    state: present
+    regexp: "^#hot_standby = on"
+    line: "hot_standby = on"
+  delegate_to: pgsrv01
+  notify:
+    - Restart postgres1c slave pgsrv01
+    
+- name: "Set hot_standby = on"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/slave/postgresql.conf
+    state: present
+    regexp: "^#hot_standby_feedback = off"
+    line: "hot_standby_feedback = on"
+  delegate_to: pgsrv01
+  notify:
+    - Restart postgres1c slave pgsrv01
+
+- name: postgresql | Create postgresql slave config file from template
+  copy:
+    src: recovery_slave_pgsrv01.conf
+    dest: /var/lib/pgsql/10/slave/recovery.conf
+    mode: 0600
+  become_user: postgres
+  delegate_to: pgsrv01
+  notify:
+    - Restart postgres1c slave pgsrv01
+
+- name: check slave pgsrv02 on pgsrv01
+  systemd:
+    name: postgresql-10-slave.service
+    state: started
+    enabled: yes
+  delegate_to: pgsrv01

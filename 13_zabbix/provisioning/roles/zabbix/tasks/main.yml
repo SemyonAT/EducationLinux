@@ -1,0 +1,167 @@
+---
+# tasks file for zabbix
+##############################################################
+### set firewalld
+- name: Enable port for zabbix-server in firewalld 
+  firewalld:
+    zone: public
+    service: zabbix-server
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for zabbix-server in firewalld 
+  firewalld:
+    zone: public
+    service: zabbix-agent
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for http in firewalld 
+  firewalld:
+    zone: public
+    service: http
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+
+#####################################################
+###  general settings  ###
+
+- name: install packages repo.zabbix.com
+  yum: 
+    name:
+    - https://repo.zabbix.com/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-2.el7.noarch.rpm
+
+- name: install packages zabbix-server
+  yum: 
+    name:
+    - zabbix-server-pgsql 
+    - zabbix-web-pgsql 
+    - zabbix-agent
+
+- name: enable zabbix-agent
+  systemd: 
+    name: zabbix-agent
+    state: started
+    enabled: yes
+
+- name: enable zabbix-server
+  systemd: 
+    name: zabbix-server
+    state: started
+    enabled: yes
+
+- name: enable zabbix-server
+  systemd: 
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: "Set DBName=zabbix"
+  lineinfile:
+    dest:  /etc/zabbix/zabbix_server.conf
+    state: present
+    regexp: "^DBName=zabbix"
+    line: "DBName=zabbix1c"
+  notify:
+    - Restart zabbix server
+
+- name: "Set DBUser=zabbix1c"
+  lineinfile:
+    dest:  /etc/zabbix/zabbix_server.conf
+    state: present
+    regexp: "^DBUser=zabbix"
+    line: "DBUser=zabbix1c"
+  notify:
+    - Restart zabbix server
+
+- name: "Set DBUser=zabbix1c"
+  lineinfile:
+    dest:  /etc/zabbix/zabbix_server.conf
+    state: present
+    regexp: "^DBUser=zabbix"
+    line: "DBUser=zabbix1c"
+  notify:
+    - Restart zabbix server
+
+- name: "Set DBHost=localhost"
+  lineinfile:
+    dest:  /etc/zabbix/zabbix_server.conf
+    state: present
+    regexp: "^# DBHost=localhost"
+    line: "DBHost=pgsrv01"
+  notify:
+    - Restart zabbix server
+
+- name: "Set DBPassword="
+  lineinfile:
+    dest:  /etc/zabbix/zabbix_server.conf
+    state: present
+    regexp: "^# DBPassword="
+    line: "DBPassword=impatience"
+  notify:
+    - Restart zabbix server
+
+
+
+- name: "Set zabbix langvich"
+  lineinfile:
+    dest:  /etc/httpd/conf.d/zabbix.conf
+    state: present
+    regexp: "# php_value date.timezone Europe/Riga"
+    line: "        php_value date.timezone Europe/Moscow"
+  notify:
+    - reload Apach
+
+################################################
+### Postgre
+
+#- name: Copy base zabbix1c
+#  copy: src=zabbix1c.sql.gz dest=/pg_backup/zabbix1c.sql.gz
+#  delegate_to: pgsrv01
+
+- name: Create user for zabbix1c
+  postgresql_user:
+    #db: zabbix1c
+    user: zabbix1c
+    #login_user: zabbix1c
+    password: impatience
+    #priv: ALL
+    role_attr_flags: SUPERUSER
+    #SUPERUSER,REPLICATION
+  delegate_to: pgsrv01
+
+- name: Create a new database zabbix1c.
+  postgresql_db:
+    name: zabbix1c
+    login_user: zabbix1c
+    login_password: impatience
+    encoding: UTF-8
+    lc_collate: ru_RU.UTF-8
+    lc_ctype: ru_RU.UTF-8
+  register: create_base_zabbix
+  delegate_to: pgsrv01
+  #notify:
+  #  - reload base zabbix
+
+- name: Dump an existing database to a file (with compression)
+  postgresql_db:
+    name: zabbix1c
+    state: dump
+    target: /pg_backup/zabbix1c.sql.gz
+  delegate_to: pgsrv01
+
+#
+#when: percona_server is changed
+
+################################################
+### SELinux
+
+- name: Set httpd_can_connect_zabbix flag on and keep it persistent across reboots
+  shell: setsebool -P httpd_can_connect_zabbix on
+
+- name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots
+  shell: setsebool -P httpd_can_network_connect_db on

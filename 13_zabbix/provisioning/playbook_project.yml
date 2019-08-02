@@ -1,0 +1,32 @@
+---
+##################################################
+- hosts: all
+  become: true
+  roles:
+    - os
+
+- hosts: nfs_server
+  become: true
+  roles:
+    - nfs
+
+- hosts: nfs_client
+  become: true
+  roles:
+    - nfs_client
+
+- hosts: PostgreSQL
+  become: true
+  roles:
+    - postgres1c
+
+- hosts: barman_server
+  become: true
+  roles:
+    - barman
+
+- hosts: zabbix_server
+  become: true
+  roles:
+    - zabbix
+

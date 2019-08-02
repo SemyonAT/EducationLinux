@@ -1,0 +1,16 @@
+---
+# handlers file for nfs
+
+- name: restart rpcbind.service
+  systemd: 
+    name: rpcbind.service
+    enabled: yes
+    state: restarted
+
+- name: restart nfs-server.service
+  systemd: 
+    name: nfs-server.service
+    enabled: yes
+    state: restarted
+
+    
