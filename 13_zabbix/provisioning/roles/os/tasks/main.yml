@@ -32,30 +32,30 @@
     - telnet
     - chrony
 
-- name: "Set DBPassword="
+- name: "Set Server"
   lineinfile:
-    dest:  /etc/zabbix/zabbix_agent.conf
+    dest:  /etc/zabbix/zabbix_agentd.conf
     state: present
     regexp: "^Server=127.0.0.1"
     line: "Server=zabbix1c"
   notify:
     - Restart zabbix agent
 
-- name: "Set DBPassword="
+- name: "Set ServerActive"
   lineinfile:
-    dest:  /etc/zabbix/zabbix_agent.conf
+    dest:  /etc/zabbix/zabbix_agentd.conf
     state: present
     regexp: "^ServerActive=127.0.0.1"
     line: "ServerActive=zabbix1c"
   notify:
     - Restart zabbix agent
 
-- name: "Set DBPassword="
+- name: "Set hostname"
   lineinfile:
-    dest:  /etc/zabbix/zabbix_agent.conf
+    dest:  /etc/zabbix/zabbix_agentd.conf
     state: present
     regexp: "^Hostname=Zabbix server"
-    line: "Hostname={{ "ansible_facts['hostname']" }}"
+    line: "Hostname={{ ansible_hostname }}"
   notify:
     - Restart zabbix agent
 
