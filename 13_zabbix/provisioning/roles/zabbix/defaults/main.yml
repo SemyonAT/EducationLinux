@@ -1,2 +1,10 @@
 ---
 # defaults file for zabbix
+
+zabbix_server:     'zabbix1c' 
+zabbix_DBHost:     'pgsrv01'
+zabbix_DBName:     'zabbix1c'
+zabbix_DBUser:     'zabbix1c'
+zabbix_DBPassword: 'impatience'
+
+

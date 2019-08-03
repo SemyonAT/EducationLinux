@@ -32,38 +32,13 @@
     - telnet
     - chrony
 
-- name: "Set Server"
-  lineinfile:
-    dest:  /etc/zabbix/zabbix_agentd.conf
-    state: present
-    regexp: "^Server=127.0.0.1"
-    line: "Server=zabbix1c"
+
+- name: Template a file to /etc/zabbix/zabbix_agentd.conf
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
   notify:
     - Restart zabbix agent
-
-- name: "Set ServerActive"
-  lineinfile:
-    dest:  /etc/zabbix/zabbix_agentd.conf
-    state: present
-    regexp: "^ServerActive=127.0.0.1"
-    line: "ServerActive=zabbix1c"
-  notify:
-    - Restart zabbix agent
-
-- name: "Set hostname"
-  lineinfile:
-    dest:  /etc/zabbix/zabbix_agentd.conf
-    state: present
-    regexp: "^Hostname=Zabbix server"
-    line: "Hostname={{ ansible_hostname }}"
-  notify:
-    - Restart zabbix agent
-
-
-
-
-
-
 
 - name: enable zabbix-agent
   systemd: 

@@ -9,7 +9,7 @@ MACHINES = {
     :disks => {
       :sata1 => {
         :dfile => './nassrv10_sata1.vdi',
-        :size => 10000,
+        :size => 1000,
         :port => 1
       }
     },
