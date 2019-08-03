@@ -26,6 +26,10 @@
     immediate: yes
     state: enabled
 
+- name: Disable selinux
+  selinux: state=disabled
+  notify:
+    - restart system
 
 #####################################################
 ###  general settings  ###
@@ -43,29 +47,14 @@
     - zabbix-agent
 
 
-
-- name: enable zabbix-agent
-  systemd: 
-    name: zabbix-agent
-    state: started
-    enabled: yes
-
-- name: enable zabbix-server
-  systemd: 
-    name: zabbix-server
-    state: started
-    enabled: yes
-
-- name: enable httpd
-  systemd: 
-    name: httpd
-    state: started
-    enabled: yes
-
 - name: Template a file to /etc/zabbix/zabbix_server.conf
   template:
     src: zabbix_server.conf.j2
     dest: /etc/zabbix/zabbix_server.conf
+    group: zabbix
+    owner: zabbix
+    mode: 0660
+
   notify:
     - Restart zabbix server
 
@@ -130,8 +119,23 @@
     target: /pg_backup/zabbix1c.sql.gz
   delegate_to: pgsrv01
 
-#
-#when: percona_server is changed
+
+- name: enable zabbix-agent
+  systemd: 
+    name: zabbix-agent
+    state: started
+    
+- name: enable zabbix-server
+  systemd: 
+    name: zabbix-server
+    state: started
+    
+- name: enable httpd
+  systemd: 
+    name: httpd
+    state: started
+    enabled: yes
+
 
 ################################################
 ### SELinux

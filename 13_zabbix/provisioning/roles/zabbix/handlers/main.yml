@@ -1,5 +1,9 @@
 ---
 # handlers file for zabbix
+- name: restart system
+  reboot: 
+    reboot_timeout: 300
+
 - name: Restore a new database zabbix1c.
   postgresql_db:
     name: zabbix1c
