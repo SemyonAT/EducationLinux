@@ -1,0 +1,210 @@
+---
+# tasks file for postgres1c
+##############################################################
+### set firewalld
+- name: Enable port for postgres in firewalld 
+  firewalld:
+    zone: public
+    service: postgresql
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+#####################################################
+###  general settings  ###
+- name: install locale ru_RU.UTF-8
+  shell: localedef  -i ru_RU -f UTF-8 ru_RU.UTF-8
+
+- name: ansible create directory distrib
+  file:
+    path: /distrib
+    state: directory
+
+- name: copy distrib
+  copy: 
+    src: "{{ item }}" 
+    dest: "/distrib/{{ item }}" 
+    mode: 0770
+  loop:
+    - postgresql10-1c-10.5-24.el7.x86_64.rpm
+    - postgresql10-1c-contrib-10.5-24.el7.x86_64.rpm
+    - postgresql10-1c-libs-10.5-24.el7.x86_64.rpm
+    - postgresql10-1c-server-10.5-24.el7.x86_64.rpm
+
+- name: install packages
+  yum: 
+    name: 
+    - openssl
+    - readline
+    - krb5-libs
+  #  - libicu50
+    state: latest 
+  
+- name: install postgres1c from a local file
+  yum:
+    name: 
+    - /distrib/postgresql10-1c-libs-10.5-24.el7.x86_64.rpm
+    - /distrib/postgresql10-1c-10.5-24.el7.x86_64.rpm
+    - /distrib/postgresql10-1c-server-10.5-24.el7.x86_64.rpm
+    - /distrib/postgresql10-1c-contrib-10.5-24.el7.x86_64.rpm
+    state: present
+
+########################################################3
+#### Setup pgsrv10 ####
+### demon for postgres ###
+- name: copy files for demone pgsrv
+  copy: 
+    src: "{{ item }}" 
+    dest: "/usr/lib/systemd/system/{{ item }}" 
+    mode: 0644
+  loop:
+    - postgresql-10-slave.service
+    - postgresql-10-audit.service
+    - postgresql-10-dev.service
+##############################################################
+### audit cluster ###
+
+- name: ansible create directory audit_cluster
+  file: path=/var/lib/pgsql/10/audit_cluster state=directory owner=postgres group=postgres
+  when: ansible_facts['hostname'] == "pgsrv10"
+
+- name: Mount up device for audit_cluster
+  mount: path=/var/lib/pgsql/10/audit_cluster src=nassrv10:/pg_cluster_audit fstype=nfs state=mounted
+  when: ansible_facts['hostname'] == "pgsrv10"
+
+- name: Ansible delete file lost+found
+  file:
+    path: /var/lib/pgsql/10/audit_cluster/lost+found
+    state: absent
+  when: ansible_facts['hostname'] == "pgsrv10"
+
+- name: init claster postgres1c audit
+  shell: /usr/pgsql-10/bin/initdb --locale=ru_RU.UTF-8 -D /var/lib/pgsql/10/audit_cluster
+  become_user: postgres
+  ignore_errors: yes
+  when: ansible_facts['hostname'] == "pgsrv10"
+
+- name: copy config files postgres1c audit pgsrv10
+  copy: src=pgsrv10-postgresql-audit.conf dest=/var/lib/pgsql/10/audit_cluster/postgresql.conf
+  notify: 
+    - Restart postgres1c audit
+  when: ansible_facts['hostname'] == "pgsrv10"
+
+- name: State postgres1c audit
+  systemd:
+    name: postgresql-10-audit.service
+    state: started
+  when: ansible_facts['hostname'] == "pgsrv10"
+##############################################################
+### outs cluster ###
+
+- name: ansible create directory outs
+  file: path=/var/lib/pgsql/10/data state=directory owner=postgres group=postgres
+
+#- name: Mount up device outs server
+#  mount: path=/var/lib/pgsql/10/data src=/dev/pg_cluster2/outs fstype=ext4 state=mounted
+#  when: ansible_facts['hostname'] == "pgsrv10"
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#Можете подсказать как можно инициализировать кластер с этой папкой?
+- name: Ansible delete file lost+found
+  file:
+    path: /var/lib/pgsql/10/data/lost+found
+    state: absent
+
+- name: init claster postgres1c outs
+  shell: /usr/pgsql-10/bin/initdb --locale=ru_RU.UTF-8 -D /var/lib/pgsql/10/data
+  become_user: postgres
+  ignore_errors: yes
+
+- name: "Set locale massege en_US.UTF8"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^lc_messages = 'ru_RU.UTF-8'"
+    line: "lc_messages = 'en_US.UTF-8'"
+  notify:
+    - Restart postgres1c outs
+
+- name: "Set wal_level = replica"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^#wal_level = replica"
+    line: "wal_level = 'replica' "
+  notify:
+    - Restart postgres1c outs
+
+- name: "Set max_wal_senders = 10 "
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^#max_wal_senders = 10 "
+    line: "max_wal_senders = 10 "
+  notify:
+    - Restart postgres1c outs
+    
+- name: "Set max_replication_slots = 10"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/postgresql.conf
+    state: present
+    regexp: "^#max_replication_slots = 10"
+    line: "max_replication_slots = 10"
+  notify:
+    - Restart postgres1c outs
+
+- name: "Set replication acses"
+  lineinfile:
+    dest:  /var/lib/pgsql/10/data/pg_hba.conf
+    state: present
+    regexp: "^host    replication     all             ::1/128                 trust"
+    line: "host    replication     all             0.0.0.0/0                 trust"
+  notify:
+    - Restart postgres1c outs
+
+
+#- name: copy config files postgres1c outs pgsrv10
+#  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
+#  notify: 
+#    - Restart postgres1c outs
+#when: ansible_facts['hostname'] == "pgsrv10"
+
+- name: State postgres1c outs
+  systemd:
+    name: postgresql-10.service
+    state: started
+
+##############################################################
+### outs slave cluster ###
+
+- name: ansible create directory outs
+  file: path=/var/lib/pgsql/10/slave state=directory owner=postgres group=postgres mode=0700
+
+#- name: copy config files postgres1c outs pgsrv10
+#  copy: src=pgsrv10-postgresql.conf dest=/var/lib/pgsql/10/data/postgresql.conf
+#  notify: 
+#    - Restart postgres1c outs
+
+
+#- name: State postgres1c outs
+#  systemd:
+#    name: postgresql-10-slave.service
+#    state: started
+
+#############################################
+### other activiti ###
+- name: install psycopg2
+  yum: 
+    name:
+      - python-psycopg2
+
+
+
+
+#############################################
+### not use but perhab ###
+#- name: copy config files postgres1c pgsrv10 pg_hba
+#  copy: src=pgsrv10-pg_hba.conf dest=/var/lib/pgsql/10/data/pg_hba.conf
+#  notify: 
+#    - Restart postgres1c outs
+#  when: ansible_facts['hostname'] == "pgsrv10"

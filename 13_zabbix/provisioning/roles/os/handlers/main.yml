@@ -1,0 +1,7 @@
+---
+# handlers file for os
+- name: Restart zabbix agent
+  systemd:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes

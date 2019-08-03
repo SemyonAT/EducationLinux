@@ -1,0 +1,120 @@
+
+---
+- name: for os
+  hosts: all
+  become: true
+  roles:
+    - os
+
+########################################
+### mysql   
+- name: for os
+  hosts: mysql
+  become: true
+  roles:
+    - mysql
+
+- hosts: master
+  become: yes
+  tasks:
+   - name: Check if bet.sql is present
+     shell: echo | mysql -s bet
+     register: bet_found
+     ignore_errors: yes
+     
+   - name: Create a new database with name 'bet'
+     when: bet_found is failed
+     mysql_db:
+      name: bet
+      state: present
+    
+   - name: Load bet.sql database
+     when: bet_found is failed   
+     mysql_db:
+      name: bet
+      state: import
+      target: /vagrant/provisioning/bet.sql
+      
+   - name: Setup replication user
+     shell: mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY 'dummysecret';"
+     ignore_errors: yes
+     
+- hosts: slave
+  become: yes
+  tasks:
+   - name: Configure replication on slave
+     ignore_errors: yes
+     shell: mysql -e "change master to master_host='master', master_user='replication', master_password='dummysecret', master_port=3306, MASTER_AUTO_POSITION=1;"    
+   - name: Start replication on slave
+     ignore_errors: yes
+     shell: mysql -e "start slave;"
+   ##Create user replication
+   - name: Setup replication user
+     shell: mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY 'dummysecret';"
+     ignore_errors: yes
+    
+   - name: Configure replication on master
+     ignore_errors: yes
+     shell: mysql -e "change master to master_host='slave', master_user='replication', master_password='dummysecret', master_port=3306, MASTER_AUTO_POSITION=1;"
+     delegate_to: 192.168.100.111
+   - name: Start replication on master
+     ignore_errors: yes
+     shell: mysql -e "start slave;"
+     delegate_to: 192.168.100.111
+
+#########################################
+### proxySQL
+- name: proxySQL
+  hosts: proxysql
+  become: true
+  roles:
+    - proxysql
+
+#########################################
+### web nginx
+- name: Playbook
+  hosts: web
+  become: true
+  roles:
+    - wordpress
+    - nginx
+    - haproxy
+
+
+#####################################################
+###  - keepalived
+- hosts: nginx1
+  become: yes
+  roles:
+   - keepalived
+  vars:
+   interface: eth1
+   virtual_router_id: 1
+   virtual_ipaddress: 192.168.100.200
+   #virtual_ipaddress: 192.168.0.254
+   priority: 101
+   secret_passwd: 'YjdstRhjrjpz,hs2881'
+
+- hosts: nginx2
+  become: yes
+  roles:
+   - keepalived
+  vars:
+   interface: eth1
+   virtual_router_id: 1
+   virtual_ipaddress: 192.168.100.200
+   #virtual_ipaddress: 192.168.0.254
+   priority: 99
+   secret_passwd: 'YjdstRhjrjpz,hs2881'
+
+- hosts: nginx2
+  become: yes
+  roles:
+   - keepalived
+  vars:
+   interface: eth1
+   virtual_router_id: 1
+   virtual_ipaddress: 192.168.100.200
+   #virtual_ipaddress: 192.168.0.254
+   priority: 98
+   secret_passwd: 'YjdstRhjrjpz,hs2881'

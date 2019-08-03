@@ -1,0 +1,57 @@
+---
+# tasks file for zabbix
+##############################################################
+### set firewalld
+- name: Enable port for zabbix-server in firewalld 
+  firewalld:
+    zone: public
+    service: zabbix-server
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+#####################################################
+###  general settings  ###
+
+- name: install packages repo.zabbix.com
+  yum: 
+    name:
+    - https://repo.zabbix.com/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-1.el7.noarch.rpm
+
+- name: install packages zabbix-server
+  yum: 
+    name:
+    - zabbix-server-mysql
+    - zabbix-web-mysql
+
+- name: enable zabbix-agent
+  systemd: 
+    name: zabbix-agent
+    state: started
+    enabled: yes
+
+- name: enable zabbix-server
+  systemd: 
+    name: zabbix-server
+    state: started
+    enabled: yes
+
+- name: enable zabbix-server
+  systemd: 
+    name: httpd
+    state: started
+    enabled: yes
+
+# mysql
+
+# zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
+
+
+################################################
+### SELinux
+
+- name: Set httpd_can_connect_zabbix flag on and keep it persistent across reboots
+  shell: setsebool -P httpd_can_connect_zabbix on
+
+- name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots
+  shell: setsebool -P httpd_can_network_connect_db on

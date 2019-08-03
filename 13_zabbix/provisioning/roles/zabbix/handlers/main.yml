@@ -1,0 +1,34 @@
+---
+# handlers file for zabbix
+- name: restart system
+  reboot: 
+    reboot_timeout: 300
+
+- name: Restore a new database zabbix1c.
+  postgresql_db:
+    name: zabbix1c
+    state: restore
+    login_user: zabbix1c
+    login_password: impatience
+    encoding: UTF-8
+    target: /srv/create.sql.gz
+  delegate_to: pgsrv01
+- name: reload Apach
+  systemd:
+    name: httpd
+    state: restarted
+    enabled: yes
+
+- name: Restart zabbix server
+  systemd:
+    name: zabbix-server
+    state: restarted
+    enabled: yes
+
+- name: Restart zabbix agent
+  systemd:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes
+
+    

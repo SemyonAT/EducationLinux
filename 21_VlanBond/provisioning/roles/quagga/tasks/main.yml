@@ -1,0 +1,124 @@
+---
+# tasks file for Quagga
+
+- name: Kernel is allowed to routing # net.ipv4.conf.all.forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Kernel is disallowed to filter # net.ipv4.conf.all.rp_filter 
+  sysctl:
+    name: net.ipv4.conf.all.rp_filter 
+    value: "0"
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Disable selinux
+  selinux: 
+    state: disabled
+  notify:
+    - restart system
+
+- name: install Quagga
+  yum:
+    name: quagga
+    state: latest
+
+- name: copy info daemons
+  copy: 
+    src: daemons
+    dest: /etc/quagga/daemons
+    group: quagga
+    owner: quagga
+
+# inetRouter    
+- name: Copy zebra config inetRouter
+  copy:
+    src: zebra.conf.inetRouter
+    dest: /etc/quagga/zebra.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  notify: Restart zebra service
+  when: ansible_facts['hostname'] == "inetRouter"
+
+- name: Copy quagga config inetRouter
+  copy: 
+    src: ospfd.conf.inetRouter
+    dest: /etc/quagga/ospfd.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "inetRouter"
+  notify: 
+    - Restart ospfd service
+
+# centralRouter    
+- name: Copy zebra config centralRouter
+  copy:
+    src: zebra.conf.centralRouter
+    dest: /etc/quagga/zebra.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "centralRouter"
+  notify: Restart zebra service
+  
+- name: Copy quagga config centralRouter
+  copy: 
+    src: ospfd.conf.centralRouter
+    dest: /etc/quagga/ospfd.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "centralRouter"
+  notify: 
+    - Restart ospfd service
+
+# office1Router    
+- name: Copy zebra config office1Router
+  copy:
+    src: zebra.conf.office1Router
+    dest: /etc/quagga/zebra.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  notify: Restart zebra service
+  when: ansible_facts['hostname'] == "office1Router"
+
+- name: Copy quagga config office1Router
+  copy: 
+    src: ospfd.conf.office1Router
+    dest: /etc/quagga/ospfd.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "office1Router"
+  notify: 
+    - Restart ospfd service
+
+# office2Router    
+- name: Copy zebra config office2Router
+  copy:
+    src: zebra.conf.office2Router
+    dest: /etc/quagga/zebra.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  notify: Restart zebra service
+  when: ansible_facts['hostname'] == "office2Router"
+
+- name: Copy quagga config office2Router
+  copy: 
+    src: ospfd.conf.office2Router
+    dest: /etc/quagga/ospfd.conf
+    group: quagga
+    owner: quagga
+    mode: 0660
+  when: ansible_facts['hostname'] == "office2Router"
+  notify: 
+    - Restart ospfd service

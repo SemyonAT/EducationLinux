@@ -1,0 +1,53 @@
+---
+# tasks file for openSSH
+
+#############################
+### open VPN
+
+- name: Add the user ca
+  user:
+    name: ca
+    comment: ca
+    password: ca
+
+#- name: ansible create directory 
+#  file: path=/usr/share/easyrsa3 state=directory owner=ca group=ca mode=0700
+
+#- name: Unarchive a file that
+#  unarchive:
+#    src: https://github.com/OpenVPN/easy-rsa/archive/master.zip
+#    dest: /usr/share/
+#    remote_src: yes
+
+# init init-pki (инициализирем каталог ключей)
+# /usr/share/easy-rsa-master/easyrsa3/easyrsa init-pki
+
+# генерируем ключ для удоставеряющего центра
+#это основной сертификат удоставеряющего центра который должен находится на всех компьютерах, 
+#так как все сертификаты выданные этим удоставеряющим центорм будут привязаны к нему
+#nopass - на продакщен этот ключ недопустим, так как сертификат будет неащищен
+#ca.crt - открытый ключ, его нужно перенести на все компы
+#ca.key - закрытый ключ его нужно хранить и защищать паролем, тоесть генерировать бе nopass
+# /usr/share/easy-rsa-master/easyrsa3/easyrsa build-ca nopass 
+
+# Генерация списка отозванных сертификатов
+# ./easyrsa revoke developer5 - в этой процедуре мы забираем сертификат у клиента developer5
+# Итоговый файл crl.pem
+# /usr/share/easy-rsa-master/easyrsa3/easyrsa gen-crl
+
+#Генерировать запрос на сертификат от пользователя
+#server.req - файл запроса
+#server.key - секретный ключ машины
+#./easyrsa gen-req server nopass
+
+#Обработка запроса на сертификат и генерация сертификата пользователя
+#Импорт сертификата в удостоверяющий центр
+#vpn-server - это имя сервера vpn в центре сертификации, может быть любым
+#./easyrsa import-req /mnt/flash/server.req vpn-server
+
+#Подписываем сертификат в центе рестификации
+#./easyrsa sign-req server vpn-server
+
+
+#Генерируем ключ для DH что бы трафик нельзя было расшифровать. Генерировать надо на сервер openvpn
+#./easyrsa gen-dh

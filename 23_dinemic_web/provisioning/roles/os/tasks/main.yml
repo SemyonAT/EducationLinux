@@ -1,0 +1,56 @@
+---
+- name: Set timezone to Europe/Moscow
+  timezone:
+    name: Europe/Moscow
+
+- name: enable chrony
+  systemd: 
+    name: chronyd
+    state: started
+    enabled: yes
+
+#- name: Manage Services
+#  service: name={{ item.name }} state={{ item.state }}
+#  with_items:
+    #- name: ntpd
+    #  state: started
+    #- name: firewalld
+    #  state: stopped
+
+
+- name: install packages epel-release
+  yum: 
+    name:
+    - epel-release
+
+- name: install packages other
+  yum: 
+    name:
+    - net-tools
+    - sysstat
+    - htop
+    - vim
+    - atop
+    - telnet
+    - chrony
+    - tcpdump
+    - nmap
+    - unzip
+    - traceroute
+    - wget
+    - lsof
+
+- name: Ensure SELINUX is permissive
+  selinux: state=permissive policy=targeted
+
+- name: Setup hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+
+- name: enable firewalld
+  systemd: 
+    name: firewalld
+    state: started
+    enabled: yes
+

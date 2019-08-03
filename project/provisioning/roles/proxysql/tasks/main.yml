@@ -1,0 +1,52 @@
+---
+# tasks file for proxysql
+
+### set firewalld
+- name: Enable port for mysql in firewalld 
+  firewalld:
+    zone: public
+    service: mysql
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Enable port for ProxySQL
+  firewalld:
+    zone: public
+    port: 6033/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+
+- name: install proxysql
+  yum:
+    name: http://repo.proxysql.com/ProxySQL/proxysql-2.0.x/centos/7/proxysql-2.0.5-1-centos7.x86_64.rpm
+    #name: http://repo.proxysql.com/ProxySQL/proxysql-1.4.x/centos/7/proxysql-1.4.15-1-centos7.x86_64.rpm
+    state: present
+
+- name: Configures proxysql
+  template:
+    src: proxysql.cnf.j2
+    dest: /etc/proxysql.cnf
+    mode: 0644
+    backup: true
+  notify:
+    - Load config from file to memory
+
+- name: Ensures proxysql is started
+  systemd:
+    name: proxysql
+    state: started
+    enabled: yes
+
+- name: Creates log dir
+  file:
+    path: /var/log/proxysql/
+    state: directory
+
+- name: Adds logrotate
+  template:
+    src: proxysql.logrotate.conf.j2
+    dest: /etc/logrotate.d/proxysql
+    mode: 0644
