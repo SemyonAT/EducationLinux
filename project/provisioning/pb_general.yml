@@ -107,7 +107,7 @@
    priority: 99
    secret_passwd: 'YjdstRhjrjpz,hs2881'
 
-- hosts: nginx2
+- hosts: nginx3
   become: yes
   roles:
    - keepalived

@@ -52,6 +52,6 @@
 - name: enable firewalld
   systemd: 
     name: firewalld
-    state: stopped
+    state: started
     enabled: no
 

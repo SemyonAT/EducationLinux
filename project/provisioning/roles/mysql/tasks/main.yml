@@ -1,6 +1,10 @@
 ---
 # tasks file for mysql
-
+- name: enable firewalld
+  systemd: 
+    name: firewalld
+    state: started
+    enabled: yes
 ### set firewalld
 - name: Enable port for mysql in firewalld 
   firewalld:

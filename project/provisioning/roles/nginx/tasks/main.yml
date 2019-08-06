@@ -1,21 +1,13 @@
 ---
 
-- name: Enable port for http in firewalld 
-  firewalld:
-    zone: public
-    service: http
-    permanent: yes
-    immediate: yes
-    state: enabled
+#- name: Enable port for http in firewalld 
+#  firewalld:
+#    zone: public
+#    service: http
+#    permanent: yes
+#    immediate: yes
+#    state: enabled
 
-- name: NGINX | Install EPEL Repo package from standard repo
-  yum:
-    name: epel-release
-    state: present
-  tags:
-    - epel-package
-    - packages
-  when: ansible_os_family == "RedHat"
 
 - name: NGINX | Install nginx package from epel repo RedHat
   yum:
@@ -121,3 +113,9 @@
 
 #make modules
 #sudo make install
+
+- name: enable firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no

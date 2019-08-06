@@ -30,7 +30,10 @@
    state: present
 
 - name: Enable keepalived to be started at boot
-  service: name=keepalived enabled=yes state=started
+  systemd:
+     name: keepalived
+     enabled: yes
+     state: started
   
 
 
