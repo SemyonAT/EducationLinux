@@ -3,15 +3,15 @@
 - name: Install packages
   yum: name=keepalived state=present
 
-#- name: Make override dir for service keepalived
-#  file:
-#   path: /etc/systemd/system/keepalived.service.d
-#   state: directory
+- name: Make override dir for service keepalived
+  file:
+   path: /etc/systemd/system/keepalived.service.d
+   state: directory
 
-#- name: Enable autorestart of services
-#  copy:
-#   src: override.conf
-#   dest: /etc/systemd/system/keepalived.service.d/override.conf
+- name: Enable autorestart of services
+  copy:
+   src: override.conf
+   dest: /etc/systemd/system/keepalived.service.d/override.conf
 
 - name: Copying keepalived.conf
   template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
@@ -28,6 +28,13 @@
    name: net.ipv4.ip_forward
    value: 1
    state: present
+
+- name: Add the user 'keepalived_script'
+  user:
+    name: keepalived_script
+    shell: /bin/bash
+    groups: wheel
+    append: yes
 
 - name: Enable keepalived to be started at boot
   systemd:

@@ -91,9 +91,8 @@
    interface: eth1
    virtual_router_id: 1
    virtual_ipaddress: 192.168.100.200
-   #virtual_ipaddress: 192.168.0.254
    priority: 101
-   secret_passwd: 'YjdstRhjrjpz,hs2881'
+   secret_passwd: 'YjdstRhj'
 
 - hosts: nginx2
   become: yes
@@ -103,9 +102,8 @@
    interface: eth1
    virtual_router_id: 1
    virtual_ipaddress: 192.168.100.200
-   #virtual_ipaddress: 192.168.0.254
    priority: 99
-   secret_passwd: 'YjdstRhjrjpz,hs2881'
+   secret_passwd: 'YjdstRhj'
 
 - hosts: nginx3
   become: yes
@@ -115,6 +113,5 @@
    interface: eth1
    virtual_router_id: 1
    virtual_ipaddress: 192.168.100.200
-   #virtual_ipaddress: 192.168.0.254
    priority: 98
-   secret_passwd: 'YjdstRhjrjpz,hs2881'
+   secret_passwd: 'YjdstRhj'
