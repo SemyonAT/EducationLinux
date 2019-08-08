@@ -8,8 +8,12 @@ mysql -h 127.0.0.1 -P6033 -uwebuser -p'YjdstRhjrjpz,hs2881'
 tcpdump -i eth1 -s0 -vv net 224.0.0.0/4
 
 proxy:6033
-webuser
-YjdstRhjrjpz,hs2881
 
-wordpress
-1!cGY0q!2iLo5@CsZo
+
+mysql_webuser:          'webuser'
+mysql_password_webuser: 'YjdstRhjrjpz,hs2881'
+mysql_db_name:          'wordppress'
+proxysql_host:          'proxy:6033'
+site_user: wordpress
+
+site: projekt

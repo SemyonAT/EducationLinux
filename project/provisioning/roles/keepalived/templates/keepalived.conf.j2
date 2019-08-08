@@ -13,7 +13,7 @@ vrrp_instance VI_1 {
   virtual_router_id {{virtual_router_id}}
   priority {{priority}}
   virtual_ipaddress {
-    {{virtual_ipaddress}}
+    {{virtual_ipaddress}} dev eth1
   }
   track_script {
     chk_haproxy

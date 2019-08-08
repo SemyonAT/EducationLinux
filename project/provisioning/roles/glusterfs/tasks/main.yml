@@ -13,10 +13,6 @@
 - include: setup-{{ ansible_distribution }}.yml
   when: ansible_os_family == 'Debian'
 
-- name: Ensure GlusterFS is started and enabled at boot.
-  service: "name={{ glusterfs_daemon }} state=started enabled=yes"
-- name: Copy hosts
-  template: src=hosts.j2 dest=/etc/hosts
 
 - name: Ensure Gluster brick and mount directories exist.
   file: "path={{ item }} state=directory mode=0775"
