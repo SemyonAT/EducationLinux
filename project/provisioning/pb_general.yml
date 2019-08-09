@@ -76,6 +76,7 @@
   hosts: web
   become: true
   roles:
+    - geerlingguy.glusterfs
     - glusterfs
     - wordpress
     - nginx

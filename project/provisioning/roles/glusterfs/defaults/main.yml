@@ -14,3 +14,4 @@ gluster_brick_name: wordpress
 gluster_php_mount_dir: /var/lib/php
 gluster_php_brick_dir: /srv/gluster/php
 gluster_php_brick_name: php
+

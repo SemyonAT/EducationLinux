@@ -76,6 +76,7 @@ Vagrant.configure("2") do |config|
             ansible.playbook = "provisioning/pb_general.yml"
             ansible.become = "true"
             ansible.inventory_path = "staging/hosts"
+            ansible.limit = "nginx1 nginx2 nginx3"
           end
       end
   end
