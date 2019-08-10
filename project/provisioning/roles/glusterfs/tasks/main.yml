@@ -1,23 +1,24 @@
 ---
-#- name: Override glusterfs_daemon for Ubuntu 14.04.
-#  set_fact:
-#    glusterfs_daemon: glusterfs-server
-#  when:
-#    - ansible_distribution == 'Ubuntu'
-#    - ansible_distribution_version == "14.04"
+- name: disabel firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no
 
 - name: Ensure Gluster brick and mount directories exist.
   file: "path={{ item }} state=directory mode=0775"
   with_items:
     - "{{ gluster_brick_dir }}"
     - "{{ gluster_mount_dir }}"
+    - "{{ gluster_php_mount_dir }}"
+    - "{{ gluster_php_brick_dir }}"
 
-- name: Configure Gluster volume.
+- name: Configure Gluster volume wordpres.
   gluster_volume:
     state: present
     name: "{{ gluster_brick_name }}"
     brick: "{{ gluster_brick_dir }}"
-    replicas: 2
+    replicas: 3
     cluster: 
       - 192.168.100.201
       - 192.168.100.202
@@ -27,7 +28,22 @@
     force: yes
   run_once: true
 
-- name: Ensure Gluster volume is mounted.
+- name: Configure Gluster volume php.
+  gluster_volume:
+    state: present
+    name: "{{ gluster_php_brick_name }}"
+    brick: "{{ gluster_php_brick_dir }}"
+    replicas: 3
+    cluster: 
+      - 192.168.100.201
+      - 192.168.100.202
+      - 192.168.100.203
+    #"{{ groups.gluster | join(',') }}"
+    host: "{{ inventory_hostname }}"
+    force: yes
+  run_once: true
+
+- name: Ensure Gluster volume is mounted wordpress.
   mount:
     name: "{{ gluster_mount_dir }}"
     src: "{{ inventory_hostname }}:/{{ gluster_brick_name }}"
@@ -35,4 +51,10 @@
     opts: "defaults,_netdev"
     state: mounted
 
-
+- name: Ensure Gluster volume is mounted php.
+  mount:
+    name: "{{ gluster_php_mount_dir }}"
+    src: "{{ inventory_hostname }}:/{{ gluster_php_brick_name }}"
+    fstype: glusterfs
+    opts: "defaults,_netdev"
+    state: mounted

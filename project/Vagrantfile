@@ -71,12 +71,15 @@ Vagrant.configure("2") do |config|
           #  SHELL
           #end 
 
-          box.vm.provision "ansible" do |ansible|
-            ansible.verbose = "v"
-            ansible.playbook = "provisioning/pb_general.yml"
-            ansible.become = "true"
-            ansible.inventory_path = "staging/hosts"
-            ansible.limit = "nginx1 nginx2 nginx3"
+          if boxname.to_s == "nginx3"
+            box.vm.provision "ansible" do |ansible|
+              #ansible.verbose = "v"
+              ansible.playbook = "provisioning/pb_general.yml"
+              ansible.become = "true"
+              ansible.inventory_path = "staging/hosts"
+              #ansible.limit = "all"
+              ansible.limit = "nginx1 nginx2 nginx3"
+            end
           end
       end
   end

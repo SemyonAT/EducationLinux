@@ -1,4 +1,10 @@
 ---
+- name: disabel firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no
+
 - name: Override glusterfs_daemon for Ubuntu 14.04.
   set_fact:
     glusterfs_daemon: glusterfs-server
@@ -29,28 +35,36 @@
    bricks: "{{ gluster_brick_dir }}"
    replicas: 3
    cluster:
-      #- 192.168.100.201
+      - 192.168.100.201
       - 192.168.100.202
       - 192.168.100.203
-      #"{{ groups['web'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
-   host: nginx2
-   #host: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+   #"{{ groups.web | join(',') }}"
+   host: "{{ inventory_hostname }}"
    force: yes
   run_once: true
 
-- name: tune gluster volume https://github.com/ansible/ansible/issues/29296
-  shell: gluster volume set {{ gluster_brick_name }} network.ping-timeout 5 performance.cache-size 256MB
-  run_once: true
-  tags:
-  - skip_ansible_lint
+#- name: tune gluster volume https://github.com/ansible/ansible/issues/29296
+#  shell: gluster volume set {{ gluster_brick_name }} network.ping-timeout 5 performance.cache-size 256MB
+#  run_once: true
+#  tags:
+#  - skip_ansible_lint
 
 - name: Ensure Gluster volume is mounted.
   mount:
-   name: "{{ gluster_mount_dir }}"
-   src: "{{ hostvars[inventory_hostname]['ansible_ssh_host'] }}:/{{ gluster_brick_name }}"
-   fstype: glusterfs
-   opts: "defaults,_netdev"
-   state: mounted
+    name: "{{ gluster_mount_dir }}"
+    src: "{{ inventory_hostname }}:/{{ gluster_brick_name }}"
+    fstype: glusterfs
+    opts: "defaults,_netdev"
+    state: mounted
+
+#- name: Ensure Gluster volume is mounted.
+#  mount:
+#   name: "{{ gluster_mount_dir }}"
+#   src: "{{ ansible_host }}:/{{ gluster_brick_name }}"
+#   #src: "{{ hostvars[inventory_hostname]['ansible_ssh_host'] }}:/{{ gluster_brick_name }}"
+#   fstype: glusterfs
+#   opts: "defaults,_netdev"
+#   state: mounted
 
 - name: Configure php-Gluster volume.
   gluster_volume:

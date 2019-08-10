@@ -114,7 +114,7 @@
 #make modules
 #sudo make install
 
-- name: enable firewalld
+- name: stopped firewalld
   systemd: 
     name: firewalld
     state: stopped
