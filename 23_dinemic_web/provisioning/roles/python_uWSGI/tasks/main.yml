@@ -1,0 +1,65 @@
+---
+# tasks file for jango_python_uWSGI
+
+##############
+#install 
+
+- name: install python-pip
+  yum: 
+    name:
+      - python-pip
+      - python-setuptools
+      - python-virtualenv
+      - uwsgi
+
+- name: install the package, force upgrade
+  pip: 
+    name: pip
+    extra_args: --upgrade
+
+- name: Setup jango 
+  pip:
+    name:
+      - Django
+
+- name: Setup jango 
+  pip:
+    name:
+      - uwsgi
+      - Flask
+
+- name: ansible create directory outs
+  file: path=/srv/python_project state=directory owner=uwsgi group=uwsgi
+
+- name: Copy project
+  copy: src=python_project dest=/srv owner=uwsgi group=uwsgi
+
+- name: connect configure site uwsgi. Create a symbolic link
+  file:
+    src: /srv/python_project/app_uwsgi.ini
+    dest: /etc/uwsgi.d/app_uwsgi.ini
+    owner: uwsgi
+    group: uwsgi
+    state: link
+
+#usermod -a -G wheel userName
+- name: Add user wordpres in group uwsgi
+  user:
+      name: wordpress
+      groups: uwsgi, wheel
+      append: yes 
+
+#- name: Copy deamon
+#  copy: src=flask-uwsgi.service dest=/etc/systemd/system/flask-uwsgi.service 
+    
+#- name: restart uWSAGI
+#  systemd:
+#    name: flask-uwsgi.service
+#    state: restarted
+#    enabled: yes
+
+- name: restart uWSAGI
+  systemd:
+    name: uwsgi.service
+    state: restarted
+    enabled: yes

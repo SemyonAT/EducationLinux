@@ -1,0 +1,16 @@
+[Unit]
+Description=uWSGI instance to serve flask-uwsgi project
+After=network.target
+
+[Service]
+#User=flask-uwsgi
+#Group=www-data
+User=root
+Group=root
+
+WorkingDirectory=/srv/python_project
+Environment="PATH=/srv/python_project/venv/bin"
+ExecStart=/srv/python_project/venv/bin/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target

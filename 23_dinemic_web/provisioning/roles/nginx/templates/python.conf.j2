@@ -1,0 +1,17 @@
+server {
+    listen 8085;
+    server_name 192.168.100.201;    
+    server_tokens off;
+    
+
+     location / {
+         #uwsgi_pass unix:/var/run/flask-uwsgi.sock;
+         uwsgi_pass unix:/run/uwsgi/flask-uwsgi.sock;
+         #uwsgi_pass uwsgi_flask_upstream;
+         include uwsgi_params;
+     }
+
+     location /static {
+         root /srv/python_project;
+     }
+}

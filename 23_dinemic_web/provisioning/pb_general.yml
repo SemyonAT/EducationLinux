@@ -72,11 +72,14 @@
 
 #########################################
 ### web nginx
-- name: Playbook
+- name: Playbook web
   hosts: web
   become: true
   roles:
     - wordpress
+    - python_uWSGI
+    #- react_java_javascript
     - nginx
-    - keepalived
+
+
 

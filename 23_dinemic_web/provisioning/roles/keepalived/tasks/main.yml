@@ -1,5 +1,0 @@
----
-
-- include: install_rh.yml
-#- include: firewall.yml
-- include: configure_rh.yml

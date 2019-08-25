@@ -9,6 +9,10 @@
     state: started
     enabled: yes
 
+- name: Disable selinux
+  selinux: state=disabled
+  notify:
+    - restart system
 #- name: Manage Services
 #  service: name={{ item.name }} state={{ item.state }}
 #  with_items:
@@ -39,9 +43,6 @@
     - traceroute
     - wget
     - lsof
-
-- name: Ensure SELINUX is permissive
-  selinux: state=permissive policy=targeted
 
 - name: Setup hosts
   template:
