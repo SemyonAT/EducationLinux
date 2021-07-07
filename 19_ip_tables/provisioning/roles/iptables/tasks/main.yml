@@ -1,0 +1,191 @@
+---
+# tasks file for iptables
+
+#############################
+#############################
+# centralRouter ##
+- name: disabel fierwalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+  when: ansible_facts['hostname'] == "inetRouter"
+
+- name: install iptabels
+  yum: name=iptables-services state=latest
+  when: ansible_facts['hostname'] == "inetRouter"
+
+- name: enabel iptables in systemd
+  systemd:
+    name: iptables
+    state: started
+    enabled: yes
+  when: ansible_facts['hostname'] == "inetRouter"
+
+################################
+### PREROUTING
+
+################################
+### INPUT
+#iptables --flush INPUT
+#iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT  
+#iptables -A INPUT -p icmp -j ACCEPT      
+#iptables -A INPUT -i lo -j ACCEPT      
+#iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT  
+#iptables -A INPUT -j REJECT 
+- name: iptables_raw blok trafik ipv6
+  iptables_raw:
+    ipversion: 6
+    weight: 50
+    name: blok trafik ipv6
+    rules: '-A INPUT -j DROP'
+#- name: iptables_raw standart rull
+#  iptables_raw:
+#    name: default_rules
+#    weight: 10
+#    keep_unmanaged: no
+#    rules: |
+#      -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#      -A INPUT -p icmp -j ACCEPT 
+#      -A INPUT -i lo -j ACCEPT
+#      -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+#      -A INPUT -j REJECT
+#      -P FORWARD ACCEPT
+#      -P OUTPUT ACCEPT
+- name: iptables_raw new rull
+  iptables_raw:
+    name: default_rules
+    weight: 10
+    keep_unmanaged: no
+    rules: |
+      -A INPUT -i lo -j ACCEPT
+      -N BTRAFFIC
+      -N SSH-INPUT
+      -N SSH-INPUTTWO
+      -A INPUT -j BTRAFFIC
+      -A BTRAFFIC -p icmp --icmp-type any -j ACCEPT
+      -A BTRAFFIC -m state --state ESTABLISHED,RELATED -j ACCEPT
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 9991 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 7777 -m recent --rcheck --name SSH0 -j SSH-INPUT
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
+      -A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 8881 -m recent --name SSH0 --set -j DROP
+      -A SSH-INPUT -m recent --name SSH1 --set -j DROP
+      -A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP 
+      -A BTRAFFIC -j DROP
+      #-P INPUT DROP
+      #-P FORWARD ACCEPT
+      -P OUTPUT ACCEPT
+#knok
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 5556 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 6667 -m recent --rcheck --name SSH0 -j SSH-INPUT
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
+#-A BTRAFFIC -m state --state NEW -m tcp -p tcp --dport 7778 -m recent --name SSH0 --set -j DROP
+#-A SSH-INPUT -m recent --name SSH1 --set -j DROP
+#-A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP 
+#-A BTRAFFIC -j DROP
+
+################################
+### FORWARD
+#-A FORWARD -j REJECT --reject-with icmp-port-unreachable
+#--flush FORWARD
+#-A FORWARD -j ACCEPT
+################################
+### OUTPUT
+
+################################
+### POSTROUTING
+
+#####################################
+#####################################
+
+
+
+# centralRouter
+- name: iptables -I FORWARD -j ACCEPT
+  iptables:
+    table: filter
+    chain: FORWARD
+    jump: ACCEPT
+    action: insert
+    rule_num: 1
+    comment: accept trafic route iptables -I FORWARD -j ACCEPT
+  become: yes
+  when: ansible_facts['hostname'] == "centralRouter"
+
+- name: copy knock scrypt
+  copy: src=knock.sh dest=/root/knock.sh mode=0700
+
+# inetRouter2    
+#Открыть порт 8080
+- name: Insert a rule open 8080 port
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 8080
+    jump: ACCEPT
+    action: insert
+    rule_num: 2
+  when: ansible_facts['hostname'] == "inetRouter2"
+#Разрешаем форвардинг всех пакетов чез локальный хост. Плюс параметры ядра устанавливаются в роли Quaga
+- name: iptables -I FORWARD -j ACCEPT
+  iptables:
+    table: filter
+    chain: FORWARD
+    jump: ACCEPT
+    action: insert
+    rule_num: 1
+    comment: accept trafic route iptables -I FORWARD -j ACCEPT
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+#Перенаправление трафика с порта на другую машину на конкретный порт с внешенго трафика
+- name: Forward port 8080 to 80 and route trafic onethe ip 192.168.0.2
+  iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    match: tcp
+    destination_port: '8080'
+    jump: DNAT
+    to_destination: '192.168.0.2:80'
+    action: insert
+    comment: Redirect web BTRAFFIC to port 8080 in centralServer
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+#Перенаправление трафика с порта на другую машину на конкретный порт с внутреннего трафика localhost
+- name: Forward port 8080 to 80 and route trafic onethe ip 192.168.0.2
+  iptables:
+    table: nat
+    chain: OUTPUT
+    protocol: tcp
+    match: tcp
+    destination_port: '8080'
+    jump: DNAT
+    to_destination: '192.168.0.2:80'
+    action: insert
+    comment: Redirect web BTRAFFIC to port 8080 in centralServer
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+#это правило маскирует исходящий трафик при перенаправлении с конкретного порта
+#iptables -I POSTROUTING -j MASQUERADE - 'это маскарадинг для всвего исходящего трафика, но можно ограничить -d -s'
+- name: Forward port 8080 to 80
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    protocol: tcp
+    match: tcp
+    destination_port: '80'
+    destination: '192.168.0.2'
+    jump: SNAT
+    to_source: '192.168.255.17'
+    action: insert
+    comment: Redirect web BTRAFFIC to port 8080 in centralServer
+  become: yes
+  when: ansible_facts['hostname'] == "inetRouter2"
+
+#Сохраниение ip tabels 

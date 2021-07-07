@@ -1,0 +1,790 @@
+Script started on Wed 27 Mar 2019 09:33:29 AM UTC
+]0;vagrant@lvm:~[?1034h[vagrant@lvm ~]$ yum install [K[vagrant@lvm ~]$ yum install xfsdump
+Loaded plugins: fastestmirror
+You need to be root to perform this command.
+]0;vagrant@lvm:~[vagrant@lvm ~]$ yum install xfsdump[1@s[1@u[1@d[1@o[1@ 
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+ * base: dedic.sh
+ * extras: mirror.sale-dedic.com
+ * updates: dedic.sh
+base                                                                                          | 3.6 kB  00:00:00     
+extras                                                                                        | 3.4 kB  00:00:00     
+updates                                                                                       | 3.4 kB  00:00:00     
+(2/2): updates/7/x86_64/primary_db           0% [                                  ]  0.0 B/s |    0 B  --:--:-- ETA (1/2): extras/7/x86_64/primary_db                                                             | 187 kB  00:00:00     
+(2/2): updates/7/x86_64/primary_db                                                            | 3.4 MB  00:00:00     
+Resolving Dependencies
+--> Running transaction check
+---> Package xfsdump.x86_64 0:3.1.7-1.el7 will be installed
+--> Processing Dependency: attr >= 2.0.0 for package: xfsdump-3.1.7-1.el7.x86_64
+--> Running transaction check
+---> Package attr.x86_64 0:2.4.46-13.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=====================================================================================================================
+ Package                    Arch                      Version                          Repository               Size
+=====================================================================================================================
+Installing:
+ xfsdump                    x86_64                    3.1.7-1.el7                      base                    308 k
+Installing for dependencies:
+ attr                       x86_64                    2.4.46-13.el7                    base                     66 k
+
+Transaction Summary
+=====================================================================================================================
+Install  1 Package (+1 Dependent package)
+
+Total download size: 374 k
+Installed size: 1.1 M
+Is this ok [y/d/N]: y
+Downloading packages:
+(1/2): attr-2.4.46-13.el7.x86_64.rpm         0% [                                  ]  0.0 B/s |    0 B  --:--:-- ETA (1/2): attr-2.4.46-13.el7.x86_64.rpm                                                          |  66 kB  00:00:00     
+(2/2): xfsdump-3.1.7-1.el7.x86_64.rpm                                                         | 308 kB  00:00:00     
+---------------------------------------------------------------------------------------------------------------------
+Total                                                                                834 kB/s | 374 kB  00:00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : attr-2.4.46-13.el7.x86_64 [                                                                     ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [####                                                                 ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [############                                                         ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [##################                                                   ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [####################                                                 ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [###########################                                          ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [############################                                         ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [#############################                                        ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [##################################                                   ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [####################################                                 ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [###########################################                          ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [############################################                         ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [##############################################                       ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [################################################                     ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [###################################################                  ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [#####################################################                ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [#######################################################              ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [#########################################################            ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [############################################################         ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [##############################################################       ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [################################################################     ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [##################################################################   ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [###################################################################  ] 1/2  Installing : attr-2.4.46-13.el7.x86_64 [#################################################################### ] 1/2  Installing : attr-2.4.46-13.el7.x86_64                                                                         1/2 
+  Installing : xfsdump-3.1.7-1.el7.x86_64 [                                                                    ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [####                                                                ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [########                                                            ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [#############                                                       ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [#################                                                   ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [####################                                                ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [#########################                                           ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [#############################                                       ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [##################################                                  ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [######################################                              ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [###########################################                         ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [###############################################                     ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [##################################################                  ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [####################################################                ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [#####################################################               ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [######################################################              ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [##########################################################          ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [############################################################        ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [################################################################    ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [#################################################################   ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [##################################################################  ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64 [################################################################### ] 2/2  Installing : xfsdump-3.1.7-1.el7.x86_64                                                                        2/2 
+  Verifying  : attr-2.4.46-13.el7.x86_64                                                                         1/2 
+  Verifying  : xfsdump-3.1.7-1.el7.x86_64                                                                        2/2 
+
+Installed:
+  xfsdump.x86_64 0:3.1.7-1.el7                                                                                       
+
+Dependency Installed:
+  attr.x86_64 0:2.4.46-13.el7                                                                                        
+
+Complete!
+]0;vagrant@lvm:~[vagrant@lvm ~]$ lsblk
+NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                       8:0    0   40G  0 disk 
+├─sda1                    8:1    0    1M  0 part 
+├─sda2                    8:2    0    1G  0 part /boot
+└─sda3                    8:3    0   39G  0 part 
+  ├─VolGroup00-LogVol00 253:0    0 37.5G  0 lvm  /
+  └─VolGroup00-LogVol01 253:1    0  1.5G  0 lvm  [SWAP]
+sdb                       8:16   0   10G  0 disk 
+sdc                       8:32   0    2G  0 disk 
+sdd                       8:48   0    1G  0 disk 
+sde                       8:64   0    1G  0 disk 
+]0;vagrant@lvm:~[vagrant@lvm ~]$ pvs
+  WARNING: Running as a non-root user. Functionality may be unavailable.
+  /run/lvm/lvmetad.socket: access failed: Permission denied
+  WARNING: Failed to connect to lvmetad. Falling back to device scanning.
+  /run/lock/lvm/P_global:aux: open failed: Permission denied
+  Unable to obtain global lock.
+]0;vagrant@lvm:~[vagrant@lvm ~]$ pvsspvsupvsdpvsopvs pvs
+  PV         VG         Fmt  Attr PSize   PFree 
+  /dev/sda3  VolGroup00 lvm2 a--  <38.97g     0 
+  /dev/sdb              lvm2 ---   10.00g 10.00g
+  /dev/sdc              lvm2 ---    2.00g  2.00g
+  /dev/sdd              lvm2 ---    1.00g  1.00g
+  /dev/sde              lvm2 ---    1.00g  1.00g
+]0;vagrant@lvm:~[vagrant@lvm ~]$ vgcreate vg_root /dev/sdb
+  WARNING: Running as a non-root user. Functionality may be unavailable.
+  /run/lvm/lvmetad.socket: access failed: Permission denied
+  WARNING: Failed to connect to lvmetad. Falling back to device scanning.
+  /run/lock/lvm/V_vg_root:aux: open failed: Permission denied
+  Can't get lock for vg_root.
+]0;vagrant@lvm:~[vagrant@lvm ~]$ vgcreate vg_root /dev/sdb[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1@s[1@u[1@d[1@o[1@ 
+  Volume group "vg_root" successfully created
+]0;vagrant@lvm:~[vagrant@lvm ~]$ lvcreate -n lv_root -l +100%FREE /dev/vg_root
+  WARNING: Running as a non-root user. Functionality may be unavailable.
+  /run/lvm/lvmetad.socket: access failed: Permission denied
+  WARNING: Failed to connect to lvmetad. Falling back to device scanning.
+  /dev/mapper/control: open failed: Permission denied
+  Failure to communicate with kernel device-mapper driver.
+  Incompatible libdevmapper 1.02.146-RHEL7 (2018-01-22) and kernel driver (unknown version).
+  striped: Required device-mapper target(s) not detected in your kernel.
+  Run `lvcreate --help' for more information.
+]0;vagrant@lvm:~[vagrant@lvm ~]$ lvcreate -n lv_root -l +100%FREE /dev/vg_root[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1@s[1@u[1@d[1@o[1@ 
+WARNING: ext4 signature detected on /dev/vg_root/lv_root at offset 1080. Wipe it? [y/n]: y
+  Wiping ext4 signature on /dev/vg_root/lv_root.
+  Logical volume "lv_root" created.
+]0;vagrant@lvm:~[vagrant@lvm ~]$ lvs
+  WARNING: Running as a non-root user. Functionality may be unavailable.
+  /run/lvm/lvmetad.socket: access failed: Permission denied
+  WARNING: Failed to connect to lvmetad. Falling back to device scanning.
+  /dev/mapper/control: open failed: Permission denied
+  Failure to communicate with kernel device-mapper driver.
+  Incompatible libdevmapper 1.02.146-RHEL7 (2018-01-22) and kernel driver (unknown version).
+]0;vagrant@lvm:~[vagrant@lvm ~]$ lvsslvsulvsdlvsolvs lvs
+  LV       VG         Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  LogVol00 VolGroup00 -wi-ao---- <37.47g                                                    
+  LogVol01 VolGroup00 -wi-ao----   1.50g                                                    
+  lv_root  vg_root    -wi-a----- <10.00g                                                    
+]0;vagrant@lvm:~[vagrant@lvm ~]$ lsblk
+NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                       8:0    0   40G  0 disk 
+├─sda1                    8:1    0    1M  0 part 
+├─sda2                    8:2    0    1G  0 part /boot
+└─sda3                    8:3    0   39G  0 part 
+  ├─VolGroup00-LogVol00 253:0    0 37.5G  0 lvm  /
+  └─VolGroup00-LogVol01 253:1    0  1.5G  0 lvm  [SWAP]
+sdb                       8:16   0   10G  0 disk 
+└─vg_root-lv_root       253:2    0   10G  0 lvm  
+sdc                       8:32   0    2G  0 disk 
+sdd                       8:48   0    1G  0 disk 
+sde                       8:64   0    1G  0 disk 
+]0;vagrant@lvm:~[vagrant@lvm ~]$ mkfs.xfs /dev/vfio/[K[K[K[Kg_root/lv_root 
+mkfs.xfs: cannot open /dev/vg_root/lv_root: Permission denied
+]0;vagrant@lvm:~[vagrant@lvm ~]$ mkfs.xfs /dev/vg_root/lv_root [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1@s[1@u[1@d[1@o[1@ 
+meta-data=/dev/vg_root/lv_root   isize=512    agcount=4, agsize=655104 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=2620416, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+]0;vagrant@lvm:~[vagrant@lvm ~]$ mount /dev/vg_root/lv-[K_root /mnt/
+mount: only root can do that
+]0;vagrant@lvm:~[vagrant@lvm ~]$ mount /dev/vg_root/lv_root /mnt/[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1@s[1@u[1@d[1@o[1@ 
+]0;vagrant@lvm:~[vagrant@lvm ~]$ df -hT
+Filesystem                      Type      Size  Used Avail Use% Mounted on
+/dev/mapper/VolGroup00-LogVol00 xfs        38G  741M   37G   2% /
+devtmpfs                        devtmpfs  109M     0  109M   0% /dev
+tmpfs                           tmpfs     118M     0  118M   0% /dev/shm
+tmpfs                           tmpfs     118M  4.5M  114M   4% /run
+tmpfs                           tmpfs     118M     0  118M   0% /sys/fs/cgroup
+/dev/sda2                       xfs      1014M   63M  952M   7% /boot
+tmpfs                           tmpfs      24M     0   24M   0% /run/user/1000
+/dev/mapper/vg_root-lv_root     xfs        10G   33M   10G   1% /mnt
+]0;vagrant@lvm:~[vagrant@lvm ~]$ xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+xfsrestore: using file dump (drive_simple) strategy
+xfsrestore: version 3.1.7 (dump format 3.0)
+xfsrestore: ERROR: unable to create /mnt/xfsrestorehousekeepingdir: Permission denied
+xfsrestore: Restore Status: ERROR
+xfsdump: effective user ID must be root
+xfsdump: Dump Status: ERROR
+]0;vagrant@lvm:~[vagrant@lvm ~]$ xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1@s[1@u[1@d[1@o[1@ 
+xfsrestore: using file dump (drive_simple) strategy
+xfsrestore: version 3.1.7 (dump format 3.0)
+xfsrestore: ERROR: unable to create /mnt/xfsrestorehousekeepingdir: Permission denied
+xfsrestore: Restore Status: ERROR
+xfsdump: using file dump (drive_simple) strategy
+xfsdump: version 3.1.7 (dump format 3.0)
+xfsdump: level 0 dump of lvm:/
+xfsdump: dump date: Wed Mar 27 09:40:12 2019
+xfsdump: session id: 04fd1b35-4d8c-45ec-9a11-6934f69315fd
+xfsdump: session label: ""
+xfsdump: ino map phase 1: constructing initial dump list
+xfsdump: ino map phase 2: skipping (no pruning necessary)
+xfsdump: ino map phase 3: skipping (only one dump stream)
+xfsdump: ino map construction complete
+xfsdump: estimated dump size: 737581184 bytes
+xfsdump: creating dump session media file 0 (media 0, file 0)
+xfsdump: dumping ino map
+xfsdump: dumping directories
+xfsdump: WARNING: write to stdio failed: 32 (Broken pipe)
+xfsdump: ending media file
+xfsdump: media file size 0 bytes
+xfsdump: dump size (non-dir files) : 0 bytes
+xfsdump: NOTE: dump interrupted: 0 seconds elapsed
+xfsdump: Dump Status: INTERRUPT
+]0;vagrant@lvm:~[vagrant@lvm ~]$ ls /mnt/
+]0;vagrant@lvm:~[vagrant@lvm ~]$ ls /dev/VolGroup00/
+[0m[01;36mLogVol00[0m  [01;36mLogVol01[0m
+]0;vagrant@lvm:~[vagrant@lvm ~]$ su -[K
+Password: 
+]0;vagrant@lvm:/home/vagrant[?1034h[root@lvm vagrant]# xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+xfsrestore: using file dump (drive_simple) strategy
+xfsrestore: version 3.1.7 (dump format 3.0)
+xfsdump: using file dump (drive_simple) strategy
+xfsdump: version 3.1.7 (dump format 3.0)
+xfsdump: level 0 dump of lvm:/
+xfsdump: dump date: Wed Mar 27 09:41:47 2019
+xfsdump: session id: 5b6965d2-d131-463b-be95-6579228cf042
+xfsdump: session label: ""
+xfsdump: ino map phase 1: constructing initial dump list
+xfsrestore: searching media for dump
+xfsdump: ino map phase 2: skipping (no pruning necessary)
+xfsdump: ino map phase 3: skipping (only one dump stream)
+xfsdump: ino map construction complete
+xfsdump: estimated dump size: 737581184 bytes
+xfsdump: creating dump session media file 0 (media 0, file 0)
+xfsdump: dumping ino map
+xfsdump: dumping directories
+xfsrestore: examining media file 0
+xfsrestore: dump description: 
+xfsrestore: hostname: lvm
+xfsrestore: mount point: /
+xfsrestore: volume: /dev/mapper/VolGroup00-LogVol00
+xfsrestore: session time: Wed Mar 27 09:41:47 2019
+xfsrestore: level: 0
+xfsrestore: session label: ""
+xfsrestore: media label: ""
+xfsrestore: file system id: b60e9498-0baa-4d9f-90aa-069048217fee
+xfsrestore: session id: 5b6965d2-d131-463b-be95-6579228cf042
+xfsrestore: media id: 12835aac-12a8-4d1c-84ec-66604e7d1bd1
+xfsrestore: searching media for directory dump
+xfsrestore: reading directories
+xfsdump: dumping non-directory files
+xfsrestore: 2730 directories and 23680 entries processed
+xfsrestore: directory post-processing
+xfsrestore: restoring non-directory files
+xfsdump: ending media file
+xfsdump: media file size 714384144 bytes
+xfsdump: dump size (non-dir files) : 701178984 bytes
+xfsdump: dump complete: 12 seconds elapsed
+xfsdump: Dump Status: SUCCESS
+xfsrestore: restore complete: 12 seconds elapsed
+xfsrestore: Restore Status: SUCCESS
+]0;vagrant@lvm:/home/vagrant[root@lvm vagrant]# ls /mnt/
+[0m[01;36mbin[0m   [01;34mdata[0m       [01;34mdev[0m  [01;34mhome[0m  [01;36mlib64[0m  [01;34mmnt[0m  [01;34mproc[0m  [01;34mrun[0m   [01;34msrv[0m  [30;42mtmp[0m  [01;34mvagrant[0m
+[01;34mboot[0m  [01;34mdata-snap[0m  [01;34metc[0m  [01;36mlib[0m   [01;34mmedia[0m  [01;34mopt[0m  [01;34mroot[0m  [01;36msbin[0m  [01;34msys[0m  [01;34musr[0m  [01;34mvar[0m
+]0;vagrant@lvm:/home/vagrant[root@lvm vagrant]# for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
+]0;vagrant@lvm:/home/vagrant[root@lvm vagrant]# chroot /mnt/
+]0;vagrant@lvm:/[?1034h[root@lvm /]# grub2-mkconfig -o /boot/grub2/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-862.2.3.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-862.2.3.el7.x86_64.img
+done
+]0;vagrant@lvm:/[root@lvm /]# cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;
+> s/.img//g"` --force; done
+Executing: /usr/bin/dracut -v initramfs-3.10.0-862.2.3.el7.x86_64.img 3.10.0-862.2.3.el7.x86_64 --force
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+*** Including module: bash ***
+*** Including module: nss-softokn ***
+*** Including module: i18n ***
+*** Including module: drm ***
+*** Including module: plymouth ***
+*** Including module: dm ***
+Skipping udev rule: 64-device-mapper.rules
+Skipping udev rule: 60-persistent-storage-dm.rules
+Skipping udev rule: 55-dm.rules
+*** Including module: kernel-modules ***
+Omitting driver floppy
+*** Including module: lvm ***
+Skipping udev rule: 64-device-mapper.rules
+Skipping udev rule: 56-lvm.rules
+Skipping udev rule: 60-persistent-storage-lvm.rules
+*** Including module: qemu ***
+*** Including module: resume ***
+*** Including module: rootfs-block ***
+*** Including module: terminfo ***
+*** Including module: udev-rules ***
+Skipping udev rule: 40-redhat-cpu-hotplug.rules
+Skipping udev rule: 91-permissions.rules
+*** Including module: biosdevname ***
+*** Including module: systemd ***
+*** Including module: usrmount ***
+*** Including module: base ***
+*** Including module: fs-lib ***
+*** Including module: shutdown ***
+*** Including modules done ***
+*** Installing kernel module dependencies and firmware ***
+*** Installing kernel module dependencies and firmware done ***
+*** Resolving executable dependencies ***
+*** Resolving executable dependencies done***
+*** Hardlinking files ***
+*** Hardlinking files done ***
+*** Stripping files ***
+*** Stripping files done ***
+*** Generating early-microcode cpio image contents ***
+*** No early-microcode cpio image needed ***
+*** Store current command line parameters ***
+*** Creating image file ***
+*** Creating image file done ***
+*** Creating initramfs image file '/boot/initramfs-3.10.0-862.2.3.el7.x86_64.img' done ***
+]0;vagrant@lvm:/boot[root@lvm boot]# vi 􀀓􀁆􀁓􀁓􀁘􀀓􀁋􀁖􀁙􀁆􀀖􀀓􀁋􀁖􀁙􀁆􀀒􀁇􀁊􀁋[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K/boot/grub2/grub.cfg 
+[?1049h[?1h=[1;77r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[77;1H"/boot/grub2/grub.cfg" 127L, 3658C[1;1H#
+# DO NOT EDIT THIS FILE
+#
+# It is automatically generated by grub2-mkconfig using templates
+# from /etc/grub.d and settings from /etc/default/grub
+#
+
+### BEGIN /etc/grub.d/00_header ###
+set pager=1
+
+if [ -s $prefix/grubenv ]; then
+  load_env
+fi
+if [ "${next_entry}" ] ; then
+   set default="${next_entry}"
+   set next_entry=
+   save_env next_entry
+   set boot_once=true
+else
+   set default="${saved_entry}"
+fi
+
+if [ x"${feature_menuentry_id}" = xy ]; then
+  menuentry_id_option="--id"
+else
+  menuentry_id_option=""
+fi
+
+export menuentry_id_option
+
+if [ "${prev_saved_entry}" ]; then
+  set saved_entry="${prev_saved_entry}"
+  save_env saved_entry
+  set prev_saved_entry=
+  save_env prev_saved_entry
+  set boot_once=true
+fi
+
+function savedefault {
+  if [ -z "${boot_once}" ]; then
+    saved_entry="${chosen}"
+    save_env saved_entry
+  fi
+}
+
+function load_video {
+  if [ x$feature_all_video_module = xy ]; then
+    insmod all_video
+  else
+    insmod efi_gop
+    insmod efi_uga
+    insmod ieee1275_fb
+    insmod vbe
+    insmod vga
+    insmod video_bochs
+    insmod video_cirrus
+  fi
+}
+
+terminal_output console
+if [ x$feature_timeout_style = xy ] ; then
+  set timeout_style=menu
+  set timeout=1
+# Fallback normal timeout code in case the timeout_style feature is
+# unavailable.
+else
+  set timeout=1
+fi
+### END /etc/grub.d/00_header ###
+
+### BEGIN /etc/grub.d/00_tuned ###
+set tuned_params=""
+set tuned_initrd=""
+### END /etc/grub.d/00_tuned ###
+
+### BEGIN /etc/grub.d/01_users ###[1;1H[?12l[?25h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[?25l[1;76r[76;1H
+[1;77r[76;1Hif [ -f ${prefix}/user.cfg ]; then[77;1H[K[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;3Hsource ${prefix}/user.cfg[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;3Hif [ -n "${GRUB2_PASSWORD}" ]; then[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;5Hset superusers="root"[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;5Hexport superusers[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;5Hpassword_pbkdf2 root ${GRUB2_PASSWORD}[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;3Hfi[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1Hfi[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/01_users ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### BEGIN /etc/grub.d/10_linux ###[?12l[?25h[?25l[1;76r[1;1H[3M[1;77r[74;1Hmenuentry 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --class oss[75;1H --unrestricted $menuentry_id_option 'gnulinux-3.10.0-862.2.3.el7.x86_64-advanced-1f35ff38-eebb-4ab2-9be9-cf69151be177[76;1H0' {[74;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hload_video[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hset gfxpayload=keep[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hinsmod gzio[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hinsmod part_msdos[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hinsmod xfs[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hset root='hd0,msdos2'[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hif [ x$feature_platform_search_hint = xy ]; then[76;8H[?12l[?25h[?25l[1;76r[1;1H[2M[1;77r[75;11Hsearch --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos2 --hint-efi=hd0,msdos2 --hint-baremetal=ahci00[76;1H,msdos2  570897ca-e759-4c81-90cf-389da6eee4cc[75;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Helse[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;11Hsearch --no-floppy --fs-uuid --set=root 570897ca-e759-4c81-90cf-389da6eee4cc[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hfi[?12l[?25h[?25l[1;76r[1;1H[3M[1;77r[74;9Hlinux16 /vmlinuz-3.10.0-862.2.3.el7.x86_64 root=/dev/mapper/vg_root-lv_root ro no_timer_check console=tty0 coo[75;1Hnsole=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto rd.lvm.lv=VolGroup00/LogVol00 rd.lvm..[76;1Hlv=VolGroup00/LogVol01 rhgb quiet[74;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;9Hinitrd16 /initramfs-3.10.0-862.2.3.el7.x86_64.img[76;8H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H}[?12l[?25h[?25l[1;76r[1;1H[2M[1;77r[75;1Hif [ "x$default" = 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' ]; then default='Advanced options for CentOS LL[76;1Hinux>CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)'; fi;[75;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/10_linux ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### BEGIN /etc/grub.d/20_linux_xen ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/20_linux_xen ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### BEGIN /etc/grub.d/20_ppc_terminfo ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/20_ppc_terminfo ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### BEGIN /etc/grub.d/30_os-prober ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/30_os-prober ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### BEGIN /etc/grub.d/40_custom ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H# This file provides an easy way to add custom menu entries.  Simply type the[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H# menu entries you want to add after this comment.  Be careful not to change[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H# the 'exec tail' line above.[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/40_custom ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### BEGIN /etc/grub.d/41_custom ###[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1Hif [ -f  ${config_directory}/custom.cfg ]; then[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;3Hsource ${config_directory}/custom.cfg[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1Helif [ -z "${config_directory}" -a -f  $prefix/custom.cfg ]; then[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;3Hsource $prefix/custom.cfg;[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1Hfi[?12l[?25h[?25l[1;76r[76;1H
+[1;77r[76;1H### END /etc/grub.d/41_custom ###[?12l[?25h[75;1H[74;1H[73;1H[72;1H[71;1H[70;1H[69;1H[68;1H[67;1H[66;1H[65;1H[64;1H[63;1H[62;1H[61;1H[60;1H[59;1H[58;1H[57;1H[56;1H[55;1H[54;1H[53;1H[51;1H[50;1H[49;8H[46;8H linux16 /vmlinuz-3.10.0-862.2.3.e[49;42H
+[51;42H[53;32H
+[55;38H[56;36H
+[58;41H[59;39H
+[61;38H[62;36H
+[64;35H[65;42H[66;42H[67;29H[68;33H
+[70;35H[71;42H[72;39H[73;42H[74;28H
+f[76;33H[75;2H[74;28H[73;42H[72;39H[71;42H[70;35H[69;1H[68;33H[67;29H[66;42H[65;42H[64;35H[63;1H[62;36H[61;38H[60;1H[59;39H[58;41H[57;1H[56;36H[55;38H[54;1H[53;32H[51;42H[50;1H[49;42H[46;42H[45;10H[46;42Hl[49;43H[46;42H[49;42H[46;42Hl7.x86_64 root=/dev/mapper/vg_root-lv_root ro no_timer_check console=tty0 c
+nsole=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto rd.lvm.lv=[?25lolGroup00/LogVol00 rd.lvm.ll[48;1Hv=VolGroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25llGroup00/LogVol00 rd.lvm.lvv[48;1H=VolGroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25lGroup00/LogVol00 rd.lvm.lv==[48;1HVolGroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25lroup00/LogVol00 rd.lvm.lv=VV[48;1HolGroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25loup00/LogVol00 rd.lvm.lv=Voo[48;1HlGroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25lup00/LogVol00 rd.lvm.lv=Voll[48;1HGroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25lp00/LogVol00 rd.lvm.lv=VolGG[48;1Hroup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25l00/LogVol00 rd.lvm.lv=VolGrr[48;1Houp00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25l0/LogVol00 rd.lvm.lv=VolGroo[48;1Hup00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25l/LogVol00 rd.lvm.lv=VolGrouu[48;1Hp00/LogVol01 rhgb quiet [47;91H[?12l[?25h[?25l[26Cuu[48;1Hp[77;1H[1m-- VISUAL --[47;91H[?12l[?25h[?25l[m[26Cuu[48;1Hp[47;91H[?12l[?25h[?25l[26Cuu[48;1Hp[77;1H[K[47;91H[?12l[?25h[27m[m[H[2J[?25l[1;1Hterminal_output console
+if [ x$feature_timeout_style = xy ] ; then
+  set timeout_style=menu
+  set timeout=1
+# Fallback normal timeout code in case the timeout_style feature is
+# unavailable.
+else
+  set timeout=1
+fi
+### END /etc/grub.d/00_header ###
+
+### BEGIN /etc/grub.d/00_tuned ###
+set tuned_params=""
+set tuned_initrd=""
+### END /etc/grub.d/00_tuned ###
+
+### BEGIN /etc/grub.d/01_users ###
+if [ -f ${prefix}/user.cfg ]; then
+  source ${prefix}/user.cfg
+  if [ -n "${GRUB2_PASSWORD}" ]; then
+    set superusers="root"
+    export superusers
+    password_pbkdf2 root ${GRUB2_PASSWORD}
+  fi
+fi
+### END /etc/grub.d/01_users ###
+
+### BEGIN /etc/grub.d/10_linux ###
+menuentry 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --class oss[30;1H --unrestricted $menuentry_id_option 'gnulinux-3.10.0-862.2.3.el7.x86_64-advanced-1f35ff38-eebb-4ab2-9be9-cf69151be177[31;1H0' {[32;9Hload_video[33;9Hset gfxpayload=keep[34;9Hinsmod gzio[35;9Hinsmod part_msdos[36;9Hinsmod xfs[37;9Hset root='hd0,msdos2'[38;9Hif [ x$feature_platform_search_hint = xy ]; then[39;11Hsearch --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos2 --hint-efi=hd0,msdos2 --hint-baremetal=ahci00[40;1H,msdos2  570897ca-e759-4c81-90cf-389da6eee4cc[41;9Helse[42;11Hsearch --no-floppy --fs-uuid --set=root 570897ca-e759-4c81-90cf-389da6eee4cc[43;9Hfi[44;9Hlinux16 /vmlinuz-3.10.0-862.2.3.el7.x86_64 root=/dev/mapper/vg_root-lv_root ro no_timer_check console=tty0 coo[45;1Hnsole=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto rd.lvm.lv=/LogVol00 rd.lvm.lv=VolGrouu[46;1Hp00/LogVol01 rhgb quiet[47;9Hinitrd16 /initramfs-3.10.0-862.2.3.el7.x86_64.img
+}
+if [ "x$default" = 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' ]; then default='Advanced options for CentOS LL[50;1Hinux>CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)'; fi;
+### END /etc/grub.d/10_linux ###
+
+### BEGIN /etc/grub.d/20_linux_xen ###
+### END /etc/grub.d/20_linux_xen ###
+
+### BEGIN /etc/grub.d/20_ppc_terminfo ###
+### END /etc/grub.d/20_ppc_terminfo ###
+
+### BEGIN /etc/grub.d/30_os-prober ###
+### END /etc/grub.d/30_os-prober ###
+
+### BEGIN /etc/grub.d/40_custom ###
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+### END /etc/grub.d/40_custom ###
+
+### BEGIN /etc/grub.d/41_custom ###
+if [ -f  ${config_directory}/custom.cfg ]; then
+  source ${config_directory}/custom.cfg
+elif [ -z "${config_directory}" -a -f  $prefix/custom.cfg ]; then
+  source $prefix/custom.cfg;
+fi[45;91H[?12l[?25h[27m[m[H[2J[?25l[1;1H### END /etc/grub.d/00_header ###
+
+### BEGIN /etc/grub.d/00_tuned ###
+set tuned_params=""
+set tuned_initrd=""
+### END /etc/grub.d/00_tuned ###
+
+### BEGIN /etc/grub.d/01_users ###
+if [ -f ${prefix}/user.cfg ]; then
+  source ${prefix}/user.cfg
+  if [ -n "${GRUB2_PASSWORD}" ]; then
+    set superusers="root"
+    export superusers
+    password_pbkdf2 root ${GRUB2_PASSWORD}
+  fi
+fi
+### END /etc/grub.d/01_users ###
+
+### BEGIN /etc/grub.d/10_linux ###
+menuentry 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --classs[21;1H os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-862.2.3.el7.x86_64-advanced-1f35ff38-eebb-4ab2-9be9-cf6911[22;1H51be170' {[23;9Hload_video[24;9Hset gfxpayload=keep[25;9Hinsmod gzio[26;9Hinsmod part_msdos[27;9Hinsmod xfs[28;9Hset root='hd0,msdos2'[29;9Hif [ x$feature_platform_search_hint = xy ]; then[30;11Hsearch --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos2 --hint-efi=hd0,msdos2 --hint-baremetal=ahh[31;1Hci0,msdos2  570897ca-e759-4c81-90cf-389da6eee4cc[32;9Helse[33;11Hsearch --no-floppy --fs-uuid --set=root 570897ca-e759-4c81-90cf-389da6eee4cc[34;9Hfi[35;9Hlinux16 /vmlinuz-3.10.0-862.2.3.el7.x86_64 root=/dev/mapper/vg_root-lv_root ro no_timer_check console=tty00[36;1H console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto rd.lvm.lv=/LogVol00 rd.lvm.lv=VV[37;1HolGroup00/LogVol01 rhgb quiet[38;9Hinitrd16 /initramfs-3.10.0-862.2.3.el7.x86_64.img
+}
+if [ "x$default" = 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' ]; then default='Advanced options for CentOO[41;1HS Linux>CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)'; fi;
+### END /etc/grub.d/10_linux ###
+
+### BEGIN /etc/grub.d/20_linux_xen ###
+### END /etc/grub.d/20_linux_xen ###
+
+### BEGIN /etc/grub.d/20_ppc_terminfo ###
+### END /etc/grub.d/20_ppc_terminfo ###
+
+### BEGIN /etc/grub.d/30_os-prober ###
+### END /etc/grub.d/30_os-prober ###
+
+### BEGIN /etc/grub.d/40_custom ###
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+### END /etc/grub.d/40_custom ###[36;94H[?12l[?25h=[?25l[59;1H[1m-- INSERT --[36;94H[?12l[?25h[?25l[mv/LogVol00 rd.lvm.lv==[37;1HVolGroup00/LogVol01 rhgb quiet[36;95H[?12l[?25h[?25lg/LogVol00 rd.lvm.lvv[37;1H=VolGroup00/LogVol01 rhgb quiet[36;96H[?12l[?25h[?25l_/LogVol00 rd.lvm.ll[37;1Hv=VolGroup00/LogVol01 rhgb quiet[36;97H[?12l[?25h[?25lr/LogVol00 rd.lvm..[37;1Hlv=VolGroup00/LogVol01 rhgb quiet[36;98H[?12l[?25h[?25lo/LogVol00 rd.lvmm[37;1H.lv=VolGroup00/LogVol01 rhgb quiet[36;99H[?12l[?25h[?25lo/LogVol00 rd.lvv[37;1Hm.lv=VolGroup00/LogVol01 rhgb quiet[36;100H[?12l[?25h[?25lt/LogVol00 rd.ll[37;1Hvm.lv=VolGroup00/LogVol01 rhgb quiet[36;101H[?12l[?25h/[?25logVol00 rd.lvv[37;1Hm.lv=VolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25lgVol00 rd.lvmm[37;1H.lv=VolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25lVol00 rd.lvm..[37;1Hlv=VolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25lol00 rd.lvm.ll[37;1Hv=VolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25ll00 rd.lvm.lvv[37;1H=VolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25l00 rd.lvm.lv==[37;1HVolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25l0 rd.lvm.lv=VV[37;1HolGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25l rd.lvm.lv=Voo[37;1HlGroup00/LogVol01 rhgb quiet [36;102H[?12l[?25h[?25ll rd.lvm.lv=VV[37;1HolGroup00/LogVol01 rhgb quiet[36;103H[?12l[?25h[?25lv rd.lvm.lv==[37;1HVolGroup00/LogVol01 rhgb quiet[36;104H[?12l[?25h[?25lr rd.lvm.lvv[37;1H=VolGroup00/LogVol01 rhgb quiet[36;105H[?12l[?25h[?25lo rd.lvm.ll[37;1Hv=VolGroup00/LogVol01 rhgb quiet[36;106H[?12l[?25h[?25lo rd.lvm..[37;1Hlv=VolGroup00/LogVol01 rhgb quiet[36;107H[?12l[?25h[?25lt rd.lvmm[37;1H.lv=VolGroup00/LogVol01 rhgb quiet[36;108H[?12l[?25h[?25l rd.lvm..[37;1Hlv=VolGroup00/LogVol01 rhgb quiet [36;107H[?12l[?25h[?25l rd.lvm.ll[37;1Hv=VolGroup00/LogVol01 rhgb quiet [36;106H[?12l[?25h[?25l rd.lvm.lvv[37;1H=VolGroup00/LogVol01 rhgb quiet [36;105H[?12l[?25h[?25l rd.lvm.lv==[37;1HVolGroup00/LogVol01 rhgb quiet [36;104H[?12l[?25h[?25l_ rd.lvm.lvv[37;1H=VolGroup00/LogVol01 rhgb quiet[36;105H[?12l[?25h[?25lr rd.lvm.ll[37;1Hv=VolGroup00/LogVol01 rhgb quiet[36;106H[?12l[?25h[?25lo rd.lvm..[37;1Hlv=VolGroup00/LogVol01 rhgb quiet[36;107H[?12l[?25h[?25lo rd.lvmm[37;1H.lv=VolGroup00/LogVol01 rhgb quiet[36;108H[?12l[?25h[?25lt rd.lvv[37;1Hm.lv=VolGroup00/LogVol01 rhgb quiet[36;109H[?12l[?25h rd.l
+m.lv=VolGrou[?25lolGroup00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25llGroup00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25lGroup00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25lroup00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25loup00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25lup00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25lp00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25l00/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25l0/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25l/LogVol01 rhgb quiet m.lv=[?12l[?25h[?25lv/LogVol01 rhgb quiet[37;7H[?12l[?25h[?25lg/LogVol01 rhgb quiet[37;8H[?12l[?25h[?25l_/LogVol01 rhgb quiet[37;9H[?12l[?25h[?25lr/LogVol01 rhgb quiet[37;10H[?12l[?25h[?25lo/LogVol01 rhgb quiet[37;11H[?12l[?25h[?25lo/LogVol01 rhgb quiet[37;12H[?12l[?25h[?25lt/LogVol01 rhgb quiet[37;13H[?12l[?25h/[?25logVol01 rhgb quiet [37;14H[?12l[?25h[?25lgVol01 rhgb quiet [37;14H[?12l[?25h[?25lVol01 rhgb quiet [37;14H[?12l[?25h[?25lol01 rhgb quiet [37;14H[?12l[?25h[?25ll01 rhgb quiet [37;14H[?12l[?25h[?25l01 rhgb quiet [37;14H[?12l[?25h[?25l1 rhgb quiet [37;14H[?12l[?25h[?25l rhgb quiet [37;14H[?12l[?25h[?25ll rhgb quiet[37;15H[?12l[?25h[?25lv rhgb quiet[37;16H[?12l[?25h[?25l_ rhgb quiet[37;17H[?12l[?25h[?25lr rhgb quiet[37;18H[?12l[?25h[?25lo rhgb quiet[37;19H[?12l[?25h[?25lo rhgb quiet[37;20H[?12l[?25h[?25lt rhgb quiet[37;21H[?12l[?25h[59;1H[K[37;20H[?25l[?12l[?25h[?25l[59;1H/[?12l[?25hLod[?25l[59;4H[K[59;4H[?12l[?25hgVol0[?25l[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[37;20H[?12l[?25h[34;10H[33;86H[32;12H[31;48H[29;56H[28;29H[27;18H[26;25H[25;19H[24;27H[23;18H[22;10H[19;34H[18;1H[17;32H[16;2H[15;4H[14;42H[13;21H[12;25H[11;37H[10;27H[9;34H[8;34H[7;1H[6;32H[5;19H[4;19H[3;34H[2;1H[1;33H[?25l[1;58r[1;1H[L[1;59r[1;1Hfi[59;1H[K[1;2H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hset timeout=1[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Helse[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H# unavailable.[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H# Fallback normal timeout code in case the timeout_style feature is[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hset timeout=1[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hset timeout_style=menu[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hif [ x$feature_timeout_style = xy ] ; then[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hterminal_output console[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H}[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hfi[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod video_cirrus[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod video_bochs[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod vga[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod vbe[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod ieee1275_fb[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod efi_uga[58;1H[1m[34m@                                                                                                                 [1;18H[?12l[?25h[?25l[1;58r[m[1;1H[L[1;59r[1;5Hinsmod efi_gop[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Helse[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hinsmod all_video[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hif [ x$feature_all_video_module = xy ]; then[57;1H[1m[34m@                                                                                                                 [58;1H@                                                                                                                 [1;46H[?12l[?25h[?25l[1;58r[m[1;1H[L[1;59r[1;1Hfunction load_video {[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H}[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hfi[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hsave_env saved_entry[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;5Hsaved_entry="${chosen}"[58;1H[1m[34m@                                                                                                                 [1;27H[?12l[?25h[?25l[1;58r[m[1;1H[L[1;59r[1;3Hif [ -z "${boot_once}" ]; then[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hfunction savedefault {[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hfi[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hset boot_once=true[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hsave_env prev_saved_entry[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hset prev_saved_entry=[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hsave_env saved_entry[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hset saved_entry="${prev_saved_entry}"[57;1H[1m[34m@                                                                                                                 [58;1H@                                                                                                                 [1;39H[?12l[?25h[?25l[1;58r[m[1;1H[L[1;59r[1;1Hif [ "${prev_saved_entry}" ]; then[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hexport menuentry_id_option[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hfi[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hmenuentry_id_option=""[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Helse[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hmenuentry_id_option="--id"[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hif [ x"${feature_menuentry_id}" = xy ]; then[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hfi[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;4Hset default="${saved_entry}"[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Helse[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;4Hset boot_once=true[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;4Hsave_env next_entry[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;4Hset next_entry=[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;4Hset default="${next_entry}"[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hif [ "${next_entry}" ] ; then[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hfi[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;3Hload_env[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hif [ -s $prefix/grubenv ]; then[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1Hset pager=1[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H### BEGIN /etc/grub.d/00_header ###[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H#[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H# from /etc/grub.d and settings from /etc/default/grub[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H# It is automatically generated by grub2-mkconfig using templates[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H#[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H# DO NOT EDIT THIS FILE[?12l[?25h[?25l[1;58r[1;1H[L[1;59r[1;1H#[?12l[?25h[?25l[59;1H/LogVol0[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[1;1H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[1;1H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[1;1H[?12l[?25h[?25l[59;1H/LogVol0[1m[37m[41mt[m[59;9H[K[59;1H[31msearch hit BOTTOM, continuing at TOP[m[1m[37m[41mE486: Pattern not found: LogVol0[m[59;33H[K[1;1H[?12l[?25h[?25l[59;1H"grub2/grub.cfg" [1m[37m[41m [m[59;18H[K[59;18H127L, 3650C written
+[?1l>[?12l[?25h[?1049l]0;vagrant@lvm:/boot[root@lvm boot]# vi /boot/grub2/grub.cfg 
+[?1049h[?1h=[1;59r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[59;1H"/boot/grub2/grub.cfg" 127L, 3650C[1;1H#
+# DO NOT EDIT THIS FILE
+#
+# It is automatically generated by grub2-mkconfig using templates
+# from /etc/grub.d and settings from /etc/default/grub
+#
+
+### BEGIN /etc/grub.d/00_header ###
+set pager=1
+
+if [ -s $prefix/grubenv ]; then
+  load_env
+fi
+if [ "${next_entry}" ] ; then
+   set default="${next_entry}"
+   set next_entry=
+   save_env next_entry
+   set boot_once=true
+else
+   set default="${saved_entry}"
+fi
+
+if [ x"${feature_menuentry_id}" = xy ]; then
+  menuentry_id_option="--id"
+else
+  menuentry_id_option=""
+fi
+
+export menuentry_id_option
+
+if [ "${prev_saved_entry}" ]; then
+  set saved_entry="${prev_saved_entry}"
+  save_env saved_entry
+  set prev_saved_entry=
+  save_env prev_saved_entry
+  set boot_once=true
+fi
+
+function savedefault {
+  if [ -z "${boot_once}" ]; then
+    saved_entry="${chosen}"
+    save_env saved_entry
+  fi
+}
+
+function load_video {
+  if [ x$feature_all_video_module = xy ]; then
+    insmod all_video
+  else
+    insmod efi_gop
+    insmod efi_uga
+    insmod ieee1275_fb
+    insmod vbe
+    insmod vga
+    insmod video_bochs
+    insmod video_cirrus
+  fi
+}[1;1H[?12l[?25h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[?25l[1;58r[58;1H
+[1;59r[59;1H[K[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hterminal_output console[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hif [ x$feature_timeout_style = xy ] ; then[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hset timeout_style=menu[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hset timeout=1[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H# Fallback normal timeout code in case the timeout_style feature is[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H# unavailable.[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Helse[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hset timeout=1[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hfi[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/00_header ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/00_tuned ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hset tuned_params=""[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hset tuned_initrd=""[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/00_tuned ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/01_users ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hif [ -f ${prefix}/user.cfg ]; then[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hsource ${prefix}/user.cfg[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hif [ -n "${GRUB2_PASSWORD}" ]; then[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;5Hset superusers="root"[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;5Hexport superusers[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;5Hpassword_pbkdf2 root ${GRUB2_PASSWORD}[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hfi[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hfi[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/01_users ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/10_linux ###[?12l[?25h[?25l[1;58r[1;1H[3M[1;59r[56;1Hmenuentry 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --classs[57;1H os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-862.2.3.el7.x86_64-advanced-1f35ff38-eebb-4ab2-9be9-cf6911[58;1H51be170' {[56;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hload_video[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hset gfxpayload=keep[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hinsmod gzio[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hinsmod part_msdos[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hinsmod xfs[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hset root='hd0,msdos2'[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hif [ x$feature_platform_search_hint = xy ]; then[58;8H[?12l[?25h[?25l[1;58r[1;1H[2M[1;59r[57;11Hsearch --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos2 --hint-efi=hd0,msdos2 --hint-baremetal=ahh[58;1Hci0,msdos2  570897ca-e759-4c81-90cf-389da6eee4cc[57;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Helse[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;11Hsearch --no-floppy --fs-uuid --set=root 570897ca-e759-4c81-90cf-389da6eee4cc[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hfi[?12l[?25h[?25l[1;58r[1;1H[3M[1;59r[56;9Hlinux16 /vmlinuz-3.10.0-862.2.3.el7.x86_64 root=/dev/mapper/vg_root-lv_root ro no_timer_check console=tty00[57;1H console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto rd.lvm.lv=vg_root/lv_root rd.lvv[58;1Hm.lv=vg_root/lv_root rhgb quiet[56;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;9Hinitrd16 /initramfs-3.10.0-862.2.3.el7.x86_64.img[58;8H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H}[?12l[?25h[?25l[1;58r[1;1H[2M[1;59r[57;1Hif [ "x$default" = 'CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)' ]; then default='Advanced options for CentOO[58;1HS Linux>CentOS Linux (3.10.0-862.2.3.el7.x86_64) 7 (Core)'; fi;[57;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/10_linux ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/20_linux_xen ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/20_linux_xen ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/20_ppc_terminfo ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/20_ppc_terminfo ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/30_os-prober ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/30_os-prober ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/40_custom ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H# This file provides an easy way to add custom menu entries.  Simply type the[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H# menu entries you want to add after this comment.  Be careful not to change[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H# the 'exec tail' line above.[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/40_custom ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### BEGIN /etc/grub.d/41_custom ###[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hif [ -f  ${config_directory}/custom.cfg ]; then[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hsource ${config_directory}/custom.cfg[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Helif [ -z "${config_directory}" -a -f  $prefix/custom.cfg ]; then[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;3Hsource $prefix/custom.cfg;[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1Hfi[?12l[?25h[?25l[1;58r[58;1H
+[1;59r[58;1H### END /etc/grub.d/41_custom ###[?12l[?25h
+[?1l>[?1049l]0;vagrant@lvm:/boot[root@lvm boot]# exit
+exit
+]0;vagrant@lvm:/home/vagrant[root@lvm vagrant]# exit
+exit
+]0;vagrant@lvm:~[vagrant@lvm ~]$ exit
+exit
+
+Script done on Wed 27 Mar 2019 09:50:16 AM UTC

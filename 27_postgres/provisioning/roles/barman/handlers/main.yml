@@ -1,0 +1,17 @@
+---
+# handlers file for barman
+
+- name: Restart postgres1c slave pgsrv01
+  systemd:
+    name: postgresql-10-slave.service
+    state: restarted
+    enabled: yes
+  delegate_to: pgsrv01
+ 
+- name: Restart postgres1c slave pgsrv02
+  systemd:
+    name: postgresql-10-slave.service
+    state: restarted
+    enabled: yes
+  delegate_to: pgsrv02
+  

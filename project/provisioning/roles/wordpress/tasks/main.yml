@@ -1,0 +1,161 @@
+---
+
+#####################################################
+### wordpress
+- name: Add group "wordpress"
+  group:
+   name: "wordpress"
+
+- name: Add user "wordpress"
+  user:
+   name: "wordpress"
+   group: "wordpress"
+   home: "/home/wordpress"
+
+- name: Download WordPress
+  get_url:
+   url: https://ru.wordpress.org/latest-ru_RU.tar.gz
+   dest: /srv/wordpress-latest.tar.gz
+  run_once: true
+
+- name: Extract archive
+  unarchive:
+    src: /srv/wordpress-latest.tar.gz
+    dest: /srv/
+    remote_src: yes
+  run_once: true
+
+- name: Fetch random salts for WordPress config
+  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/ warn=no
+  register: "wp_salt"
+  become: no
+  run_once: true
+
+- name: Install dependansu for mysql
+  yum:
+   name:
+      - MySQL-python
+
+- name: Create WordPress database
+  mysql_db: 
+   name: '{{ mysql_db_name }}' 
+   login_user:     '{{ mysql_webuser }}'
+   login_password: '{{ mysql_password_webuser }}'
+   login_host: proxy
+   login_port: 6033
+   state: present
+  run_once: true
+
+#- name: Create WordPress database user
+#  mysql_user: name={{ wp_db_user }} password={{ wp_db_password }} priv={{ wp_db_name }}.*:ALL host='localhost' state=present
+
+- name: Copy WordPress config file
+  template: src=wp-config.php.j2 dest=/srv/wordpress/
+  run_once: true
+
+- name: Change ownership of WordPress installation
+  file: path=/srv/wordpress/ owner=wordpress group=wordpress state=directory recurse=yes
+
+#- name: install SEManage
+#  yum: pkg=policycoreutils-python state=present
+
+#- name: set the SELinux policy for the Wordpress directory
+#  command: semanage fcontext -a -t httpd_sys_content_t "/srv/wordpress(/.*)?"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux policy for wp-config.php
+#  command: semanage fcontext -a -t httpd_sys_script_exec_t "/srv/wordpress/wp-config\.php"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux policy for wp-content directory
+#  command: semanage fcontext -a -t httpd_sys_rw_content_t "/srv/wordpress/wp-content(/.*)?"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux policy for the *.php files
+#  command: semanage fcontext -a -t httpd_sys_script_exec_t "/srv/wordpress/.*\.php"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux policy for the Upgrade directory
+#  command: semanage fcontext -a -t httpd_sys_rw_content_t "/srv/wordpress/wp-content/upgrade(/.*)?"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux policy for the Uploads directory
+#  command: semanage fcontext -a -t httpd_sys_rw_content_t "/srv/wordpress/wp-content/uploads(/.*)?"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux policy for the wp-includes php files
+#  command: semanage fcontext -a -t httpd_sys_script_exec_t "/srv/wordpress/wp-includes/.*\.php"
+#  tags:
+#  - skip_ansible_lint
+
+#- name: set the SELinux on all the Files
+#  command: restorecon -RF /srv/wordpress
+#  tags:
+#  - skip_ansible_lint
+
+
+############################################################
+### php-fpm
+- name: Copy the REMI repository definition
+  copy: src=remi.repo dest=/etc/yum.repos.d/
+
+- name: Copy the REMI-php72 repository definition
+  copy: src=remi-php72.repo dest=/etc/yum.repos.d/
+
+- name: Create the GPG key for REMI
+  copy: src=RPM-GPG-KEY-remi dest=/etc/pki/rpm-gpg
+
+- name: Install php-fpm and deps
+  yum:
+   name:
+      - php-fpm
+      - php-enchant
+      - php-IDNA_Convert
+      - php-mbstring
+      - php-mysql
+      - php-PHPMailer
+      - php-process
+      - php-simplepie
+      - php-xml
+      - php-opcache
+   state: present
+
+#- name: Make override dir for service php-fpm
+#  file:
+#   path: /etc/systemd/system/php-fpm.service.d
+#   state: directory
+
+#- name: Enable autorestart of services
+#  copy:
+#   src: override.conf
+#   dest: /etc/systemd/system/php-fpm.service.d/override.conf
+
+#- name: Enable php settings override
+#  copy:
+#   src: z_custom.ini
+#   dest: /etc/php.d/z_custom.ini
+
+#- name: Make upload_tmp_dir
+#  file:
+#   path: /var/lib/php/upload
+#   state: directory
+
+- name: Change ownership of php installation
+  file: path=/var/lib/php/ owner={{ site_user }} group={{ site_user }} state=directory recurse=yes
+
+- name: Disable default pool
+  command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
+  notify: reload php-fpm
+
+- name: Copy php-fpm configuration
+  template: src=wordpress.conf dest=/etc/php-fpm.d/
+  notify: reload php-fpm
+
+- name: php-fpm service state
+  service: name=php-fpm state=started enabled=yes

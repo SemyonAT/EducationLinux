@@ -1,0 +1,13 @@
+
+---
+- name: for os
+  hosts: all
+  become: true
+  roles:
+    - os
+
+- name: Playbook
+  hosts: all
+  become: true
+  roles:
+    - nginx

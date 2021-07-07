@@ -1,0 +1,121 @@
+---
+
+#- name: Enable port for http in firewalld 
+#  firewalld:
+#    zone: public
+#    service: http
+#    permanent: yes
+#    immediate: yes
+#    state: enabled
+
+
+- name: NGINX | Install nginx package from epel repo RedHat
+  yum:
+    name: nginx
+    state: latest
+  notify:
+    - restart nginx
+  tags:
+    - nginx-package
+    - packages
+  when: ansible_os_family == "RedHat"
+  
+- name: NGINX | Install nginx package Ubuntu
+  apt:
+    name: nginx
+    state: latest
+  notify:
+    - restart nginx
+  tags:
+    - nginx-package
+    - packages
+  when: ansible_os_family == "Debian"
+  
+- name: Copy nginx configuration for wordpress
+  template: src=default.conf.j2 dest=/etc/nginx/conf.d/default.conf
+  notify: reload nginx
+
+- name: NGINX | Create NGINX config file from template
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - reload nginx
+  tags:
+    - nginx-configuration
+
+
+- name: install for developer lib
+  yum:
+    name:
+    - bison
+    - byacc
+    - cscope
+    - ctags
+    - cvs
+    - diffstat
+    - doxygen
+    - flex
+    - gcc
+    - gcc-c++
+    - gcc-gfortran
+    - gettext
+    - git
+    - indent
+    - intltool
+    - libtool
+    - patch
+    - patchutils
+    - rcs
+    - redhat-rpm-config
+    - rpm-build
+    - subversion
+    - swig
+    - systemtap
+    - zlib-devel
+    - pcre-devel
+
+- name: Download to specified path
+  get_url:
+    url: http://nginx.org/download/nginx-1.12.2.tar.gz
+    #url: https://nginx.org/download/nginx-1.16.0.tar.gz
+    dest: /usr/share/nginx
+    #nginx-1.12.2.tar.gz
+
+#- name: ansible create directory outs
+#  file: path=/usr/share/nginx/nginx-1.12.2 state=directory owner=root group=root
+
+- name: Unarchive a file that
+  unarchive:
+    src: /usr/share/nginx/nginx-1.12.2.tar.gz
+    #src: /usr/share/nginx/nginx-1.16.0.tar.gz
+    dest: /usr/share/nginx/
+    owner: root
+    group: root
+    remote_src: yes
+
+#- name: Create new module
+#  #shell: /usr/share/nginx/nginx-1.16.0/configure --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.cong -sbin-path=/usr/sbin/nginx --with-pcre --with-zlib --with-http_ssl_module --with-http_geoip_module 
+#  shell: /usr/share/nginx/nginx-1.12.2/configure --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.cong --with-pcre --with-http_ssl_module --with-http_geoip_module --with-openssl
+#  #--with-zlib 
+#  #--ngx_http_headers_module --ngx_http_rewrite_module
+  
+
+#- name: Run 'modules' target as root
+#  make:
+#    chdir: /usr/share/nginx/nginx-1.12.2/
+#    target: modules
+
+#- name: Run 'install' target as root
+#  make:
+#    chdir: /usr/share/nginx/nginx-1.12.2/
+#    target: install
+
+#make modules
+#sudo make install
+
+- name: stopped firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no

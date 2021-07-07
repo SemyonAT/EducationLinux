@@ -1,0 +1,35 @@
+---
+# tasks file for openVPN
+- name: install openvpn
+  yum: name=openvpn state=latest
+
+- name: ansible create directory for log
+  file: path=/var/log/openvpn/ state=directory owner=openvpn group=openvpn mode=0700
+
+- name: copy config
+  copy: src=client.conf dest=/etc/openvpn/server/client.conf owner=openvpn
+  when: ansible_facts['hostname'] == "centralRouter"
+
+- name: copy config
+  copy: src=openssl.conf dest=/etc/openvpn/server/openssl.cnf owner=openvpn
+  #when: ansible_facts['hostname'] == "centralRouter"
+
+- name: copy config
+  copy: src=server.conf dest=/etc/openvpn/server/vpn-server.conf owner=openvpn
+  when: ansible_facts['hostname'] == "office1Router"
+
+#- name: copy config
+#  copy: src=openssl.conf dest=/etc/openvpn/client/openssl.conf owner=openvpn
+#  when: ansible_facts['hostname'] == "office1Router"
+
+
+  
+#Генерируем ключ для DH что бы трафик нельзя было расшифровать. Генерировать надо на сервер openvpn
+#/usr/share/easy-rsa-master/easyrsa3/easyrsa gen-dh
+
+#Поместить ключ на место
+#easyrsa3/pki/dh.pem /etc/openvpn
+
+# cd /etc/openvpn
+# openvpn --genkey --secret ta.key
+

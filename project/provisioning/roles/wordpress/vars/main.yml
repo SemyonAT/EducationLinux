@@ -1,0 +1,5 @@
+mysql_webuser:          'webuser'
+mysql_password_webuser: 'YjdstRhjrjpz,hs2881'
+mysql_db_name:          'wordppress'
+proxysql_host:          'proxy:6033'
+site_user: wordpress
